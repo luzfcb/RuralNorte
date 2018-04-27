@@ -105,8 +105,8 @@ class Lote(models.Model):
     )
     quantidade_familias_utilizacao_mesma_fonte_agua = models.IntegerField('Mais de uma. Quantas?', blank=True, null=True)
     agua_para_animais_plantio_choices = (
-        (1, 'Sim, os animais vão até um curso d\'água ou represa'),
-        (2, 'Sim, a água é puxada de um curso d\'água ou represa'),
+        (1, "Sim, os animais vão até um curso d'água ou represa"),
+        (2, "Sim, a água é puxada de um curso d'água ou represa"),
         (3, 'Sim, temos um poço exclusivo para os animais'),
         (4, 'Sim, é a mesma água que vem para a casa'),
         (5, 'Não há água para animais'),
@@ -122,8 +122,8 @@ class Lote(models.Model):
     )
     regularidade_abastecimento_agua_choices = (
         (1, 'Sempre tem água'),
-        (2, 'Fatla água às vezes'),
-        (3, 'Fatla água com frequência'),
+        (2, 'Falta água às vezes'),
+        (3, 'Falta água com frequência'),
         (4, 'Nunca tem água')
     )
     regularidade_abastecimento_agua = models.IntegerField(
@@ -416,20 +416,8 @@ class CreditoBancario(models.Model):
         verbose_name = 'Com relação aos créditos bancários, como está a aplicação na parcela?'
         verbose_name_plural = 'Com relação aos créditos bancários, como está a aplicação na parcela?'
 
-class TipoProducao(models.Model):
-    nome = models.CharField('Nome', max_length=30)
-
-    def __str__(self):
-        return self.nome
-
 class ProducaoVegetal(models.Model):
     lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='producoesVegetais', on_delete=models.CASCADE)
-    # classificacao_choices = (
-    #     (1, 'Cultura'),
-    #     (2, 'Olericultura'),
-    #     (3, 'Fruticultura')
-    # )
-    # classificacao = models.IntegerField('Classificação', choices=classificacao_choices)
     classificacao = models.IntegerField('Classificação')
     tipo_producao_choices = (
         (1, 'Amendoim'),
@@ -507,13 +495,8 @@ class ProducaoVegetal(models.Model):
         (4, 'Outros')
     )
     tipo_irrigacao = models.IntegerField('Tipo de irrigação', choices=tipo_irrigacao_choices, blank=True, null=True)
-
-    def __str__(self):
-        return '%s - %s' % (str(self.classificacao), str(self.tipo_producao))
-
-    class Meta:
-        verbose_name = 'Produção Vegetal - (Cultura, Olericultura e Fruticultura)'
-        verbose_name_plural = 'Produções Vegetais - (Cultura, Olericultura e Fruticultura)'
+    criado_em = models.DateTimeField('Criado em', auto_now_add=True)
+    atualizado_em = models.DateTimeField('Atualizado em', auto_now=True)
 
 class CulturaManager(models.Manager):
     def get_queryset(self):
@@ -523,7 +506,7 @@ class Cultura(ProducaoVegetal):
     objects = CulturaManager()
 
     def __str__(self):
-        return '%s - %s' % (str(self.classificacao), str(self.tipo_producao))
+        return '%s - %s' % ('Produção Vegetal (Cultura)', str(self.tipo_producao))
 
     def save(self, *args, **kwargs):
         self.classificacao = 1
@@ -542,7 +525,7 @@ class Olericultura(ProducaoVegetal):
     objects = OlericulturaManager()
 
     def __str__(self):
-        return '%s - %s' % (str(self.classificacao), str(self.tipo_producao))
+        return '%s - %s' % ('Produção Vegetal (Olericultura)', str(self.tipo_producao))
 
     def save(self, *args, **kwargs):
         self.classificacao = 2
@@ -561,7 +544,7 @@ class Fruticultura(ProducaoVegetal):
     objects = FruticulturaManager()
 
     def __str__(self):
-        return '%S - %s' % (str(self.classificacao), str(self.tipo_producao))
+        return '%s - %s' % ('Produção Vegetal (Fruticultura)', str(self.tipo_producao))
 
     def save(self, *args, **kwargs):
         self.classificacao = 3
@@ -571,3 +554,116 @@ class Fruticultura(ProducaoVegetal):
         proxy = True
         verbose_name = 'Produção Vegetal - Fruticultura'
         verbose_name_plural = 'Produções Vegetais - Fruticulturas'
+
+class AtividadeExtrativista(models.Model):
+    lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='atividadesExtrativistas', on_delete=models.CASCADE)
+    especificacao_choices = (
+        (1, 'Açaí(Kg)'),
+        (2, 'Babaçu(Kg)'),
+        (3, 'Buriti(Kg)'),
+        (4, 'Cagaita(Kg)'),
+        (5, 'Murici(Kg)'),
+        (6, 'Pequi(Kg)'),
+        (7, 'Outros')
+    )
+    especificacao = models.IntegerField('Especificação', choices=especificacao_choices)
+    outros = models.CharField('Outros', max_length=30, blank=True, null=True)
+    quantidade_frutos_ano = models.IntegerField('Quantidade Colhida / Ano - Fruto(s)')
+    quantidade_palmitos_ano = models.IntegerField('Quantidade Colhida / Ano - Palmito(s)')
+    valor = models.DecimalField('Valor R$/Kg', max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return '%s - %s' % ('Atividade extrativista', str(self.especificacao))
+
+    class Meta:
+        verbose_name = 'Atividade Extrativista'
+        verbose_name_plural = 'Atividades Extrativistas'
+
+class ProducaoFlorestal(models.Model):
+    lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='producoesFlorestais', on_delete=models.CASCADE)
+    especificacao_choices = (
+        (1, 'Eucalipto(m³)'),
+        (2, 'Teca(m³)'),
+        (3, 'Seringueira(Kg/látex)'),
+        (4, 'Seringueira(m³/Madeira)'),
+        (5, 'Outros')
+    )
+    especificacao = models.IntegerField('Especificação', choices=especificacao_choices)
+    outros = models.CharField('Outros', max_length=30, blank=True, null=True)
+    quantidade_produzida_ano = models.IntegerField('Quantidade Colhida / Ano - Fruto(s)')
+    area_plantada = models.DecimalField('Área plantada (ha)', max_digits=10, decimal_places=4)
+    valor = models.DecimalField('R$/Unidade colhida', max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return '%s - %s' % ('Produção Florestal', str(self.especificacao))
+
+    class Meta:
+        verbose_name = 'Produção Florestal'
+        verbose_name_plural = 'Produções Florestais'
+
+class ProducaoAnimal(models.Model):
+    lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='producoesAnimais', on_delete=models.CASCADE)
+    classificacao = models.IntegerField('Classificação')
+    tipo_criacao_choices = (
+        (1, 'Gado Leiteiro'),
+        (2, 'Gado de Corte')
+    )
+    tipo_criacao = models.IntegerField('Tipo de criação', choices=tipo_criacao_choices)
+    especificacao_choices = (
+        (10, 'Touros'),
+        (20, 'Vacas'),
+        (30, 'Novilhas(os) + de 02 anos'),
+        (40, 'Novilhas(os) + de 01 ano'),
+        (50, 'Bezerras(os)'),
+        (60, 'Boi'),
+        (70, 'Frango de corte caipira'),
+        (80, 'Galinha caipira (somente frangos(as) e adultos)'),
+        (90, 'Suínos'),
+        (100, 'Ovinos'),
+        (100, 'Equinos / Muares'),
+        (120, 'Caprinos')
+    )
+    especificacao = models.IntegerField('Especificação', choices=especificacao_choices)
+    quantidade_cabeças = models.IntegerField('Nº de Cabeça(s)')
+    valor_cabeca = models.DecimalField('R$/Cabeça', max_digits=7, decimal_places=2)
+    criado_em = models.DateTimeField('Criado em', auto_now_add=True)
+    atualizado_em = models.DateTimeField('Atualizado em', auto_now=True)
+
+class BovinoculturaManager(models.Manager):
+    def get_queryset(self):
+        return super(BovinoculturaManager, self).get_queryset().filter(classificacao=1)
+
+class Bovinocultura(ProducaoAnimal):
+    objects = BovinoculturaManager()
+
+    def __str__(self):
+        return '%s - %s - %s' % ('Produção Animal (Bovinocultura)', str(self.tipo_criacao), str(self.especificacao))
+
+    def save(self, *args, **kwargs):
+        self.classificacao = 1
+        super().save(*args, **kwargs)
+
+    class Meta:
+        proxy = True
+        verbose_name = 'Produção Animal - Bovinocultura (Efetivo Atual)'
+        verbose_name_plural = 'Produção Animal - Bovinocultura (Efetivo Atual)'
+
+class OutraCriacaoManager(models.Manager):
+    def get_queryset(self):
+        return super(OutraCriacaoManager, self).get_queryset().filter(classificacao=2)
+
+class OutraCriacao(ProducaoAnimal):
+    objects = OutraCriacaoManager()
+
+    def __str__(self):
+        return '%s - %s - %s' % ('Produção Animal (Outras Criações)', str(self.tipo_criacao), str(self.especificacao))
+
+    def save(self, *args, **kwargs):
+        self.classificacao = 2
+        self.tipo_criacao = 3
+        super().save(*args, **kwargs)
+
+    class Meta:
+        proxy = True
+        verbose_name = 'Produção Animal - Outras Criações Animais (Efetivo Atual)'
+        verbose_name_plural = 'Produção Animal - Outras Criações Animais (Efetivo Atual)'

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import *
+from . import models
 
 class ProjetoAssentamentoAdmin(admin.ModelAdmin):
     list_display = ('codigo', 'nome', 'municipio', 'contrato', 'data_criacao')
@@ -7,58 +7,76 @@ class ProjetoAssentamentoAdmin(admin.ModelAdmin):
     list_filter = ['contrato', 'municipio', 'criado_em', 'atualizado_em']
 
 class DocumentoLoteInlineAdmin(admin.StackedInline):
-    model = DocumentoLote
+    model = models.DocumentoLote
     extra = 1
 
 class BeneficioSocialInlineAdmin(admin.StackedInline):
-    model = BeneficioSocial
+    model = models.BeneficioSocial
     extra = 1
 
 class EstruturaOrganizativaInlineAdmin(admin.StackedInline):
-    model = EstruturaOrganizativa
+    model = models.EstruturaOrganizativa
     extra = 1
 
 class AutoDeclaracaoEtniaInlineAdmin(admin.StackedInline):
-    model = AutoDeclaracaoEtnia
+    model = models.AutoDeclaracaoEtnia
     extra = 1
 
 class FonteAguaInlineAdmin(admin.StackedInline):
-    model = FonteAgua
+    model = models.FonteAgua
     extra = 1
 
 class TratamentoAguaInlineAdmin(admin.StackedInline):
-    model = TratamentoAgua
+    model = models.TratamentoAgua
     extra = 1
 
 class ConstrucaoLoteInlineAdmin(admin.StackedInline):
-    model = ConstrucaoLote
+    model = models.ConstrucaoLote
     extra = 1
 
 class BemProdutivoInlineAdmin(admin.StackedInline):
-    model = BemProdutivo
+    model = models.BemProdutivo
     extra = 1
 
 class AplicacaoCreditoInlineAdmin(admin.StackedInline):
-    model = AplicacaoCredito
+    model = models.AplicacaoCredito
     extra = 1
 
 class CreditoBancarioInlineAdmin(admin.StackedInline):
-    model = CreditoBancario
+    model = models.CreditoBancario
     extra = 1
 
 class CulturaInlineAdmin(admin.StackedInline):
-    model = Cultura
+    model = models.Cultura
     exclude = ['classificacao']
     extra = 1
 
 class OlericulturaInlineAdmin(admin.StackedInline):
-    model = Olericultura
+    model = models.Olericultura
     exclude = ['classificacao']
     extra = 1
 
 class FruticulturaInlineAdmin(admin.StackedInline):
-    model = Fruticultura
+    model = models.Fruticultura
     exclude = ['classificacao']
+    extra = 1
+
+class AtividadeExtrativistaInlineAdmin(admin.StackedInline):
+    model = models.AtividadeExtrativista
+    extra = 1
+
+class ProducaoFlorestalInlineAdmin(admin.StackedInline):
+    model = models.ProducaoFlorestal
+    extra = 1
+
+class BovinoculturaInlineAdmin(admin.StackedInline):
+    model = models.Bovinocultura
+    exclude = ['classificacao']
+    extra = 1
+
+class OutraCriacaoInlineAdmin(admin.StackedInline):
+    model = models.OutraCriacao
+    exclude = ['classificacao', 'tipo_criacao']
     extra = 1
 
 class LoteAdmin(admin.ModelAdmin):
@@ -77,8 +95,9 @@ class LoteAdmin(admin.ModelAdmin):
         DocumentoLoteInlineAdmin, BeneficioSocialInlineAdmin, AutoDeclaracaoEtniaInlineAdmin, EstruturaOrganizativaInlineAdmin,
         FonteAguaInlineAdmin, TratamentoAguaInlineAdmin, ConstrucaoLoteInlineAdmin,  BemProdutivoInlineAdmin,
         AplicacaoCreditoInlineAdmin, CreditoBancarioInlineAdmin, CulturaInlineAdmin, OlericulturaInlineAdmin,
-        FruticulturaInlineAdmin
+        FruticulturaInlineAdmin, AtividadeExtrativistaInlineAdmin, ProducaoFlorestalInlineAdmin,
+        BovinoculturaInlineAdmin, OutraCriacaoInlineAdmin
     ]
 
-admin.site.register(ProjetoAssentamento, ProjetoAssentamentoAdmin)
-admin.site.register(Lote, LoteAdmin)
+admin.site.register(models.ProjetoAssentamento, ProjetoAssentamentoAdmin)
+admin.site.register(models.Lote, LoteAdmin)
