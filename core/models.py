@@ -30,8 +30,8 @@ class Lote(models.Model):
     area = models.DecimalField('Área (ha)', max_digits=10, decimal_places=4)
     numero = models.IntegerField('Lote N.º')
     entrevistador = models.CharField('Nome do Entrevistador', max_length=50)
-    coordenada_x = models.BigIntegerField('Coordenada "X"')
-    coordenada_y = models.BigIntegerField('Coordenada "Y"')
+    coordenada_x = models.CharField('Coordenada "X"', max_length=30)
+    coordenada_y = models.CharField('Coordenada "Y"', max_length=30)
 
     sim_nao_choices = (
         (1, 'Sim'),
@@ -51,9 +51,13 @@ class Lote(models.Model):
         choices=sim_nao_choices
     )
     moradia_assentamento = models.IntegerField('Possui moradia no assentamento?', choices=sim_nao_choices)
+
+    TIPO_PAREDE_ALVENARIA = 1
+    TIPO_PAREDE_TABUAS_MADEIRA = 2
+
     tipo_parede_externa_choices = (
-        (1, 'Alvenaria'),
-        (2, 'Tábuas / Madeira'),
+        (TIPO_PAREDE_ALVENARIA, 'Alvenaria'),
+        (TIPO_PAREDE_TABUAS_MADEIRA, 'Tábuas / Madeira'),
         (3, 'Tapumes ou chapas de madeira'),
         (4, 'Folha de zinco'),
         (5, 'Barro ou adobe'),
@@ -161,6 +165,39 @@ class Lote(models.Model):
         'Como está cercado o lote?',
         choices=situacao_cercado_lote_choices
     )
+    area_preservacao_permanente = models.IntegerField(
+        'Existe Área de Preservação Permanente (APP) dentro do seu lote/parcela?', choices=sim_nao_choices
+    )
+    area_preservacao_permanente_cercada = models.IntegerField(
+        'A Área de Preservação Permanente está cercada ou isolada?', choices=sim_nao_choices
+    )
+    necessita_licenciamento_ambiental = models.IntegerField(
+        'Necessita de licenciamento ambiental de atividade?', default=0
+    )
+    necessita_autoriacao_exploracao_florestal_queima_controlada = models.IntegerField(
+        'Necessita de autorização de exploração florestal e/ou queima controlada?', choices=sim_nao_choices
+    )
+    qualidade_servico_saude_choices = (
+        (1, 'Ótimo'),
+        (2, 'Bom'),
+        (3, 'Ruim'),
+        (4, 'Péssimo')
+    )
+    qualidade_servico_saude = models.IntegerField(
+        'Como os moradores consideram o serviço de saúde no assentamento?', choices=qualidade_servico_saude_choices
+    )
+    frequencia_atividade_fisica_choices = (
+        (1, 'Diariamente'),
+        (2, 'Duas vezes por semana'),
+        (3, 'Mais de duas vezes por semana'),
+        (4, 'Não pratica')
+    )
+    frequencia_atividade_fisica = models.IntegerField(
+        'Com que frequência praticam atividades físicas ou esportes?', choices=frequencia_atividade_fisica_choices
+    )
+    oferta_transporte_interno = models.IntegerField(
+        'Para a escola do assentamento há oferta de transporte interno?', choices=sim_nao_choices
+    )
     criado_em = models.DateTimeField('Criado em', auto_now_add=True)
     atualizado_em = models.DateTimeField('Atualizado em', auto_now=True)
 
@@ -176,7 +213,7 @@ class DocumentoLote(models.Model):
         (4, 'Título Definitivo - registrado cartório'),
         (5, 'Matrícula da Propriedade')
     )
-    tipo_documento = models.IntegerField('Qual documento o lote possui?', choices=tipo_documento_choices)
+    tipo_documento = models.IntegerField('Documento', choices=tipo_documento_choices)
     criado_em = models.DateTimeField('Criado em', auto_now_add=True)
     atualizado_em = models.DateTimeField('Atualizado em', auto_now=True)
 
@@ -184,7 +221,7 @@ class DocumentoLote(models.Model):
         return str(self.tipo_documento)
 
     class Meta:
-        verbose_name = 'Qual documento o lote possui?'
+        verbose_name = 'Documento do lote'
         verbose_name_plural = 'Quais documentos o lote possui?'
 
 class BeneficioSocial(models.Model):
@@ -206,7 +243,7 @@ class BeneficioSocial(models.Model):
         return str(self.tipo_beneficio)
 
     class Meta:
-        verbose_name = 'Qual o tipo de benefício?'
+        verbose_name = 'Tipo de benefício'
         verbose_name_plural = 'Quais os tipos de benefício?'
 
 class AutoDeclaracaoEtnia(models.Model):
@@ -261,7 +298,7 @@ class EstruturaOrganizativa(models.Model):
         return '%s - %s' % (str(self.tipo_estrutura_organizativa), str(self.frequencia))
 
     class Meta:
-        verbose_name = 'Das estruturas organizativas internas ao assentamento diga qual existe no assentamento e de quais os membros da família participam'
+        verbose_name = 'Estruturas organizativa interna existente'
         verbose_name_plural = 'Das estruturas organizativas internas ao assentamento diga qual existe no assentamento e de quais os membros da família participam'
 
 class FonteAgua(models.Model):
@@ -278,6 +315,7 @@ class FonteAgua(models.Model):
         (9, 'Outra')
     )
     fonte_agua = models.IntegerField('Fonte de água', choices=fonte_agua_choices)
+    outra = models.CharField('Outra (Especificar)', max_length=30, blank=True, null=True)
     criado_em = models.DateTimeField('Criado em', auto_now_add=True)
     atualizado_em = models.DateTimeField('Atualizado em', auto_now=True)
 
@@ -285,7 +323,7 @@ class FonteAgua(models.Model):
         return str(self.fonte_agua)
 
     class Meta:
-        verbose_name = 'De onde vem a água que abastece a família?'
+        verbose_name = 'Abastecimento de água'
         verbose_name_plural = 'De onde vem a água que abastece a família?'
 
 class TratamentoAgua(models.Model):
@@ -306,7 +344,7 @@ class TratamentoAgua(models.Model):
         return str(self.tratamento_agua)
 
     class Meta:
-        verbose_name = 'Qual a forma tratamento da água para consumo?'
+        verbose_name = 'Tratamento da água'
         verbose_name_plural = 'Qual a forma tratamento da água para consumo?'
 
 class ConstrucaoLote(models.Model):
@@ -325,6 +363,7 @@ class ConstrucaoLote(models.Model):
     )
     construcao_no_lote = models.IntegerField('Construção', choices=construcao_no_lote_choices)
     outros = models.CharField('Outros', max_length=30, blank=True, null=True)
+    quantidade = models.IntegerField('Quantidade')
     criado_em = models.DateTimeField('Criado em', auto_now_add=True)
     atualizado_em = models.DateTimeField('Atualizado em', auto_now=True)
 
@@ -332,7 +371,7 @@ class ConstrucaoLote(models.Model):
         return str(self.construcao_no_lote)
 
     class Meta:
-        verbose_name = 'O que tem construído no lote?'
+        verbose_name = 'Contruído no lote'
         verbose_name_plural = 'O que tem construído no lote?'
 
 class BemProdutivo(models.Model):
@@ -359,6 +398,7 @@ class BemProdutivo(models.Model):
     )
     bem_produtivo = models.IntegerField('Bem produtivo', choices=bem_produtivo_choices)
     outros = models.CharField('Outros', max_length=30, blank=True, null=True)
+    quantidade = models.IntegerField('Quantidade')
     criado_em = models.DateTimeField('Criado em', auto_now_add=True)
     atualizado_em = models.DateTimeField('Atualizado em', auto_now=True)
 
@@ -366,7 +406,7 @@ class BemProdutivo(models.Model):
         return str(self.bem_produtivo)
 
     class Meta:
-        verbose_name = 'Bens produtivos disponíveis no lote'
+        verbose_name = 'Bem produtivo'
         verbose_name_plural = 'Bens produtivos disponíveis no lote'
 
 class AplicacaoCredito(models.Model):
@@ -383,6 +423,7 @@ class AplicacaoCredito(models.Model):
         (9, 'PNHR-Reforma')
     )
     tipo_aplicacao_credito = models.IntegerField('Tipo de crédito', choices=tipo_aplicacao_credito_choices)
+    valor = models.DecimalField('Valor (R$)', max_digits=10, decimal_places=2)
     criado_em = models.DateTimeField('Criado em', auto_now_add=True)
     atualizado_em = models.DateTimeField('Atualizado em', auto_now=True)
 
@@ -390,7 +431,7 @@ class AplicacaoCredito(models.Model):
         return str(self.tipo_aplicacao_credito)
 
     class Meta:
-        verbose_name = 'Com relação aos créditos, como está a aplicação no lote?'
+        verbose_name = 'Aplicação do crédito no lote'
         verbose_name_plural = 'Com relação aos créditos, como está a aplicação no lote?'
 
 class CreditoBancario(models.Model):
@@ -406,6 +447,12 @@ class CreditoBancario(models.Model):
     )
     credito_bancario = models.IntegerField('Tipo de crédito', choices=credito_bancario_choices)
     outros = models.CharField('Outros', max_length=30, blank=True, null=True)
+    valor = models.DecimalField('Valor (R$)', max_digits=10, decimal_places=2)
+    sim_nao_choices = (
+        (1, 'Sim'),
+        (0, 'Não')
+    )
+    adimplente = models.IntegerField('Adimplente?', choices=sim_nao_choices)
     criado_em = models.DateTimeField('Criado em', auto_now_add=True)
     atualizado_em = models.DateTimeField('Atualizado em', auto_now=True)
 
@@ -413,7 +460,7 @@ class CreditoBancario(models.Model):
         return str(self.credito_bancario)
 
     class Meta:
-        verbose_name = 'Com relação aos créditos bancários, como está a aplicação na parcela?'
+        verbose_name = 'Aplicação do crédito bancário na parcela'
         verbose_name_plural = 'Com relação aos créditos bancários, como está a aplicação na parcela?'
 
 class ProducaoVegetal(models.Model):
@@ -624,7 +671,7 @@ class ProducaoAnimal(models.Model):
         (120, 'Caprinos')
     )
     especificacao = models.IntegerField('Especificação', choices=especificacao_choices)
-    quantidade_cabeças = models.IntegerField('Nº de Cabeça(s)')
+    quantidade_cabecas = models.IntegerField('Nº de Cabeça(s)')
     valor_cabeca = models.DecimalField('R$/Cabeça', max_digits=7, decimal_places=2)
     criado_em = models.DateTimeField('Criado em', auto_now_add=True)
     atualizado_em = models.DateTimeField('Atualizado em', auto_now=True)
@@ -637,7 +684,7 @@ class Bovinocultura(ProducaoAnimal):
     objects = BovinoculturaManager()
 
     def __str__(self):
-        return '%s - %s - %s' % ('Produção Animal (Bovinocultura)', str(self.tipo_criacao), str(self.especificacao))
+        return '%s - %s' % (str(self.tipo_criacao), str(self.especificacao))
 
     def save(self, *args, **kwargs):
         self.classificacao = 1
@@ -656,7 +703,7 @@ class OutraCriacao(ProducaoAnimal):
     objects = OutraCriacaoManager()
 
     def __str__(self):
-        return '%s - %s - %s' % ('Produção Animal (Outras Criações)', str(self.tipo_criacao), str(self.especificacao))
+        return '%s - %s' % (str(self.tipo_criacao), str(self.especificacao))
 
     def save(self, *args, **kwargs):
         self.classificacao = 2
@@ -667,3 +714,399 @@ class OutraCriacao(ProducaoAnimal):
         proxy = True
         verbose_name = 'Produção Animal - Outras Criações Animais (Efetivo Atual)'
         verbose_name_plural = 'Produção Animal - Outras Criações Animais (Efetivo Atual)'
+
+class DescarteAnimal(models.Model):
+    lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='descartesAnimais', on_delete=models.CASCADE)
+    tipo_criacao = models.IntegerField('Tipo de criação')
+    especificacao_choices = (
+        (10, 'Touros'),
+        (20, 'Vacas'),
+        (30, 'Novilhas(os) + de 02 anos'),
+        (40, 'Novilhas(os) + de 01 ano'),
+        (50, 'Bezerras(os)'),
+        (60, 'Boi')
+    )
+    especificacao = models.IntegerField('Especificação', choices=especificacao_choices)
+    quantidade_cabecas_consumo = models.IntegerField('Nº de Cabeça(s) - Consumo')
+    quantidade_cabecas_comercio = models.IntegerField('Nº de Cabeça(s) - Comércio')
+    valor_cabeca = models.DecimalField('R$/Cabeça', max_digits=7, decimal_places=2)
+    canal_comercializacao_choices = (
+        (1, 'Venda para outro produtor'),
+        (2, 'Entrega para frigorífico/açougue'),
+        (3, 'Venda para agentes "atravessadores"'),
+        (4, 'Outros')
+    )
+    canal_comercializacao = models.IntegerField('Formas/Canais de Comercialização', choices=canal_comercializacao_choices)
+    canal_comercializacao_outros = models.CharField('Outros (Especificar)', max_length=30, blank=True, null=True)
+    criado_em = models.DateTimeField('Criado em', auto_now_add=True)
+    atualizado_em = models.DateTimeField('Atualizado em', auto_now=True)
+
+class BovinoculturaLeiteiraManager(models.Manager):
+    def get_queryset(self):
+        return super(BovinoculturaLeiteiraManager, self).get_queryset().filter(tipo_criacao=1)
+
+class BovinoculturaLeiteira(DescarteAnimal):
+    objects = BovinoculturaLeiteiraManager()
+
+    def __str__(self):
+        return '%s - %s' % (str(self.tipo_criacao), str(self.especificacao))
+
+    def save(self, *args, **kwargs):
+        self.tipo_criacao = 1
+        super().save(*args, **kwargs)
+
+    class Meta:
+        proxy = True
+        verbose_name = 'Descarte Animal - Bovinocultura Leiteira'
+        verbose_name_plural = 'Descarte Animal - Bovinocultura Leiteira'
+
+class BovinoculturaCorteManager(models.Manager):
+    def get_queryset(self):
+        return super(BovinoculturaCorteManager, self).get_queryset().filter(tipo_criacao=2)
+
+class BovinoculturaCorte(DescarteAnimal):
+    objects = BovinoculturaCorteManager()
+
+    def __str__(self):
+        return '%s - %s' % (str(self.tipo_criacao), str(self.especificacao))
+
+    def save(self, *args, **kwargs):
+        self.tipo_criacao = 2
+        super().save(*args, **kwargs)
+
+    class Meta:
+        proxy = True
+        verbose_name = 'Descarte Animal - Bovinocultura de Corte'
+        verbose_name_plural = 'Descarte Animal - Bovinocultura de Corte'
+
+class Produto(models.Model):
+    lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='produtosOrigemAnimal', on_delete=models.CASCADE)
+    classificacao = models.IntegerField('Classificação')
+    especificacao_choices = (
+        (1, 'Carne(Kg)'),
+        (2, 'Leite(L)'),
+        (3, 'Mel(Kg)'),
+        (4, 'Ovos(Dz)'),
+        (5, 'Peixes(Kg)'),
+        (6, 'Banha(Kg)'),
+        (7, 'Conservas(Un)'),
+        (8, 'Doces(Un)'),
+        (9, 'Farinha de Mandioca(Kg)'),
+        (10, 'Linguiça(Kg)'),
+        (11, 'Povilho de Mandioca(Kg)'),
+        (12, 'Queijo(Kg)'),
+        (13, 'Rapadura(Kg)'),
+        (14, 'Outros')
+    )
+    especificacao = models.IntegerField('Especificação', choices=especificacao_choices)
+    outros = models.CharField('Outros (Especificar)', max_length=30, blank=True, null=True)
+    producao_consumo = models.IntegerField('Produção (Consumo)')
+    producao_comercio = models.IntegerField('Produção (Comércio)')
+    valor = models.DecimalField('Valor R$/Unidade', max_digits=7, decimal_places=2)
+    criado_em = models.DateTimeField('Criado em', auto_now_add=True)
+    atualizado_em = models.DateTimeField('Atualizado em', auto_now=True)
+
+class OrigemAnimalManager(models.Manager):
+    def get_queryset(self):
+        return super(OrigemAnimalManager, self).get_queryset().filter(classificacao=1)
+
+class OrigemAnimal(Produto):
+    objects = OrigemAnimalManager()
+
+    def __str__(self):
+        return '%s - %s' % (str(self.classificacao), str(self.especificacao))
+
+    def save(self, *args, **kwargs):
+        self.classificacao = 1
+        super().save(*args, **kwargs)
+
+    class Meta:
+        proxy = True
+        verbose_name = 'Produto de origem animal produzido'
+        verbose_name_plural = 'Sobre os produtos de origem animal produzidos no último ano agrícola'
+
+class NivelTecnologicoProducaoAnimal(models.Model):
+    lote = models.OneToOneField(
+        Lote, verbose_name='Lote', related_name='nivelTecnologicoProducaoAnimal', on_delete=models.CASCADE,
+        primary_key=True,
+    )
+    sim_nao_choices = (
+        (1, 'Sim'),
+        (0, 'Não')
+    )
+    possui_capineira = models.IntegerField('Possui Capineira?', choices=sim_nao_choices)
+    tipo_capineira_choices = (
+        (10, 'Cana'),
+        (20, 'Napier'),
+        (99, 'Não se aplica')
+    )
+    tipo_capineira = models.IntegerField('Tipo de Capineira', choices=tipo_capineira_choices)
+    area_capineira = models.DecimalField(
+        'Área da capineira (ha)', max_digits=10, decimal_places=4, blank=True, null=True
+    )
+    possui_pastagem_rotacionada = models.IntegerField(
+        'Possui Pastagem em Pastejo Rotacionado?', choices=sim_nao_choices
+    )
+    area_pastagem_rotacionada = models.DecimalField(
+        'Área Pastejo Rotacionado (ha)', max_digits=10, decimal_places=4, blank=True, null=True
+    )
+    patrica_insemincacao = models.IntegerField(
+        'Pratica inseminação artificial no rebanho leiteiro?', choices=sim_nao_choices
+    )
+    criado_em = models.DateTimeField('Criado em', auto_now_add=True)
+    atualizado_em = models.DateTimeField('Atualizado em', auto_now=True)
+
+    def __str__(self):
+        return str(self.possui_capineira)
+
+    class Meta:
+        verbose_name = 'Sobre o Nível Tecnológico da Produção Animal'
+        verbose_name_plural = 'Sobre o Nível Tecnológico da Produção Animal'
+
+class ProcessadoBeneficiadoManager(models.Manager):
+    def get_queryset(self):
+        return super(ProcessadoBeneficiadoManager, self).get_queryset().filter(classificacao=2)
+
+class ProcessadoBeneficiado(Produto):
+    objects = ProcessadoBeneficiadoManager()
+
+    def __str__(self):
+        return '%s - %s' % (str(self.classificacao), str(self.especificacao))
+
+    def save(self, *args, **kwargs):
+        self.classificacao = 2
+        super().save(*args, **kwargs)
+
+    class Meta:
+        proxy = True
+        verbose_name = 'Produto processado ou beneficiado'
+        verbose_name_plural = 'Sobre os produtos processados ou beneficiados no estabelecimento, no último ano agrícola (agroindústria)'
+
+class ProblemaAmbiental(models.Model):
+    lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='problemasAmbientais', on_delete=models.CASCADE)
+    tipo_problema_choices = (
+        (1, 'Erosão (laminar, sulco, voçoroca)'),
+        (2, 'Compactação do solo'),
+        (3, 'Contaminação por uso de  agrotóxicos/destinação inadequada de embalagens'),
+        (4, 'Exposição de lixo de forma inadequada (a céu aberto)'),
+        (5, 'Queima de lixo'),
+        (6, 'Destinação inadequada de pilhas/baterias/lixo eletrônico'),
+        (7, 'Poluição/contaminação nascente e/ou rios/córregos'),
+        (8, 'Assoreamento de rio/córrego'),
+        (9, 'Queimadas'),
+        (10, 'Desmatamento'),
+        (11, 'Outros')
+    )
+    tipo_problema = models.IntegerField('Tipo de problema', choices=tipo_problema_choices)
+    outros = models.CharField('Outros (Especificar)', max_length=50, blank=True, null=True)
+    criado_em = models.DateTimeField('Criado em', auto_now_add=True)
+    atualizado_em = models.DateTimeField('Atualizado em', auto_now=True)
+
+    def __str__(self):
+        return str(self.tipo_problema)
+
+    class Meta:
+        verbose_name = 'Problema ambiental'
+        verbose_name_plural = 'Quais são os problemas ambientais existentes no lote?'
+
+class PraticaConservacionista(models.Model):
+    lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='praticasConservacionistas', on_delete=models.CASCADE)
+    tipo_pratica_choices = (
+        (10, 'Adubação verde'),
+        (20, 'Curvas em nível'),
+        (30, 'Rotação/consórcio de culturas'),
+        (40, 'Adubação orgânica'),
+        (50, 'Cordões de vegetação em nível'),
+        (60, 'Controle alternativo de pragas e doenças'),
+        (70, 'Agrofloresta'),
+        (80, 'Plantios de árvores para proteção de mananciais / áreas degradadas')
+    )
+    tipo_pratica = models.IntegerField('Prática Conservacionista', choices=tipo_pratica_choices)
+    criado_em = models.DateTimeField('Criado em', auto_now_add=True)
+    atualizado_em = models.DateTimeField('Atualizado em', auto_now=True)
+
+    def __str__(self):
+        return str(self.tipo_pratica)
+
+    class Meta:
+        verbose_name = 'Prática conservacionista praticada'
+        verbose_name_plural = 'Quais são as práticas conservacionistas praticadas na propriedade?'
+
+class DestinoLixoDomestico(models.Model):
+    lote = models.OneToOneField(
+        Lote, verbose_name='Lote', related_name='destinosLixoDomestico', on_delete=models.CASCADE,
+        primary_key=True,
+    )
+    destino_choices = (
+        (10, 'Espalhado no lote'),
+        (20, 'Queima'),
+        (30, 'Enterra'),
+        (40, "Joga nos cursos d'água"),
+        (50, 'Recicla/reaproveita lixo inorgânico'),
+        (60, 'Deposita a céu aberto no lote')
+    )
+    destino = models.IntegerField('Destino', choices=destino_choices)
+    criado_em = models.DateTimeField('Criado em', auto_now_add=True)
+    atualizado_em = models.DateTimeField('Atualizado em', auto_now=True)
+
+    def __str__(self):
+        return str(self.destino)
+
+    class Meta:
+        verbose_name = 'Destino do lixo doméstico não orgânico?'
+        verbose_name_plural = 'Qual é o destino do lixo doméstico não orgânico?'
+
+class DestinoMaterialOrganico(models.Model):
+    lote = models.OneToOneField(
+        Lote, verbose_name='Lote', related_name='destinosMaterialOrganico', on_delete=models.CASCADE,
+        primary_key=True,
+    )
+    destino_choices = (
+        (10, 'Uso para alimentação de animais'),
+        (20, 'Faz compostagem'),
+        (30, 'Enterra junto com inorgânico'),
+        (40, 'Deposita a céu aberto no lote')
+    )
+    destino = models.IntegerField('Destino', choices=destino_choices)
+    criado_em = models.DateTimeField('Criado em', auto_now_add=True)
+    atualizado_em = models.DateTimeField('Atualizado em', auto_now=True)
+
+    def __str__(self):
+        return str(self.destino)
+
+    class Meta:
+        verbose_name = 'Destino do material orgânico?'
+        verbose_name_plural = 'Qual o destino do material orgânico?'
+
+class LicenciamentoAmbiental(models.Model):
+    lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='licenciamentosAmbientais', on_delete=models.CASCADE)
+    tipo_atividade_choices = (
+        (1, 'Agropecuária'),
+        (2, 'Irrigação'),
+        (3, 'Aquicultura'),
+        (4, 'Lazer e Turismo'),
+        (5, 'Outros')
+    )
+    tipo_atividade = models.IntegerField('Tipo de atividade', choices=tipo_atividade_choices)
+    outros = models.CharField('Outros (Especificar)', max_length=50, blank=True, null=True)
+    criado_em = models.DateTimeField('Criado em', auto_now_add=True)
+    atualizado_em = models.DateTimeField('Atualizado em', auto_now=True)
+
+    def __str__(self):
+        return str(self.tipo_atividade)
+
+    def save(self, *args, **kwargs):
+        lote = self.lote
+        lote.necessita_licenciamento_ambiental = 1
+        lote.save()
+        super().save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = 'Licenciamento ambiental'
+        verbose_name_plural = 'Necessita de licenciamento ambiental para alguma atividade?'
+
+class AtendimentoSaude(models.Model):
+    lote = models.OneToOneField(
+        Lote, verbose_name='Lote', related_name='atendimentosSaude', on_delete=models.CASCADE,
+        primary_key=True,
+    )
+    local_choices = (
+        (1, 'P.A'),
+        (2, 'Cidade')
+    )
+    hospital = models.IntegerField('Hospital', choices=local_choices)
+    posto_saude = models.IntegerField('Posto de saúde', choices=local_choices)
+    farmacia = models.IntegerField('Farmácia', choices=local_choices)
+    outros = models.IntegerField('Outros', choices=local_choices, blank=True, null=True)
+    outros_especificacao = models.CharField('Outros (Especificar)', max_length=50, blank=True, null=True)
+    criado_em = models.DateTimeField('Criado em', auto_now_add=True)
+    atualizado_em = models.DateTimeField('Atualizado em', auto_now=True)
+
+    def __str__(self):
+        return 'Hospital: %s - Posto de saúde: %s - Farmácia: %s' % (str(self.hospital), str(self.posto_saude), str(self.farmacia))
+
+    class Meta:
+        verbose_name = 'Local de atendimento à saúde'
+        verbose_name_plural = 'Onde é feito o atendimento à saúde para as famílias do assentamento?'
+
+class ProgramaSaude(models.Model):
+    lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='programasSaude', on_delete=models.CASCADE)
+    programa_saude_choices = (
+        (10, 'Programa Saúde da Família - PSF'),
+        (20, 'Agentes Comunitários de Saúde'),
+        (30, 'Atendimento médico'),
+        (40, 'Atendimento odontológico'),
+        (50, 'Campanha de vacinação'),
+        (60, 'Saúde da Mulher')
+    )
+    programa_saude = models.IntegerField('Programa/Tipo de atendimento à saúde', choices=programa_saude_choices)
+    criado_em = models.DateTimeField('Criado em', auto_now_add=True)
+    atualizado_em = models.DateTimeField('Atualizado em', auto_now=True)
+
+    def __str__(self):
+        return str(self.programa_saude)
+
+    class Meta:
+        verbose_name = 'Programa ou tipo de atendimento à saúde disponibilizado no P.A'
+        verbose_name_plural = 'Quais programas ou tipos de atendimento à saúde são disponibilizados no P.A?'
+
+class AtividadeFisica(models.Model):
+    lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='atividadesFisicas', on_delete=models.CASCADE)
+    atividade_fisica_choices = (
+        (1, 'Futebol'),
+        (2, 'Caminhada/corrida'),
+        (3, 'Nenhuma atividade física'),
+        (4, 'Outros')
+    )
+    atividade_fisica = models.IntegerField('Esporte/atividade física', choices=atividade_fisica_choices)
+    outros = models.CharField('Outros (Especificar)', max_length=50, blank=True, null=True)
+    criado_em = models.DateTimeField('Criado em', auto_now_add=True)
+    atualizado_em = models.DateTimeField('Atualizado em', auto_now=True)
+
+    def __str__(self):
+        return str(self.atividade_fisica)
+
+    class Meta:
+        verbose_name = 'Esporte/atividade física praticada'
+        verbose_name_plural = 'Quais são os esportes/atividades físicas praticados pelos familiares com maior frequência?'
+
+class EspacoDisponivel(models.Model):
+    lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='espacosDisponiveis', on_delete=models.CASCADE)
+    espaco_disponivel_choices = (
+        (1, 'Quadra de esportes'),
+        (2, 'Campo de futebol'),
+        (3, 'Salão de festas'),
+        (4, 'Não possui')
+    )
+    espaco_disponivel = models.IntegerField('Espaço disponível', choices=espaco_disponivel_choices)
+    criado_em = models.DateTimeField('Criado em', auto_now_add=True)
+    atualizado_em = models.DateTimeField('Atualizado em', auto_now=True)
+
+    def __str__(self):
+        return str(self.espaco_disponivel)
+
+    class Meta:
+        verbose_name = 'Espaço disponível para a prática de esporte/recreação'
+        verbose_name_plural = 'No assentamento quais são os espaços disponíveis para a prática de esporte ou para a recreação?'
+
+class EstabelecimentoEnsino(models.Model):
+    lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='estabelecimentosEnsino', on_delete=models.CASCADE)
+    estabelecimento_ensino_choices = (
+        (1, 'Pré-escolar (creche)'),
+        (2, 'Ensino Fundamental'),
+        (3, 'EJA'),
+        (4, 'Ensino Médio'),
+        (5, 'Ensino Superior'),
+        (6, 'Ensino Profissionalizante'),
+        (7, 'Não há estabelecimento de ensino no PA')
+    )
+    estabelecimento_ensino = models.IntegerField('Estabelecimento de ensino', choices=estabelecimento_ensino_choices)
+    criado_em = models.DateTimeField('Criado em', auto_now_add=True)
+    atualizado_em = models.DateTimeField('Atualizado em', auto_now=True)
+
+    def __str__(self):
+        return str(self.estabelecimento_ensino)
+
+    class Meta:
+        verbose_name = 'Estabelecimento de ensino disponível no assentamento'
+        verbose_name_plural = 'Que tipo de estabelecimento de ensino está disponível no assentamento?'
