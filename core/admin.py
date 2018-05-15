@@ -4,12 +4,66 @@ from . import models
 from django import forms
 
 
+class CulturaFormAdmin(forms.ModelForm):
+    tipo_producao = forms.ChoiceField(
+        choices=(('', '---------'),) + models.Cultura.CULTURA + ((999, 'Outros'),))
+
+    class Meta:
+        model = models.Cultura
+        fields = '__all__'
+
+
+class OlericulturaFormAdmin(forms.ModelForm):
+    tipo_producao = forms.ChoiceField(
+        choices=(('', '---------'),) + models.Olericultura.OLERICULTURA + ((999, 'Outros'),))
+
+    class Meta:
+        model = models.Olericultura
+        fields = '__all__'
+
+
 class FruticulturaFormAdmin(forms.ModelForm):
     tipo_producao = forms.ChoiceField(
-        choices=(('', '---------'),) + models.Fruticultura.FRUTICULTURA + ((99, 'Outros'),))
+        choices=(('', '---------'),) + models.Fruticultura.FRUTICULTURA + ((999, 'Outros'),))
 
     class Meta:
         model = models.Fruticultura
+        fields = '__all__'
+
+
+class BovinoculturaFormAdmin(forms.ModelForm):
+    especificacao = forms.ChoiceField(
+        choices=(('', '---------'),) + models.Bovinocultura.BOVINOCULTURA + ((999, 'Outros'),))
+
+    class Meta:
+        model = models.Bovinocultura
+        fields = '__all__'
+
+
+class OutraCriacaoFormAdmin(forms.ModelForm):
+    especificacao = forms.ChoiceField(
+        choices=(('', '---------'),) + models.OutraCriacao.OUTRA_CRIACAO + ((999, 'Outros'),))
+
+    class Meta:
+        model = models.OutraCriacao
+        fields = '__all__'
+
+
+class OrigemAnimalFormAdmin(forms.ModelForm):
+    especificacao = forms.ChoiceField(
+        choices=(('', '---------'),) + models.OrigemAnimal.ORIGEM_ANIMAL + ((999, 'Outros'),))
+
+    class Meta:
+        model = models.OrigemAnimal
+        fields = '__all__'
+
+
+class ProcessadoBeneficiadoFormAdmin(forms.ModelForm):
+    especificacao = forms.ChoiceField(
+        choices=(('', '---------'),) + models.ProcessadoBeneficiado.PROCESSADO_BENEFICIADO + ((999, 'Outros'),))
+
+    class Meta:
+        model = models.ProcessadoBeneficiado
         fields = '__all__'
 
 
@@ -17,6 +71,7 @@ class ProjetoAssentamentoAdmin(admin.ModelAdmin):
     list_display = ('codigo', 'nome', 'municipio', 'contrato', 'data_criacao')
     search_fields = ['codigo', 'nome', 'municipio']
     list_filter = ['contrato', 'municipio', 'cadastrado_em', 'modificado_em']
+    exclude = ['desativado_por', 'desativado_em']
 
 
 class OpcaoEnsinoUtilizadaInlineAdmin(nested_admin.NestedStackedInline):
@@ -124,12 +179,14 @@ class CulturaInlineAdmin(admin.StackedInline):
     model = models.Cultura
     exclude = ['classificacao', 'desativado_por', 'desativado_em']
     extra = 1
+    form = CulturaFormAdmin
 
 
 class OlericulturaInlineAdmin(admin.StackedInline):
     model = models.Olericultura
     exclude = ['classificacao', 'desativado_por', 'desativado_em']
     extra = 1
+    form = OlericulturaFormAdmin
 
 
 class FruticulturaInlineAdmin(admin.StackedInline):
@@ -155,21 +212,25 @@ class BovinoculturaInlineAdmin(admin.StackedInline):
     model = models.Bovinocultura
     exclude = ['classificacao', 'desativado_por', 'desativado_em']
     extra = 1
+    form = BovinoculturaFormAdmin
 
 
 class OutraCriacaoInlineAdmin(admin.StackedInline):
     model = models.OutraCriacao
     exclude = ['classificacao', 'tipo_criacao', 'desativado_por', 'desativado_em']
     extra = 1
+    form = OutraCriacaoFormAdmin
 
 
 class NivelTecnologicoProducaoAnimalInlineAdmin(admin.StackedInline):
     model = models.NivelTecnologicoProducaoAnimal
+    extra = 1
     exclude = ['desativado_por', 'desativado_em']
 
 
 class ProblemaAmbientalInlineAdmin(admin.StackedInline):
     model = models.ProblemaAmbiental
+    exclude = ['desativado_por', 'desativado_em']
     extra = 1
 
 
@@ -240,12 +301,14 @@ class OrigemAnimalInlineAdmin(admin.StackedInline):
     model = models.OrigemAnimal
     exclude = ['classificacao', 'desativado_por', 'desativado_em']
     extra = 1
+    form = OrigemAnimalFormAdmin
 
 
 class ProcessadoBeneficiadoInlineAdmin(admin.StackedInline):
     model = models.ProcessadoBeneficiado
     exclude = ['classificacao', 'desativado_por', 'desativado_em']
     extra = 1
+    form = ProcessadoBeneficiadoFormAdmin
 
 
 class NaoPossuiDocumentoInlineAdmin(admin.StackedInline):
@@ -254,7 +317,10 @@ class NaoPossuiDocumentoInlineAdmin(admin.StackedInline):
 
 
 class LoteAdmin(nested_admin.NestedModelAdmin):
-    list_display = ('codigo_sipra', 'area', 'numero', 'projeto_assentamento', 'outra_familia_no_lote', 'tipo_parede_externa')
+    list_display = (
+        'codigo_sipra', 'data_homologacao', 'area', 'numero', 'projeto_assentamento', 'outra_familia_no_lote', 'cad_unico', 'ocupante_irregular',
+        'moradia_assentamento'
+    )
 
     search_fields = ['codigo_sipra', 'numero']
     list_filter = [
@@ -282,7 +348,7 @@ class LoteAdmin(nested_admin.NestedModelAdmin):
         AtendimentoSaudeInlineAdmin, ProgramaSaudeInlineAdmin, AtividadeFisicaInlineAdmin, EspacoDisponivelInlineAdmin,
         EstabelecimentoEnsinoInlineAdmin, NaoPossuiDocumentoInlineAdmin
     ]
-    exclude = ['necessita_licenciamento_ambiental', 'desativado_por', 'desativado_em']
+    exclude = ['possui_capineira', 'necessita_licenciamento_ambiental', 'desativado_por', 'desativado_em']
 
 
 admin.site.register(models.ProjetoAssentamento, ProjetoAssentamentoAdmin)

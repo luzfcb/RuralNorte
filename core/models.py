@@ -81,6 +81,7 @@ class Lote(AuditoriaAbstractModel):
     projeto_assentamento = models.ForeignKey(
         ProjetoAssentamento, verbose_name='PA', related_name='lotes', on_delete=models.CASCADE
     )
+    data_homologacao = models.DateField('Data Homologação', blank=True, null=True)
     codigo_sipra = models.CharField('Código SIPRA', max_length=15)
     area = models.DecimalField('Área (ha)', max_digits=10, decimal_places=4)
     numero = models.IntegerField('Lote N.º')
@@ -110,13 +111,13 @@ class Lote(AuditoriaAbstractModel):
     )
     moradia_assentamento = models.IntegerField('Possui moradia no assentamento?', choices=sim_nao_choices)
 
-    TIPO_PAREDE_ALVENARIA = 1
-    TIPO_PAREDE_TABUAS_MADEIRA = 2
-    TIPO_PAREDE_TAPUMES_OU_CHAPAS_MADEIRA = 3
-    TIPO_PAREDE_FOLHAS_DE_ZINCO = 4
-    TIPO_PAREDE_BARRO_OU_ADOBE = 5
-    TIPO_PAREDE_LONA = 6
-    TIPO_PAREDE_OUTROS = 7
+    TIPO_PAREDE_ALVENARIA = 10
+    TIPO_PAREDE_TABUAS_MADEIRA = 20
+    TIPO_PAREDE_TAPUMES_OU_CHAPAS_MADEIRA = 30
+    TIPO_PAREDE_FOLHAS_DE_ZINCO = 40
+    TIPO_PAREDE_BARRO_OU_ADOBE = 50
+    TIPO_PAREDE_LONA = 60
+    TIPO_PAREDE_OUTROS = 70
 
     tipo_parede_externa_choices = (
         (TIPO_PAREDE_ALVENARIA, 'Alvenaria'),
@@ -132,10 +133,10 @@ class Lote(AuditoriaAbstractModel):
         blank=True, null=True
     )
 
-    TIPO_INSTALACAO_ELETRICA_NAO_INSTALADA = 1
-    TIPO_INSTALACAO_ELETRICA_INSTALADA_APENAS_PARA_MORADIA = 2
-    TIPO_INSTALACAO_ELETRICA_INSTALADA_PARA_MORADIA_E_OUTROS_USOS = 3
-    TIPO_INSTALACAO_ELETRICA_OUTROS = 4
+    TIPO_INSTALACAO_ELETRICA_NAO_INSTALADA = 10
+    TIPO_INSTALACAO_ELETRICA_INSTALADA_APENAS_PARA_MORADIA = 20
+    TIPO_INSTALACAO_ELETRICA_INSTALADA_PARA_MORADIA_E_OUTROS_USOS = 30
+    TIPO_INSTALACAO_ELETRICA_OUTROS = 40
 
     tipo_instalacao_eletrica_choices = (
         (TIPO_INSTALACAO_ELETRICA_NAO_INSTALADA, 'Não instalada'),
@@ -148,10 +149,10 @@ class Lote(AuditoriaAbstractModel):
         blank=True, null=True
     )
 
-    TIPO_INSTALACAO_SANITARIA_BANHEIRO_COM_FOSSA_SEPTICA = 1
-    TIPO_INSTALACAO_SANITARIA_BANHEIRO_COM_FOSSA_NEGRA = 2
-    TIPO_INSTALACAO_SANITARIA_PRIVADA_LATRINA = 3
-    TIPO_INSTALACAO_SANITARIA_NENHUMA = 4
+    TIPO_INSTALACAO_SANITARIA_BANHEIRO_COM_FOSSA_SEPTICA = 10
+    TIPO_INSTALACAO_SANITARIA_BANHEIRO_COM_FOSSA_NEGRA = 20
+    TIPO_INSTALACAO_SANITARIA_PRIVADA_LATRINA = 30
+    TIPO_INSTALACAO_SANITARIA_NENHUMA = 40
 
     tipo_instalacao_sanitaria_choices = (
         (TIPO_INSTALACAO_SANITARIA_BANHEIRO_COM_FOSSA_SEPTICA, 'Banheiro com fossa séptica'),
@@ -177,9 +178,9 @@ class Lote(AuditoriaAbstractModel):
         'A água que abastece a residência é suficiente?', choices=sim_nao_choices
     )
 
-    QUANTAS_FAMILIAS_UTILIZAM_MESMA_FONTE_DE_AGUA_NENHUMA = 1
-    QUANTAS_FAMILIAS_UTILIZAM_MESMA_FONTE_DE_AGUA_UMA_OUTRA_FAMILIA_ALEM_DA_SUA = 2
-    QUANTAS_FAMILIAS_UTILIZAM_MESMA_FONTE_DE_AGUA_MAIS_DE_UMA = 3
+    QUANTAS_FAMILIAS_UTILIZAM_MESMA_FONTE_DE_AGUA_NENHUMA = 10
+    QUANTAS_FAMILIAS_UTILIZAM_MESMA_FONTE_DE_AGUA_UMA_OUTRA_FAMILIA_ALEM_DA_SUA = 20
+    QUANTAS_FAMILIAS_UTILIZAM_MESMA_FONTE_DE_AGUA_MAIS_DE_UMA = 30
 
     quantas_familias_utilizam_mesma_fonte_agua_choices = (
         (QUANTAS_FAMILIAS_UTILIZAM_MESMA_FONTE_DE_AGUA_NENHUMA, 'Nenhuma'),
@@ -194,14 +195,14 @@ class Lote(AuditoriaAbstractModel):
     quantidade_familias_utilizacao_mesma_fonte_agua = models.IntegerField('Mais de uma. Quantas?', blank=True,
                                                                           null=True)
 
-    AGUA_PARA_ANIMAIS_PLANTIO_SIM_OS_ANIMAIS_VAO_ATE_CURSO_DAGUA_OU_REPRESA = 1
-    AGUA_PARA_ANIMAIS_PLANTIO_SIM_AGUA_PUXADA_DE_CURSO_DAGUA_OU_REPRESA = 2
-    AGUA_PARA_ANIMAIS_PLANTIO_SIM_TEMOS_POCO_EXCLUSIVO_PARA_ANIMAIS = 3
-    AGUA_PARA_ANIMAIS_PLANTIO_SIM_MESMA_AGUA_QUE_VEM_PARA_CASA = 4
-    AGUA_PARA_ANIMAIS_PLANTIO_NAO_HA_AGUA_PARA_ANIMAIS = 5
-    AGUA_PARA_ANIMAIS_PLANTIO_SIM_EXISTE_AGUA_PARA_PLANTIO_IRRIGADO = 6
-    AGUA_PARA_ANIMAIS_PLANTIO_NAO_EXISTE_AGUA_PARA_PLANTIO_IRRIGADO = 7
-    AGUA_PARA_ANIMAIS_PLANTIO_OUTROS = 8
+    AGUA_PARA_ANIMAIS_PLANTIO_SIM_OS_ANIMAIS_VAO_ATE_CURSO_DAGUA_OU_REPRESA = 10
+    AGUA_PARA_ANIMAIS_PLANTIO_SIM_AGUA_PUXADA_DE_CURSO_DAGUA_OU_REPRESA = 20
+    AGUA_PARA_ANIMAIS_PLANTIO_SIM_TEMOS_POCO_EXCLUSIVO_PARA_ANIMAIS = 30
+    AGUA_PARA_ANIMAIS_PLANTIO_SIM_MESMA_AGUA_QUE_VEM_PARA_CASA = 40
+    AGUA_PARA_ANIMAIS_PLANTIO_NAO_HA_AGUA_PARA_ANIMAIS = 50
+    AGUA_PARA_ANIMAIS_PLANTIO_SIM_EXISTE_AGUA_PARA_PLANTIO_IRRIGADO = 60
+    AGUA_PARA_ANIMAIS_PLANTIO_NAO_EXISTE_AGUA_PARA_PLANTIO_IRRIGADO = 70
+    AGUA_PARA_ANIMAIS_PLANTIO_OUTROS = 80
 
     agua_para_animais_plantio_choices = (
         (AGUA_PARA_ANIMAIS_PLANTIO_SIM_OS_ANIMAIS_VAO_ATE_CURSO_DAGUA_OU_REPRESA,
@@ -226,10 +227,10 @@ class Lote(AuditoriaAbstractModel):
         'Água para animais/plantio (Outros)', max_length=50, blank=True, null=True
     )
 
-    REGULARIDADE_ABASTECIMENTO_AGUA_SEMPRE_TEM_AGUA = 1
-    REGULARIDADE_ABASTECIMENTO_AGUA_FALTA_AGUA_AS_VEZES = 2
-    REGULARIDADE_ABASTECIMENTO_AGUA_FALTA_AGUA_COM_FREQUENCIA = 3
-    REGULARIDADE_ABASTECIMENTO_AGUA_NUNCA_TEM_AGUA = 4
+    REGULARIDADE_ABASTECIMENTO_AGUA_SEMPRE_TEM_AGUA = 10
+    REGULARIDADE_ABASTECIMENTO_AGUA_FALTA_AGUA_AS_VEZES = 20
+    REGULARIDADE_ABASTECIMENTO_AGUA_FALTA_AGUA_COM_FREQUENCIA = 30
+    REGULARIDADE_ABASTECIMENTO_AGUA_NUNCA_TEM_AGUA = 40
 
     regularidade_abastecimento_agua_choices = (
         (REGULARIDADE_ABASTECIMENTO_AGUA_SEMPRE_TEM_AGUA, 'Sempre tem água'),
@@ -242,11 +243,11 @@ class Lote(AuditoriaAbstractModel):
         choices=regularidade_abastecimento_agua_choices
     )
 
-    TIPO_ESTRADA_DE_ACESSO_ASFALTO = 1
-    TIPO_ESTRADA_DE_ACESSO_ESTRADA_CASCALHADA = 2
-    TIPO_ESTRADA_DE_ACESSO_ESTRADA_DE_TERRA = 3
-    TIPO_ESTRADA_DE_ACESSO_TRILHEIRO = 4
-    TIPO_ESTRADA_DE_ACESSO_INEXISTENTE = 5
+    TIPO_ESTRADA_DE_ACESSO_ASFALTO = 10
+    TIPO_ESTRADA_DE_ACESSO_ESTRADA_CASCALHADA = 20
+    TIPO_ESTRADA_DE_ACESSO_ESTRADA_DE_TERRA = 30
+    TIPO_ESTRADA_DE_ACESSO_TRILHEIRO = 40
+    TIPO_ESTRADA_DE_ACESSO_INEXISTENTE = 50
 
     tipo_estrada_acesso_choices = (
         (TIPO_ESTRADA_DE_ACESSO_ASFALTO, 'Asfalto'),
@@ -260,10 +261,10 @@ class Lote(AuditoriaAbstractModel):
         choices=tipo_estrada_acesso_choices
     )
 
-    SITUACAO_ESTRADA_ACESSO_BOA = 1
-    SITUACAO_ESTRADA_ACESSO_RAZOAVEL = 2
-    SITUACAO_ESTRADA_ACESSO_RUIM = 3
-    SITUACAO_ESTRADA_ACESSO_PESSIMA = 4
+    SITUACAO_ESTRADA_ACESSO_BOA = 10
+    SITUACAO_ESTRADA_ACESSO_RAZOAVEL = 20
+    SITUACAO_ESTRADA_ACESSO_RUIM = 30
+    SITUACAO_ESTRADA_ACESSO_PESSIMA = 40
 
     situacao_estrada_acesso_choices = (
         (SITUACAO_ESTRADA_ACESSO_BOA, 'Boa'),
@@ -276,10 +277,10 @@ class Lote(AuditoriaAbstractModel):
         choices=situacao_estrada_acesso_choices
     )
 
-    SITUACAO_CERCADO_LOTE_TOTALMENTE_CERCADO_COM_DIVISOES_INTERNAS = 1
-    SITUACAO_CERCADO_LOTE_TOTALMENTE_CERCADO_SEM_DIVISOES_INTERNAS = 2
-    SITUACAO_CERCADO_LOTE_PARCIALMENTE_CERCADO = 3
-    SITUACAO_CERCADO_LOTE_NAO_ESTA_CERCADO = 4
+    SITUACAO_CERCADO_LOTE_TOTALMENTE_CERCADO_COM_DIVISOES_INTERNAS = 10
+    SITUACAO_CERCADO_LOTE_TOTALMENTE_CERCADO_SEM_DIVISOES_INTERNAS = 20
+    SITUACAO_CERCADO_LOTE_PARCIALMENTE_CERCADO = 30
+    SITUACAO_CERCADO_LOTE_NAO_ESTA_CERCADO = 40
 
     situacao_cercado_lote_choices = (
         (SITUACAO_CERCADO_LOTE_TOTALMENTE_CERCADO_COM_DIVISOES_INTERNAS, 'Totalmente cercado, com divisões internas'),
@@ -297,6 +298,18 @@ class Lote(AuditoriaAbstractModel):
     area_preservacao_permanente_cercada = models.IntegerField(
         'A Área de Preservação Permanente está cercada ou isolada?', choices=sim_nao_choices
     )
+    possui_capineira = models.IntegerField(
+        'Possui Capineira?', default=0
+    )
+    possui_pastagem_em_pastejo_rotacionado = models.IntegerField(
+        'Possui Pastagem em Pastejo Rotacionado?', choices=sim_nao_choices
+    )
+    area_pastejo_rotacionado = models.DecimalField(
+        'Tamanho da área em sistema de Pastejo Rotacionado', max_digits=10, decimal_places=4, blank=True, null=True
+    )
+    pratica_inseminacao_artificial_no_rebanho_leiteiro = models.IntegerField(
+        'Pratica inseminação aritificial no rebanho leiteiro?', choices=sim_nao_choices
+    )
     necessita_licenciamento_ambiental = models.IntegerField(
         'Necessita de licenciamento ambiental de atividade?', default=0
     )
@@ -304,37 +317,45 @@ class Lote(AuditoriaAbstractModel):
         'Necessita de autorização de exploração florestal e/ou queima controlada?', choices=sim_nao_choices
     )
 
-    QUALIDADE_SERVICO_SAUDE_OTIMO = 1
-    QUALIDADE_SERVICO_SAUDE_BOM = 2
-    QUALIDADE_SERVICO_SAUDE_RUIM = 3
-    QUALIDADE_SERVICO_SAUDE_PESSIMO = 4
+    QUALIDADE_SERVICO_SAUDE_OTIMO = 10
+    QUALIDADE_SERVICO_SAUDE_BOM = 20
+    QUALIDADE_SERVICO_SAUDE_RUIM = 30
+    QUALIDADE_SERVICO_SAUDE_PESSIMO = 40
 
     qualidade_servico_saude_choices = (
-        (1, 'Ótimo'),
-        (2, 'Bom'),
-        (3, 'Ruim'),
-        (4, 'Péssimo')
+        (QUALIDADE_SERVICO_SAUDE_OTIMO, 'Ótimo'),
+        (QUALIDADE_SERVICO_SAUDE_BOM, 'Bom'),
+        (QUALIDADE_SERVICO_SAUDE_RUIM, 'Ruim'),
+        (QUALIDADE_SERVICO_SAUDE_PESSIMO, 'Péssimo')
     )
     qualidade_servico_saude = models.IntegerField(
         'Como os moradores consideram o serviço de saúde no assentamento?', choices=qualidade_servico_saude_choices
     )
 
-    FREQUENCIA_ATIVIDADE_FISICA_DIARIAMENTE = 1
-    FREQUENCIA_ATIVIDADE_FISICA_DUAS_VEZES_POR_SEMANA = 2
-    FREQUENCIA_ATIVIDADE_FISICA_MAIS_DE_DUAS_VEZES_POR_SEMANA = 3
-    FREQUENCIA_ATIVIDADE_FISICA_NAO_PRATICA = 4
+    FREQUENCIA_ATIVIDADE_FISICA_DIARIAMENTE = 10
+    FREQUENCIA_ATIVIDADE_FISICA_DUAS_VEZES_POR_SEMANA = 20
+    FREQUENCIA_ATIVIDADE_FISICA_MAIS_DE_DUAS_VEZES_POR_SEMANA = 30
+    FREQUENCIA_ATIVIDADE_FISICA_NAO_PRATICA = 40
 
     frequencia_atividade_fisica_choices = (
-        (1, 'Diariamente'),
-        (2, 'Duas vezes por semana'),
-        (3, 'Mais de duas vezes por semana'),
-        (4, 'Não pratica')
+        (FREQUENCIA_ATIVIDADE_FISICA_DIARIAMENTE, 'Diariamente'),
+        (FREQUENCIA_ATIVIDADE_FISICA_DUAS_VEZES_POR_SEMANA, 'Duas vezes por semana'),
+        (FREQUENCIA_ATIVIDADE_FISICA_MAIS_DE_DUAS_VEZES_POR_SEMANA, 'Mais de duas vezes por semana'),
+        (FREQUENCIA_ATIVIDADE_FISICA_NAO_PRATICA, 'Não pratica')
     )
     frequencia_atividade_fisica = models.IntegerField(
         'Com que frequência praticam atividades físicas ou esportes?', choices=frequencia_atividade_fisica_choices
     )
+    OFERTA_TRANSPORTE_INTERNO_SIM = 1
+    OFERTA_TRANSPORTE_INTERNO_NAO = 0
+    OFERTA_TRANSPORTE_INTERNO_NAO_SE_APLICA = 99
+    oferta_transporte_interno_choices = (
+        (OFERTA_TRANSPORTE_INTERNO_SIM, 'Sim'),
+        (OFERTA_TRANSPORTE_INTERNO_NAO, 'Não'),
+        (OFERTA_TRANSPORTE_INTERNO_NAO_SE_APLICA, 'Não se aplica')
+    )
     oferta_transporte_interno = models.IntegerField(
-        'Para a escola do assentamento há oferta de transporte interno?', choices=sim_nao_choices
+        'Para a escola do assentamento há oferta de transporte interno?', choices=oferta_transporte_interno_choices
     )
 
     def __str__(self):
@@ -344,11 +365,11 @@ class Lote(AuditoriaAbstractModel):
 class DocumentoLote(AuditoriaAbstractModel):
     lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='documentos', on_delete=models.CASCADE)
 
-    TIPO_DOCUMENTO_CONTRATO_DE_ASSENTAMENTO = 1
-    TIPO_DOCUMENTO_CONTRATO_DE_CONCESSAO_DE_USO = 2
-    TIPO_DOCUMENTO_TITULO_DEFINITIVO_NAO_REGISTRADO = 3
-    TIPO_DOCUMENTO_TITULO_DEFINITIVO_REGISTRADO_CARTORIO = 4
-    TIPO_DOCUMENTO_MATRICULA_DA_PROPRIEDADE = 5
+    TIPO_DOCUMENTO_CONTRATO_DE_ASSENTAMENTO = 10
+    TIPO_DOCUMENTO_CONTRATO_DE_CONCESSAO_DE_USO = 20
+    TIPO_DOCUMENTO_TITULO_DEFINITIVO_NAO_REGISTRADO = 30
+    TIPO_DOCUMENTO_TITULO_DEFINITIVO_REGISTRADO_CARTORIO = 40
+    TIPO_DOCUMENTO_MATRICULA_DA_PROPRIEDADE = 50
 
     tipo_documento_choices = (
         (TIPO_DOCUMENTO_CONTRATO_DE_ASSENTAMENTO, 'Contrato de Assentamento'),
@@ -370,12 +391,12 @@ class DocumentoLote(AuditoriaAbstractModel):
 class BeneficioSocial(AuditoriaAbstractModel):
     lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='beneficios', on_delete=models.CASCADE)
 
-    TIPO_BENEFICIO_APOSENTADORIA_POR_TEMPO_DE_SERVICO_IDADE = 1
-    TIPO_BENEFICIO_APOSENTADORIA_POR_INVALIDEZ = 2
-    TIPO_BENEFICIO_AUXILIO_MATERNIDADE = 3
-    TIPO_BENEFICIO_BOLSA_FAMILIA = 4
-    TIPO_BENEFICIO_BOLSA_VERDE = 5
-    TIPO_BENEFICIO_OUTROS = 6
+    TIPO_BENEFICIO_APOSENTADORIA_POR_TEMPO_DE_SERVICO_IDADE = 10
+    TIPO_BENEFICIO_APOSENTADORIA_POR_INVALIDEZ = 20
+    TIPO_BENEFICIO_AUXILIO_MATERNIDADE = 30
+    TIPO_BENEFICIO_BOLSA_FAMILIA = 40
+    TIPO_BENEFICIO_BOLSA_VERDE = 50
+    TIPO_BENEFICIO_OUTROS = 60
 
     tipo_beneficio_choices = (
         (TIPO_BENEFICIO_APOSENTADORIA_POR_TEMPO_DE_SERVICO_IDADE, 'Aposentadoria por tempo de serviço/idade'),
@@ -399,12 +420,12 @@ class BeneficioSocial(AuditoriaAbstractModel):
 class AutoDeclaracaoEtnia(AuditoriaAbstractModel):
     lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='autoDeclaracoes', on_delete=models.CASCADE)
 
-    TIPO_DECLARACAO_ETNIA_NEGROS = 1
-    TIPO_DECLARACAO_ETNIA_PARDOS = 2
-    TIPO_DECLARACAO_ETNIA_BRANCOS = 3
-    TIPO_DECLARACAO_ETNIA_INDIOS = 4
-    TIPO_DECLARACAO_ETNIA_ORIENTAIS = 5
-    TIPO_DECLARACAO_ETNIA_OUTROS = 6
+    TIPO_DECLARACAO_ETNIA_NEGROS = 10
+    TIPO_DECLARACAO_ETNIA_PARDOS = 20
+    TIPO_DECLARACAO_ETNIA_BRANCOS = 30
+    TIPO_DECLARACAO_ETNIA_INDIOS = 40
+    TIPO_DECLARACAO_ETNIA_ORIENTAIS = 50
+    TIPO_DECLARACAO_ETNIA_OUTROS = 60
 
     tipo_declaracao_etnia_choices = (
         (TIPO_DECLARACAO_ETNIA_NEGROS, 'Negros'),
@@ -430,16 +451,16 @@ class EstruturaOrganizativa(AuditoriaAbstractModel):
     lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='estruturasOrganizativas',
                              on_delete=models.CASCADE)
 
-    TIPO_ESTRUTURA_ORGANIZATIVA_ASSOCIACAO_COMUNITARIA = 1
-    TIPO_ESTRUTURA_ORGANIZATIVA_COOPERATIVAS_PRODUCAO_CREDITOS = 2
-    TIPO_ESTRUTURA_ORGANIZATIVA_ASSOCIACAO_OU_GRUPOS_DE_MULHERES = 3
-    TIPO_ESTRUTURA_ORGANIZATIVA_NUCLEOS_DE_BASE_LIGADOS_AOS_MOVIMENTOS = 4
-    TIPO_ESTRUTURA_ORGANIZATIVA_TRABALHOS_COLETIVOS_MULTIROES = 5
-    TIPO_ESTRUTURA_ORGANIZATIVA_GRUPOS_VINCULADOS_A_IGREJA = 6
-    TIPO_ESTRUTURA_ORGANIZATIVA_GRUPOS_DE_JOVENS = 7
-    TIPO_ESTRUTURA_ORGANIZATIVA_GRUPOS_DE_SAUDE = 8
-    TIPO_ESTRUTURA_ORGANIZATIVA_ASSOCIACAO_DE_PAIS_E_MESTRES = 9
-    TIPO_ESTRUTURA_ORGANIZATIVA_GRUPOS_DE_LASER_E_CULTURA = 10
+    TIPO_ESTRUTURA_ORGANIZATIVA_ASSOCIACAO_COMUNITARIA = 10
+    TIPO_ESTRUTURA_ORGANIZATIVA_COOPERATIVAS_PRODUCAO_CREDITOS = 20
+    TIPO_ESTRUTURA_ORGANIZATIVA_ASSOCIACAO_OU_GRUPOS_DE_MULHERES = 30
+    TIPO_ESTRUTURA_ORGANIZATIVA_NUCLEOS_DE_BASE_LIGADOS_AOS_MOVIMENTOS = 40
+    TIPO_ESTRUTURA_ORGANIZATIVA_TRABALHOS_COLETIVOS_MULTIROES = 50
+    TIPO_ESTRUTURA_ORGANIZATIVA_GRUPOS_VINCULADOS_A_IGREJA = 60
+    TIPO_ESTRUTURA_ORGANIZATIVA_GRUPOS_DE_JOVENS = 70
+    TIPO_ESTRUTURA_ORGANIZATIVA_GRUPOS_DE_SAUDE = 80
+    TIPO_ESTRUTURA_ORGANIZATIVA_ASSOCIACAO_DE_PAIS_E_MESTRES = 90
+    TIPO_ESTRUTURA_ORGANIZATIVA_GRUPOS_DE_LASER_E_CULTURA = 100
 
     tipo_estrutura_organizativa_choices = (
         (TIPO_ESTRUTURA_ORGANIZATIVA_ASSOCIACAO_COMUNITARIA, 'Associação comunitária'),
@@ -456,10 +477,10 @@ class EstruturaOrganizativa(AuditoriaAbstractModel):
     tipo_estrutura_organizativa = models.IntegerField('Estrutura organizativa',
                                                       choices=tipo_estrutura_organizativa_choices)
 
-    FREQUENCIA_FREQUENTE = 1
-    FREQUENCIA_REGULARMENTE = 2
-    FREQUENCIA_RARAMENTE = 3
-    FREQUENCIA_NAO_PARTICIPA = 4
+    FREQUENCIA_FREQUENTE = 10
+    FREQUENCIA_REGULARMENTE = 20
+    FREQUENCIA_RARAMENTE = 30
+    FREQUENCIA_NAO_PARTICIPA = 40
 
     frequencia_choices = (
         (FREQUENCIA_FREQUENTE, 'Frequente (>70%)'),
@@ -480,15 +501,15 @@ class EstruturaOrganizativa(AuditoriaAbstractModel):
 class FonteAgua(AuditoriaAbstractModel):
     lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='fontesAgua', on_delete=models.CASCADE)
 
-    FONTE_DE_AGUA_POCO_ARTESIANO = 1
-    FONTE_DE_AGUA_NASCENTE_OU_VERTENTE = 2
-    FONTE_DE_AGUA_CORREGOS_OU_RIOS = 3
-    FONTE_DE_AGUA_CAPITACAO_DE_AGUA_DA_CHUVA = 4
-    FONTE_DE_AGUA_ACUDE_BARREIRO = 5
-    FONTE_DE_AGUA_POCO_COMUM = 6
-    FONTE_DE_AGUA_DEPOSITO_COLETIVO = 7
-    FONTE_DE_AGUA_REDE_DE_AGUA_ENCANADA = 8
-    FONTE_DE_AGUA_OUTRA = 9
+    FONTE_DE_AGUA_POCO_ARTESIANO = 10
+    FONTE_DE_AGUA_NASCENTE_OU_VERTENTE = 20
+    FONTE_DE_AGUA_CORREGOS_OU_RIOS = 30
+    FONTE_DE_AGUA_CAPITACAO_DE_AGUA_DA_CHUVA = 40
+    FONTE_DE_AGUA_ACUDE_BARREIRO = 50
+    FONTE_DE_AGUA_POCO_COMUM = 60
+    FONTE_DE_AGUA_DEPOSITO_COLETIVO = 70
+    FONTE_DE_AGUA_REDE_DE_AGUA_ENCANADA = 80
+    FONTE_DE_AGUA_OUTRA = 90
 
     fonte_agua_choices = (
         (FONTE_DE_AGUA_POCO_ARTESIANO, 'Poço artesiano'),
@@ -515,12 +536,12 @@ class FonteAgua(AuditoriaAbstractModel):
 class TratamentoAgua(AuditoriaAbstractModel):
     lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='tratamentosAgua', on_delete=models.CASCADE)
 
-    TRATAMENTO_AGUA_NAO_HA_TRATAMENTO = 1
-    TRATAMENTO_AGUA_CLORACAO = 2
-    TRATAMENTO_AGUA_FERVURA = 3
-    TRATAMENTO_AGUA_FILTRAGEM = 4
-    TRATAMENTO_AGUA_DESSALINIZACAO = 5
-    TRATAMENTO_AGUA_OUTRA = 6
+    TRATAMENTO_AGUA_NAO_HA_TRATAMENTO = 10
+    TRATAMENTO_AGUA_CLORACAO = 20
+    TRATAMENTO_AGUA_FERVURA = 30
+    TRATAMENTO_AGUA_FILTRAGEM = 40
+    TRATAMENTO_AGUA_DESSALINIZACAO = 50
+    TRATAMENTO_AGUA_OUTRA = 60
 
     tratamento_agua_choices = (
         (TRATAMENTO_AGUA_NAO_HA_TRATAMENTO, 'Não há tratamento'),
@@ -543,16 +564,16 @@ class TratamentoAgua(AuditoriaAbstractModel):
 class ConstrucaoLote(AuditoriaAbstractModel):
     lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='construcoesLote', on_delete=models.CASCADE)
 
-    CONSTRUCAO_NO_LOTE_GALPAO = 1
-    CONSTRUCAO_NO_LOTE_CURRAL = 2
-    CONSTRUCAO_NO_LOTE_CHIQUEIRO = 3
-    CONSTRUCAO_NO_LOTE_GALINHEIRO = 4
-    CONSTRUCAO_NO_LOTE_SEGUNDA_CASA = 5
-    CONSTRUCAO_NO_LOTE_REPRESA = 6
-    CONSTRUCAO_NO_LOTE_ESPACO_PARA_CULTOS_RELIGIOSOS = 7
-    CONSTRUCAO_NO_LOTE_ESTABELECIMENTO_COMERCIAL = 8
-    CONSTRUCAO_NO_LOTE_AGROINDUSTRIA = 9
-    CONSTRUCAO_NO_LOTE_OUTROS = 10
+    CONSTRUCAO_NO_LOTE_GALPAO = 10
+    CONSTRUCAO_NO_LOTE_CURRAL = 20
+    CONSTRUCAO_NO_LOTE_CHIQUEIRO = 30
+    CONSTRUCAO_NO_LOTE_GALINHEIRO = 40
+    CONSTRUCAO_NO_LOTE_SEGUNDA_CASA = 50
+    CONSTRUCAO_NO_LOTE_REPRESA = 60
+    CONSTRUCAO_NO_LOTE_ESPACO_PARA_CULTOS_RELIGIOSOS = 70
+    CONSTRUCAO_NO_LOTE_ESTABELECIMENTO_COMERCIAL = 80
+    CONSTRUCAO_NO_LOTE_AGROINDUSTRIA = 90
+    CONSTRUCAO_NO_LOTE_OUTROS = 100
 
     construcao_no_lote_choices = (
         (CONSTRUCAO_NO_LOTE_GALPAO, 'Galpão'),
@@ -581,24 +602,24 @@ class ConstrucaoLote(AuditoriaAbstractModel):
 class BemProdutivo(AuditoriaAbstractModel):
     lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='bensProdutivos', on_delete=models.CASCADE)
 
-    BEM_PRODUTIVO_TRATOR = 1
-    BEM_PRODUTIVO_CAMINHAO = 2
-    BEM_PRODUTIVO_CAMINHONETE = 3
-    BEM_PRODUTIVO_ARADO_GRADE = 4
-    BEM_PRODUTIVO_PLANTADEIRA_ADUBADEIRA = 5
-    BEM_PRODUTIVO_PULVERIZADOR_TRATORIZADO = 6
-    BEM_PRODUTIVO_CARROCA_OU_CARRO_DE_BOI = 7
-    BEM_PRODUTIVO_ARADO_DE_TRACAO_ANIMAL = 8
-    BEM_PRODUTIVO_TRITURADOR = 9
-    BEM_PRODUTIVO_RESFRIADOR_DE_LEITE = 10
-    BEM_PRODUTIVO_COCHOS = 11
-    BEM_PRODUTIVO_CALCARIADORA = 12
-    BEM_PRODUTIVO_BOMBA_PULVERIZADOR_COSTAL = 13
-    BEM_PRODUTIVO_MATRACA = 14
-    BEM_PRODUTIVO_BRETE_VACINACAO_GADO = 15
-    BEM_PRODUTIVO_ROCADEIRA = 16
-    BEM_PRODUTIVO_MOTOSSERRA = 17
-    BEM_PRODUTIVO_OUTROS = 18
+    BEM_PRODUTIVO_TRATOR = 10
+    BEM_PRODUTIVO_CAMINHAO = 20
+    BEM_PRODUTIVO_CAMINHONETE = 30
+    BEM_PRODUTIVO_ARADO_GRADE = 40
+    BEM_PRODUTIVO_PLANTADEIRA_ADUBADEIRA = 50
+    BEM_PRODUTIVO_PULVERIZADOR_TRATORIZADO = 60
+    BEM_PRODUTIVO_CARROCA_OU_CARRO_DE_BOI = 70
+    BEM_PRODUTIVO_ARADO_DE_TRACAO_ANIMAL = 80
+    BEM_PRODUTIVO_TRITURADOR = 90
+    BEM_PRODUTIVO_RESFRIADOR_DE_LEITE = 100
+    BEM_PRODUTIVO_COCHOS = 110
+    BEM_PRODUTIVO_CALCARIADORA = 120
+    BEM_PRODUTIVO_BOMBA_PULVERIZADOR_COSTAL = 130
+    BEM_PRODUTIVO_MATRACA = 140
+    BEM_PRODUTIVO_BRETE_VACINACAO_GADO = 150
+    BEM_PRODUTIVO_ROCADEIRA = 160
+    BEM_PRODUTIVO_MOTOSSERRA = 170
+    BEM_PRODUTIVO_OUTROS = 180
 
     bem_produtivo_choices = (
         (BEM_PRODUTIVO_TRATOR, 'Trator'),
@@ -635,15 +656,15 @@ class BemProdutivo(AuditoriaAbstractModel):
 class AplicacaoCredito(AuditoriaAbstractModel):
     lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='aplicacoesCredito', on_delete=models.CASCADE)
 
-    TIPO_APLICACAO_CREDITO_APOIO_INICIAL_ANTES_DE_2015 = 1
-    TIPO_APLICACAO_CREDITO_APOIO_INICIAL_I_APOS_2015 = 2
-    TIPO_APLICACAO_CREDITO_APOIO_INICIAL_II_APOS_2015 = 3
-    TIPO_APLICACAO_CREDITO_FOMENTO = 4
-    TIPO_APLICACAO_CREDITO_FOMENTO_MULHER = 5
-    TIPO_APLICACAO_CREDITO_MORADIA = 6
-    TIPO_APLICACAO_CREDITO_PNHR_MINHA_CASA_MINHA_VIDA = 7
-    TIPO_APLICACAO_CREDITO_REFORMA_MORADIA = 8
-    TIPO_APLICACAO_CREDITO_PNHR_REFORMA = 9
+    TIPO_APLICACAO_CREDITO_APOIO_INICIAL_ANTES_DE_2015 = 10
+    TIPO_APLICACAO_CREDITO_APOIO_INICIAL_I_APOS_2015 = 20
+    TIPO_APLICACAO_CREDITO_APOIO_INICIAL_II_APOS_2015 = 30
+    TIPO_APLICACAO_CREDITO_FOMENTO = 40
+    TIPO_APLICACAO_CREDITO_FOMENTO_MULHER = 50
+    TIPO_APLICACAO_CREDITO_MORADIA = 60
+    TIPO_APLICACAO_CREDITO_PNHR_MINHA_CASA_MINHA_VIDA = 70
+    TIPO_APLICACAO_CREDITO_REFORMA_MORADIA = 80
+    TIPO_APLICACAO_CREDITO_PNHR_REFORMA = 90
 
     tipo_aplicacao_credito_choices = (
         (TIPO_APLICACAO_CREDITO_APOIO_INICIAL_ANTES_DE_2015, 'Apoio inicial (antes de 2015)'),
@@ -670,13 +691,13 @@ class AplicacaoCredito(AuditoriaAbstractModel):
 class CreditoBancario(AuditoriaAbstractModel):
     lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='creditosBancarios', on_delete=models.CASCADE)
 
-    CREDITO_BANCARIO_MICRO_CREDITO_PRODUTIVO_A = 1
-    CREDITO_BANCARIO_A = 2
-    CREDITO_BANCARIO_A_C = 3
-    CREDITO_BANCARIO_JOVEM = 4
-    CREDITO_BANCARIO_MULHER = 5
-    CREDITO_BANCARIO_RECUPERACAO_COMPLEMENTAR = 6
-    CREDITO_BANCARIO_OUTROS = 7
+    CREDITO_BANCARIO_MICRO_CREDITO_PRODUTIVO_A = 10
+    CREDITO_BANCARIO_A = 20
+    CREDITO_BANCARIO_A_C = 30
+    CREDITO_BANCARIO_JOVEM = 40
+    CREDITO_BANCARIO_MULHER = 50
+    CREDITO_BANCARIO_RECUPERACAO_COMPLEMENTAR = 60
+    CREDITO_BANCARIO_OUTROS = 70
 
     credito_bancario_choices = (
         (CREDITO_BANCARIO_MICRO_CREDITO_PRODUTIVO_A, 'Micro Crédito Produtivo (A)'),
@@ -708,15 +729,15 @@ class ProducaoVegetal(AuditoriaAbstractModel):
     lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='producoesVegetais', on_delete=models.CASCADE)
     classificacao = models.IntegerField('Classificação')
 
-    TIPO_PRODUCAO_AMENDOIM = 1
-    TIPO_PRODUCAO_ARROZ = 2
-    TIPO_PRODUCAO_BATATA_DOCE = 3
-    TIPO_PRODUCAO_CANA_DE_ACUCAR = 4
-    TIPO_PRODUCAO_FEIJAO = 5
-    TIPO_PRODUCAO_MAMONA = 6
-    TIPO_PRODUCAO_MANDIOCA_DE_FARINHA = 7
-    TIPO_PRODUCAO_MANDIOCA_DE_MESA = 8
-    TIPO_PRODUCAO_MILHO = 9
+    TIPO_PRODUCAO_AMENDOIM = 10
+    TIPO_PRODUCAO_ARROZ = 20
+    TIPO_PRODUCAO_BATATA_DOCE = 30
+    TIPO_PRODUCAO_CANA_DE_ACUCAR = 40
+    TIPO_PRODUCAO_FEIJAO = 50
+    TIPO_PRODUCAO_MAMONA = 60
+    TIPO_PRODUCAO_MANDIOCA_DE_FARINHA = 70
+    TIPO_PRODUCAO_MANDIOCA_DE_MESA = 80
+    TIPO_PRODUCAO_MILHO = 90
 
     CULTURA = ((TIPO_PRODUCAO_AMENDOIM, 'Amendoim'),
                (TIPO_PRODUCAO_ARROZ, 'Arroz'),
@@ -728,79 +749,79 @@ class ProducaoVegetal(AuditoriaAbstractModel):
                (TIPO_PRODUCAO_MANDIOCA_DE_MESA, 'Mandioca de / Mesa'),
                (TIPO_PRODUCAO_MILHO, 'Milho'))
 
-    TIPO_PRODUCAO_ALFACE = 10
-    TIPO_PRODUCAO_CEBOLINHA = 11
-    TIPO_PRODUCAO_COUVE = 12
-    TIPO_PRODUCAO_COENTRO = 13
-    TIPO_PRODUCAO_COUVE_FLOR = 14
-    TIPO_PRODUCAO_RABANETE = 15
-    TIPO_PRODUCAO_RUCULA = 16
-    TIPO_PRODUCAO_SALSA = 17
-    TIPO_PRODUCAO_ABOBORA = 18
-    TIPO_PRODUCAO_MAXIXE = 19
-    TIPO_PRODUCAO_MELANCIA = 20
-    TIPO_PRODUCAO_MELAO = 21
-    TIPO_PRODUCAO_PEPINO = 22
-    TIPO_PRODUCAO_PIMENTAO = 23
-    TIPO_PRODUCAO_QUIABO = 24
-    TIPO_PRODUCAO_TOMATE = 25
+    TIPO_PRODUCAO_ALFACE = 100
+    TIPO_PRODUCAO_CEBOLINHA = 110
+    TIPO_PRODUCAO_COUVE = 120
+    TIPO_PRODUCAO_COENTRO = 130
+    TIPO_PRODUCAO_COUVE_FLOR = 140
+    TIPO_PRODUCAO_RABANETE = 150
+    TIPO_PRODUCAO_RUCULA = 160
+    TIPO_PRODUCAO_SALSA = 170
+    TIPO_PRODUCAO_ABOBORA = 180
+    TIPO_PRODUCAO_MAXIXE = 190
+    TIPO_PRODUCAO_MELANCIA = 200
+    TIPO_PRODUCAO_MELAO = 210
+    TIPO_PRODUCAO_PEPINO = 220
+    TIPO_PRODUCAO_PIMENTAO = 230
+    TIPO_PRODUCAO_QUIABO = 240
+    TIPO_PRODUCAO_TOMATE = 250
 
     OLERICULTURA = (
-        (10, 'Alface'),
-        (11, 'Cebolinha'),
-        (12, 'Couve'),
-        (13, 'Coentro'),
-        (14, 'Couve-flor'),
-        (15, 'Rabanete'),
-        (16, 'Rúcula'),
-        (17, 'Salsa'),
-        (18, 'Abóbora'),
-        (19, 'Maxixe'),
-        (20, 'Melancia'),
-        (21, 'Melão'),
-        (22, 'Pepino'),
-        (23, 'Pimentão'),
-        (24, 'Quiabo'),
-        (25, 'Tomate')
+        (TIPO_PRODUCAO_ALFACE, 'Alface'),
+        (TIPO_PRODUCAO_CEBOLINHA, 'Cebolinha'),
+        (TIPO_PRODUCAO_COUVE, 'Couve'),
+        (TIPO_PRODUCAO_COENTRO, 'Coentro'),
+        (TIPO_PRODUCAO_COUVE_FLOR, 'Couve-flor'),
+        (TIPO_PRODUCAO_RABANETE, 'Rabanete'),
+        (TIPO_PRODUCAO_RUCULA, 'Rúcula'),
+        (TIPO_PRODUCAO_SALSA, 'Salsa'),
+        (TIPO_PRODUCAO_ABOBORA, 'Abóbora'),
+        (TIPO_PRODUCAO_MAXIXE, 'Maxixe'),
+        (TIPO_PRODUCAO_MELANCIA, 'Melancia'),
+        (TIPO_PRODUCAO_MELAO, 'Melão'),
+        (TIPO_PRODUCAO_PEPINO, 'Pepino'),
+        (TIPO_PRODUCAO_PIMENTAO, 'Pimentão'),
+        (TIPO_PRODUCAO_QUIABO, 'Quiabo'),
+        (TIPO_PRODUCAO_TOMATE, 'Tomate')
     )
 
-    TIPO_PRODUCAO_ABACATE = 26
-    TIPO_PRODUCAO_ACEROLA = 27
-    TIPO_PRODUCAO_BANANA = 28
-    TIPO_PRODUCAO_CAJU = 29
-    TIPO_PRODUCAO_COCO = 30
-    TIPO_PRODUCAO_GOIABA = 31
-    TIPO_PRODUCAO_JABUTICABA = 32
-    TIPO_PRODUCAO_JACA = 33
-    TIPO_PRODUCAO_LARANJA = 34
-    TIPO_PRODUCAO_LIMA = 35
-    TIPO_PRODUCAO_LIMAO = 36
-    TIPO_PRODUCAO_MANGA = 37
-    TIPO_PRODUCAO_MARACUJA = 38
-    TIPO_PRODUCAO_TAMARINDO = 39
-    TIPO_PRODUCAO_TANGERINA = 40
-    TIPO_PRODUCAO_UVA = 41
+    TIPO_PRODUCAO_ABACATE = 260
+    TIPO_PRODUCAO_ACEROLA = 270
+    TIPO_PRODUCAO_BANANA = 280
+    TIPO_PRODUCAO_CAJU = 290
+    TIPO_PRODUCAO_COCO = 300
+    TIPO_PRODUCAO_GOIABA = 310
+    TIPO_PRODUCAO_JABUTICABA = 320
+    TIPO_PRODUCAO_JACA = 330
+    TIPO_PRODUCAO_LARANJA = 340
+    TIPO_PRODUCAO_LIMA = 350
+    TIPO_PRODUCAO_LIMAO = 360
+    TIPO_PRODUCAO_MANGA = 370
+    TIPO_PRODUCAO_MARACUJA = 380
+    TIPO_PRODUCAO_TAMARINDO = 390
+    TIPO_PRODUCAO_TANGERINA = 400
+    TIPO_PRODUCAO_UVA = 410
 
     FRUTICULTURA = (
-        (26, 'Abacate'),
-        (27, 'Acerola'),
-        (28, 'Banana'),
-        (29, 'Cajú'),
-        (30, 'Côco'),
-        (31, 'Goiaba'),
-        (32, 'Jabuticaba'),
-        (33, 'Jaca'),
-        (34, 'Laranja'),
-        (35, 'Lima'),
-        (36, 'Limão'),
-        (37, 'Manga'),
-        (38, 'Maracujá'),
-        (39, 'Tamarindo'),
-        (40, 'Tangerina'),
-        (41, 'Uva')
+        (TIPO_PRODUCAO_ABACATE, 'Abacate'),
+        (TIPO_PRODUCAO_ACEROLA, 'Acerola'),
+        (TIPO_PRODUCAO_BANANA, 'Banana'),
+        (TIPO_PRODUCAO_CAJU, 'Cajú'),
+        (TIPO_PRODUCAO_COCO, 'Côco'),
+        (TIPO_PRODUCAO_GOIABA, 'Goiaba'),
+        (TIPO_PRODUCAO_JABUTICABA, 'Jabuticaba'),
+        (TIPO_PRODUCAO_JACA, 'Jaca'),
+        (TIPO_PRODUCAO_LARANJA, 'Laranja'),
+        (TIPO_PRODUCAO_LIMA, 'Lima'),
+        (TIPO_PRODUCAO_LIMAO, 'Limão'),
+        (TIPO_PRODUCAO_MANGA, 'Manga'),
+        (TIPO_PRODUCAO_MARACUJA, 'Maracujá'),
+        (TIPO_PRODUCAO_TAMARINDO, 'Tamarindo'),
+        (TIPO_PRODUCAO_TANGERINA, 'Tangerina'),
+        (TIPO_PRODUCAO_UVA, 'Uva')
     )
 
-    TIPO_PRODUCAO_OUTROS = 99
+    TIPO_PRODUCAO_OUTROS = 999
 
     tipo_producao_choices = CULTURA + OLERICULTURA + FRUTICULTURA + (
         (TIPO_PRODUCAO_OUTROS, 'Outros'),
@@ -843,10 +864,10 @@ class ProducaoVegetal(AuditoriaAbstractModel):
     area_irrigada = models.DecimalField('Área irrigada', max_digits=10, decimal_places=4, blank=True, null=True)
     medida_area_irrigada = models.IntegerField('Medida da área irrigada', choices=medida_choices, blank=True, null=True)
 
-    TIPO_IRRIGACAO_ASPERSAO = 1
-    TIPO_IRRIGACAO_SULCO = 2
-    TIPO_IRRIGACAO_GOTEJAMENTO = 3
-    TIPO_IRRIGACAO_OUTROS = 4
+    TIPO_IRRIGACAO_ASPERSAO = 10
+    TIPO_IRRIGACAO_SULCO = 20
+    TIPO_IRRIGACAO_GOTEJAMENTO = 30
+    TIPO_IRRIGACAO_OUTROS = 40
 
     tipo_irrigacao_choices = (
         (TIPO_IRRIGACAO_ASPERSAO, 'Aspersão'),
@@ -855,6 +876,38 @@ class ProducaoVegetal(AuditoriaAbstractModel):
         (TIPO_IRRIGACAO_OUTROS, 'Outros')
     )
     tipo_irrigacao = models.IntegerField('Tipo de irrigação', choices=tipo_irrigacao_choices, blank=True, null=True)
+
+    CANAL_COMERCIALIZACAO_VENDA_DIRETA_AO_CONSUMIDOR = 10
+    CANAL_COMERCIALIZACAO_VENDA_EM_FEIRAS = 20
+    CANAL_COMERCIALIZACAO_ENTREGA_PARA_SUPERMERCADOS_MERCEARIAS_AÇOUGUES = 30
+    CANAL_COMERCIALIZACAO_VENDA_PARA_INDUSTRIAS_AGROINDUSTRIAS_LATICINIOS = 40
+    CANAL_COMERCIALIZACAO_VENDA_PARA_AGENTES_ATRAVESSADORES = 50
+    CANAL_COMERCIALIZACAO_OUTROS = 60
+
+    canal_comercializacao_choices = (
+        (CANAL_COMERCIALIZACAO_VENDA_DIRETA_AO_CONSUMIDOR, 'Venda direta ao consumidor (de casa em casa)'),
+        (CANAL_COMERCIALIZACAO_VENDA_EM_FEIRAS, 'Venda em feiras'),
+        (CANAL_COMERCIALIZACAO_ENTREGA_PARA_SUPERMERCADOS_MERCEARIAS_AÇOUGUES, 'Entrega para supermercados, mercearias, açougues, etc'),
+        (CANAL_COMERCIALIZACAO_VENDA_PARA_INDUSTRIAS_AGROINDUSTRIAS_LATICINIOS, 'Venda p/ indústrias, e/ou agroindústrias (laticínios etc'),
+        (CANAL_COMERCIALIZACAO_VENDA_PARA_AGENTES_ATRAVESSADORES, 'Venda para agentes "atravessadores"'),
+        (CANAL_COMERCIALIZACAO_OUTROS, 'Outros')
+    )
+    canal_comercializacao = models.IntegerField('Formas/Canais de Comercialização', choices=canal_comercializacao_choices, blank=True, null=True)
+
+    MERCADO_INSTITUCIONAL_PAA_CONAB = 10
+    MERCADO_INSTITUCIONAL_PAA_PREFEITURA_MDS = 20
+    MERCADO_INSTITUCIONAL_ALIMENTACAO_ESCOLAR_PNAE = 30
+    MERCADO_INSTITUCIONAL_BIODIESEL = 40
+    MERCADO_INSTITUCIONAL_OUTROS = 50
+
+    mercado_institucional_choices = (
+        (MERCADO_INSTITUCIONAL_PAA_CONAB, 'PAA-CONAB'),
+        (MERCADO_INSTITUCIONAL_PAA_PREFEITURA_MDS, 'PAA-Prefeitura / MDS'),
+        (MERCADO_INSTITUCIONAL_ALIMENTACAO_ESCOLAR_PNAE, 'Alimentação Escolar - PNAE'),
+        (MERCADO_INSTITUCIONAL_BIODIESEL, 'Biodiesel'),
+        (MERCADO_INSTITUCIONAL_OUTROS, 'Outros')
+    )
+    mercado_institucional = models.IntegerField('Mercado Institucional', choices=mercado_institucional_choices, blank=True, null=True)
 
 
 class CulturaManager(models.Manager):
@@ -924,13 +977,13 @@ class AtividadeExtrativista(AuditoriaAbstractModel):
     lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='atividadesExtrativistas',
                              on_delete=models.CASCADE)
 
-    ESPECIFICACAO_ACAI = 1
-    ESPECIFICACAO_BABACU = 2
-    ESPECIFICACAO_BURITI = 3
-    ESPECIFICACAO_CAGAITA = 4
-    ESPECIFICACAO_MURICI = 5
-    ESPECIFICACAO_PEQUI = 6
-    ESPECIFICACAO_OUTROS = 7
+    ESPECIFICACAO_ACAI = 10
+    ESPECIFICACAO_BABACU = 20
+    ESPECIFICACAO_BURITI = 30
+    ESPECIFICACAO_CAGAITA = 40
+    ESPECIFICACAO_MURICI = 50
+    ESPECIFICACAO_PEQUI = 60
+    ESPECIFICACAO_OUTROS = 70
 
     especificacao_choices = (
         (ESPECIFICACAO_ACAI, 'Açaí(Kg)'),
@@ -947,6 +1000,42 @@ class AtividadeExtrativista(AuditoriaAbstractModel):
     quantidade_palmitos_ano = models.IntegerField('Quantidade Colhida / Ano - Palmito(s)')
     valor = models.DecimalField('Valor R$/Kg', max_digits=10, decimal_places=2)
 
+    CANAL_COMERCIALIZACAO_VENDA_DIRETA_AO_CONSUMIDOR = 10
+    CANAL_COMERCIALIZACAO_VENDA_EM_FEIRAS = 20
+    CANAL_COMERCIALIZACAO_ENTREGA_PARA_SUPERMERCADOS_MERCEARIAS_AÇOUGUES = 30
+    CANAL_COMERCIALIZACAO_VENDA_PARA_INDUSTRIAS_AGROINDUSTRIAS_LATICINIOS = 40
+    CANAL_COMERCIALIZACAO_VENDA_PARA_AGENTES_ATRAVESSADORES = 50
+    CANAL_COMERCIALIZACAO_OUTROS = 60
+
+    canal_comercializacao_choices = (
+        (CANAL_COMERCIALIZACAO_VENDA_DIRETA_AO_CONSUMIDOR, 'Venda direta ao consumidor (de casa em casa)'),
+        (CANAL_COMERCIALIZACAO_VENDA_EM_FEIRAS, 'Venda em feiras'),
+        (CANAL_COMERCIALIZACAO_ENTREGA_PARA_SUPERMERCADOS_MERCEARIAS_AÇOUGUES,
+         'Entrega para supermercados, mercearias, açougues, etc'),
+        (CANAL_COMERCIALIZACAO_VENDA_PARA_INDUSTRIAS_AGROINDUSTRIAS_LATICINIOS,
+         'Venda p/ indústrias, e/ou agroindústrias (laticínios etc'),
+        (CANAL_COMERCIALIZACAO_VENDA_PARA_AGENTES_ATRAVESSADORES, 'Venda para agentes "atravessadores"'),
+        (CANAL_COMERCIALIZACAO_OUTROS, 'Outros')
+    )
+    canal_comercializacao = models.IntegerField('Formas/Canais de Comercialização',
+                                                choices=canal_comercializacao_choices, blank=True, null=True)
+
+    MERCADO_INSTITUCIONAL_PAA_CONAB = 10
+    MERCADO_INSTITUCIONAL_PAA_PREFEITURA_MDS = 20
+    MERCADO_INSTITUCIONAL_ALIMENTACAO_ESCOLAR_PNAE = 30
+    MERCADO_INSTITUCIONAL_BIODIESEL = 40
+    MERCADO_INSTITUCIONAL_OUTROS = 50
+
+    mercado_institucional_choices = (
+        (MERCADO_INSTITUCIONAL_PAA_CONAB, 'PAA-CONAB'),
+        (MERCADO_INSTITUCIONAL_PAA_PREFEITURA_MDS, 'PAA-Prefeitura / MDS'),
+        (MERCADO_INSTITUCIONAL_ALIMENTACAO_ESCOLAR_PNAE, 'Alimentação Escolar - PNAE'),
+        (MERCADO_INSTITUCIONAL_BIODIESEL, 'Biodiesel'),
+        (MERCADO_INSTITUCIONAL_OUTROS, 'Outros')
+    )
+    mercado_institucional = models.IntegerField('Mercado Institucional', choices=mercado_institucional_choices,
+                                                blank=True, null=True)
+
     def __str__(self):
         return '%s - %s' % ('Atividade extrativista', str(self.especificacao))
 
@@ -958,11 +1047,11 @@ class AtividadeExtrativista(AuditoriaAbstractModel):
 class ProducaoFlorestal(AuditoriaAbstractModel):
     lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='producoesFlorestais', on_delete=models.CASCADE)
 
-    ESPECIFICACAO_EUCALIPTO = 1
-    ESPECIFICACAO_TECA = 2
-    ESPECIFICACAO_SERINGUEIRA_KG_LATEX = 3
-    ESPECIFICACAO_SERINGUEIRA_M3_MADEIRA = 4
-    ESPECIFICACAO_OUTROS = 5
+    ESPECIFICACAO_EUCALIPTO = 10
+    ESPECIFICACAO_TECA = 20
+    ESPECIFICACAO_SERINGUEIRA_KG_LATEX = 30
+    ESPECIFICACAO_SERINGUEIRA_M3_MADEIRA = 40
+    ESPECIFICACAO_OUTROS = 50
 
     especificacao_choices = (
         (ESPECIFICACAO_EUCALIPTO, 'Eucalipto(m³)'),
@@ -976,6 +1065,28 @@ class ProducaoFlorestal(AuditoriaAbstractModel):
     quantidade_produzida_ano = models.IntegerField('Quantidade Colhida / Ano - Fruto(s)')
     area_plantada = models.DecimalField('Área plantada (ha)', max_digits=10, decimal_places=4)
     valor = models.DecimalField('R$/Unidade colhida', max_digits=10, decimal_places=2)
+
+    CANAL_COMERCIALIZACAO_VENDA_DIRETA_AO_CONSUMIDOR = 10
+    CANAL_COMERCIALIZACAO_VENDA_EM_FEIRAS = 20
+    CANAL_COMERCIALIZACAO_ENTREGA_PARA_SUPERMERCADOS_MERCEARIAS_AÇOUGUES = 30
+    CANAL_COMERCIALIZACAO_VENDA_PARA_INDUSTRIAS_AGROINDUSTRIAS_LATICINIOS = 40
+    CANAL_COMERCIALIZACAO_VENDA_PARA_AGENTES_ATRAVESSADORES = 50
+    CANAL_COMERCIALIZACAO_OUTROS = 60
+
+    canal_comercializacao_choices = (
+        (CANAL_COMERCIALIZACAO_VENDA_DIRETA_AO_CONSUMIDOR, 'Venda direta ao consumidor (de casa em casa)'),
+        (CANAL_COMERCIALIZACAO_VENDA_EM_FEIRAS, 'Venda em feiras'),
+        (CANAL_COMERCIALIZACAO_ENTREGA_PARA_SUPERMERCADOS_MERCEARIAS_AÇOUGUES,
+         'Entrega para supermercados, mercearias, açougues, etc'),
+        (CANAL_COMERCIALIZACAO_VENDA_PARA_INDUSTRIAS_AGROINDUSTRIAS_LATICINIOS,
+         'Venda p/ indústrias, e/ou agroindústrias (laticínios etc'),
+        (CANAL_COMERCIALIZACAO_VENDA_PARA_AGENTES_ATRAVESSADORES, 'Venda para agentes "atravessadores"'),
+        (CANAL_COMERCIALIZACAO_OUTROS, 'Outros')
+    )
+    canal_comercializacao = models.IntegerField('Formas/Canais de Comercialização',
+                                                choices=canal_comercializacao_choices, blank=True, null=True)
+
+
 
     def __str__(self):
         return '%s - %s' % ('Produção Florestal', str(self.especificacao))
@@ -1027,10 +1138,10 @@ class ProducaoAnimal(AuditoriaAbstractModel):
                      (ESPECIFICACAO_EQUINOS_MUARES, 'Equinos / Muares'),
                      (ESPECIFICACAO_CAPRINOS, 'Caprinos'),)
 
-    # ESPECIFICACAO_OUTROS = 99
+    ESPECIFICACAO_OUTROS = 999
 
     especificacao_choices = BOVINOCULTURA + OUTRA_CRIACAO + (
-        # (ESPECIFICACAO_OUTROS, 'Outros'),
+        (ESPECIFICACAO_OUTROS, 'Outros'),
     )
     especificacao = models.IntegerField('Especificação', choices=especificacao_choices)
     quantidade_cabecas = models.IntegerField('Nº de Cabeça(s)')
@@ -1104,10 +1215,10 @@ class DescarteAnimal(AuditoriaAbstractModel):
     quantidade_cabecas_comercio = models.IntegerField('Nº de Cabeça(s) - Comércio')
     valor_cabeca = models.DecimalField('R$/Cabeça', max_digits=7, decimal_places=2)
 
-    CANAL_COMERCIALIZACAO_VENDA_PARA_OUTRO_PRODUTOR = 1
-    CANAL_COMERCIALIZACAO_ENTREGA_PARA_FRIGORIFICO_ACOUGUE = 2
-    CANAL_COMERCIALIZACAO_VENDA_PARA_AGENTES_ATRAVESSADORES = 3
-    CANAL_COMERCIALIZACAO_OUTROS = 4
+    CANAL_COMERCIALIZACAO_VENDA_PARA_OUTRO_PRODUTOR = 10
+    CANAL_COMERCIALIZACAO_ENTREGA_PARA_FRIGORIFICO_ACOUGUE = 20
+    CANAL_COMERCIALIZACAO_VENDA_PARA_AGENTES_ATRAVESSADORES = 30
+    CANAL_COMERCIALIZACAO_OUTROS = 40
 
     canal_comercializacao_choices = (
         (CANAL_COMERCIALIZACAO_VENDA_PARA_OUTRO_PRODUTOR, 'Venda para outro produtor'),
@@ -1166,42 +1277,82 @@ class Produto(AuditoriaAbstractModel):
     lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='produtosOrigemAnimal', on_delete=models.CASCADE)
     classificacao = models.IntegerField('Classificação')
 
-    ESPECIFICACAO_CARNE = 1
-    ESPECIFICACAO_LEITE = 2
-    ESPECIFICACAO_MEL = 3
-    ESPECIFICACAO_OVOS = 4
-    ESPECIFICACAO_PEIXES = 5
-    ESPECIFICACAO_BANHA = 6
-    ESPECIFICACAO_CONSERVAS = 7
-    ESPECIFICACAO_DOCES = 8
-    ESPECIFICACAO_FARINHA_DE_MANDIOCA = 9
-    ESPECIFICACAO_LINGUICA = 10
-    ESPECIFICACAO_POVILHO_DE_MANDIOCA = 11
-    ESPECIFICACAO_QUEIJO = 12
-    ESPECIFICACAO_RAPADURA = 13
-    ESPECIFICACAO_OUTROS = 14
+    ESPECIFICACAO_CARNE = 10
+    ESPECIFICACAO_LEITE = 20
+    ESPECIFICACAO_MEL = 30
+    ESPECIFICACAO_OVOS = 40
+    ESPECIFICACAO_PEIXES = 50
 
-    especificacao_choices = (
-        (ESPECIFICACAO_CARNE, 'Carne(Kg)'),
-        (ESPECIFICACAO_LEITE, 'Leite(L)'),
-        (ESPECIFICACAO_MEL, 'Mel(Kg)'),
-        (ESPECIFICACAO_OVOS, 'Ovos(Dz)'),
-        (ESPECIFICACAO_PEIXES, 'Peixes(Kg)'),
-        (ESPECIFICACAO_BANHA, 'Banha(Kg)'),
-        (ESPECIFICACAO_CONSERVAS, 'Conservas(Un)'),
-        (ESPECIFICACAO_DOCES, 'Doces(Un)'),
-        (ESPECIFICACAO_FARINHA_DE_MANDIOCA, 'Farinha de Mandioca(Kg)'),
-        (ESPECIFICACAO_LINGUICA, 'Linguiça(Kg)'),
-        (ESPECIFICACAO_POVILHO_DE_MANDIOCA, 'Povilho de Mandioca(Kg)'),
-        (ESPECIFICACAO_QUEIJO, 'Queijo(Kg)'),
-        (ESPECIFICACAO_RAPADURA, 'Rapadura(Kg)'),
-        (ESPECIFICACAO_OUTROS, 'Outros')
+    ORIGEM_ANIMAL = ((ESPECIFICACAO_CARNE, 'Carne(Kg)'),
+                     (ESPECIFICACAO_LEITE, 'Leite(L)'),
+                     (ESPECIFICACAO_MEL, 'Mel(Kg)'),
+                     (ESPECIFICACAO_OVOS, 'Ovos(Dz)'),
+                     (ESPECIFICACAO_PEIXES, 'Peixes(Kg)'),)
+
+    ESPECIFICACAO_BANHA = 60
+    ESPECIFICACAO_CONSERVAS = 70
+    ESPECIFICACAO_DOCES = 80
+    ESPECIFICACAO_FARINHA_DE_MANDIOCA = 90
+    ESPECIFICACAO_LINGUICA = 100
+    ESPECIFICACAO_POVILHO_DE_MANDIOCA = 110
+    ESPECIFICACAO_QUEIJO = 120
+    ESPECIFICACAO_RAPADURA = 130
+
+    PROCESSADO_BENEFICIADO = ((ESPECIFICACAO_BANHA, 'Banha(Kg)'),
+                              (ESPECIFICACAO_CONSERVAS, 'Conservas(Un)'),
+                              (ESPECIFICACAO_DOCES, 'Doces(Un)'),
+                              (ESPECIFICACAO_FARINHA_DE_MANDIOCA, 'Farinha Mandioca(Kg'),
+                              (ESPECIFICACAO_LINGUICA, 'Linguiça(Kg)'),
+                              (ESPECIFICACAO_POVILHO_DE_MANDIOCA, 'Polvilho de Mandioca(Kg)'),
+                              (ESPECIFICACAO_QUEIJO, 'Queijo(Kg)'),
+                              (ESPECIFICACAO_RAPADURA, 'Rapadura(Kg)'),)
+
+    ESPECIFICACAO_OUTROS = 999
+
+    especificacao_choices = ORIGEM_ANIMAL + PROCESSADO_BENEFICIADO + (
+        (ESPECIFICACAO_OUTROS, 'Outros'),
     )
     especificacao = models.IntegerField('Especificação', choices=especificacao_choices)
     outros = models.CharField('Outros (Especificar)', max_length=30, blank=True, null=True)
     producao_consumo = models.IntegerField('Produção (Consumo)')
     producao_comercio = models.IntegerField('Produção (Comércio)')
     valor = models.DecimalField('Valor R$/Unidade', max_digits=7, decimal_places=2)
+
+    CANAL_COMERCIALIZACAO_VENDA_DIRETA_AO_CONSUMIDOR = 10
+    CANAL_COMERCIALIZACAO_VENDA_EM_FEIRAS = 20
+    CANAL_COMERCIALIZACAO_ENTREGA_PARA_SUPERMERCADOS_MERCEARIAS_AÇOUGUES = 30
+    CANAL_COMERCIALIZACAO_VENDA_PARA_INDUSTRIAS_AGROINDUSTRIAS_LATICINIOS = 40
+    CANAL_COMERCIALIZACAO_VENDA_PARA_AGENTES_ATRAVESSADORES = 50
+    CANAL_COMERCIALIZACAO_OUTROS = 60
+
+    canal_comercializacao_choices = (
+        (CANAL_COMERCIALIZACAO_VENDA_DIRETA_AO_CONSUMIDOR, 'Venda direta ao consumidor (de casa em casa)'),
+        (CANAL_COMERCIALIZACAO_VENDA_EM_FEIRAS, 'Venda em feiras'),
+        (CANAL_COMERCIALIZACAO_ENTREGA_PARA_SUPERMERCADOS_MERCEARIAS_AÇOUGUES,
+         'Entrega para supermercados, mercearias, açougues, etc'),
+        (CANAL_COMERCIALIZACAO_VENDA_PARA_INDUSTRIAS_AGROINDUSTRIAS_LATICINIOS,
+         'Venda p/ indústrias, e/ou agroindústrias (laticínios etc'),
+        (CANAL_COMERCIALIZACAO_VENDA_PARA_AGENTES_ATRAVESSADORES, 'Venda para agentes "atravessadores"'),
+        (CANAL_COMERCIALIZACAO_OUTROS, 'Outros')
+    )
+    canal_comercializacao = models.IntegerField('Formas/Canais de Comercialização',
+                                                choices=canal_comercializacao_choices, blank=True, null=True)
+
+    MERCADO_INSTITUCIONAL_PAA_CONAB = 10
+    MERCADO_INSTITUCIONAL_PAA_PREFEITURA_MDS = 20
+    MERCADO_INSTITUCIONAL_ALIMENTACAO_ESCOLAR_PNAE = 30
+    MERCADO_INSTITUCIONAL_BIODIESEL = 40
+    MERCADO_INSTITUCIONAL_OUTROS = 50
+
+    mercado_institucional_choices = (
+        (MERCADO_INSTITUCIONAL_PAA_CONAB, 'PAA-CONAB'),
+        (MERCADO_INSTITUCIONAL_PAA_PREFEITURA_MDS, 'PAA-Prefeitura / MDS'),
+        (MERCADO_INSTITUCIONAL_ALIMENTACAO_ESCOLAR_PNAE, 'Alimentação Escolar - PNAE'),
+        (MERCADO_INSTITUCIONAL_BIODIESEL, 'Biodiesel'),
+        (MERCADO_INSTITUCIONAL_OUTROS, 'Outros')
+    )
+    mercado_institucional = models.IntegerField('Mercado Institucional', choices=mercado_institucional_choices,
+                                                blank=True, null=True)
 
 
 class OrigemAnimalManager(models.Manager):
@@ -1226,10 +1377,7 @@ class OrigemAnimal(Produto):
 
 
 class NivelTecnologicoProducaoAnimal(AuditoriaAbstractModel):
-    lote = models.OneToOneField(
-        Lote, verbose_name='Lote', related_name='nivelTecnologicoProducaoAnimal', on_delete=models.CASCADE,
-        primary_key=True,
-    )
+    lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='niveisTecnologicosProducaoAnimal', on_delete=models.CASCADE)
 
     CHOICE_SIM = 1
     CHOICE_NAO = 0
@@ -1238,7 +1386,6 @@ class NivelTecnologicoProducaoAnimal(AuditoriaAbstractModel):
         (CHOICE_SIM, 'Sim'),
         (CHOICE_NAO, 'Não')
     )
-    possui_capineira = models.IntegerField('Possui Capineira?', choices=sim_nao_choices)
 
     TIPO_CAPINEIRA_CANA = 10
     TIPO_CAPINEIRA_NAPIER = 20
@@ -1253,18 +1400,9 @@ class NivelTecnologicoProducaoAnimal(AuditoriaAbstractModel):
     area_capineira = models.DecimalField(
         'Área da capineira (ha)', max_digits=10, decimal_places=4, blank=True, null=True
     )
-    possui_pastagem_rotacionada = models.IntegerField(
-        'Possui Pastagem em Pastejo Rotacionado?', choices=sim_nao_choices
-    )
-    area_pastagem_rotacionada = models.DecimalField(
-        'Área Pastejo Rotacionado (ha)', max_digits=10, decimal_places=4, blank=True, null=True
-    )
-    patrica_insemincacao = models.IntegerField(
-        'Pratica inseminação artificial no rebanho leiteiro?', choices=sim_nao_choices
-    )
 
     def __str__(self):
-        return str(self.possui_capineira)
+        return str(self.tipo_capineira)
 
     class Meta:
         verbose_name = 'Sobre o Nível Tecnológico da Produção Animal'
@@ -1295,17 +1433,17 @@ class ProcessadoBeneficiado(Produto):
 class ProblemaAmbiental(AuditoriaAbstractModel):
     lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='problemasAmbientais', on_delete=models.CASCADE)
 
-    TIPO_PROBLEMA_EROSAO = 1
-    TIPO_PROBLEMA_COMPACTACAO_DO_SOLO = 2
-    TIPO_PROBLEMA_CONTAMINACAO_POR_USO_DE_AGROTOXICOS_DESTINACAO_INADEQUADA_DE_EMBALAGENS = 3
-    TIPO_PROBLEMA_EXPOSICAO_DE_LIXO_DE_FORMA_INADEQUADA_A_CEU_ABERTO = 4
-    TIPO_PROBLEMA_QUEIMA_DE_LIXO = 5
-    TIPO_PROBLEMA_DESTINACAO_INADEQUADA_DE_PILHAS_BATERIAS_LIXO_ELETRONICO = 6
-    TIPO_PROBLEMA_POLUICAO_CONTAMINACAO_NASCENTE_E_OU_RIOS_CORREGOS = 7
-    TIPO_PROBLEMA_ASSOREAMENTO_DE_RIO_CORREGO = 8
-    TIPO_PROBLEMA_QUEIMADAS = 9
-    TIPO_PROBLEMA_DESMATAMENTO = 10
-    TIPO_PROBLEMA_OUTROS = 11
+    TIPO_PROBLEMA_EROSAO = 10
+    TIPO_PROBLEMA_COMPACTACAO_DO_SOLO = 20
+    TIPO_PROBLEMA_CONTAMINACAO_POR_USO_DE_AGROTOXICOS_DESTINACAO_INADEQUADA_DE_EMBALAGENS = 30
+    TIPO_PROBLEMA_EXPOSICAO_DE_LIXO_DE_FORMA_INADEQUADA_A_CEU_ABERTO = 40
+    TIPO_PROBLEMA_QUEIMA_DE_LIXO = 50
+    TIPO_PROBLEMA_DESTINACAO_INADEQUADA_DE_PILHAS_BATERIAS_LIXO_ELETRONICO = 60
+    TIPO_PROBLEMA_POLUICAO_CONTAMINACAO_NASCENTE_E_OU_RIOS_CORREGOS = 70
+    TIPO_PROBLEMA_ASSOREAMENTO_DE_RIO_CORREGO = 80
+    TIPO_PROBLEMA_QUEIMADAS = 90
+    TIPO_PROBLEMA_DESMATAMENTO = 100
+    TIPO_PROBLEMA_OUTROS = 110
 
     tipo_problema_choices = (
         (TIPO_PROBLEMA_EROSAO, 'Erosão (laminar, sulco, voçoroca)'),
@@ -1431,11 +1569,11 @@ class LicenciamentoAmbiental(AuditoriaAbstractModel):
     lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='licenciamentosAmbientais',
                              on_delete=models.CASCADE)
 
-    TIPO_ATIVIDADE_AGROPECUARIA = 1
-    TIPO_ATIVIDADE_IRRIGACAO = 2
-    TIPO_ATIVIDADE_AQUICULTURA = 3
-    TIPO_ATIVIDADE_LAZER_E_TURISMO = 4
-    TIPO_ATIVIDADE_OUTROS = 5
+    TIPO_ATIVIDADE_AGROPECUARIA = 10
+    TIPO_ATIVIDADE_IRRIGACAO = 20
+    TIPO_ATIVIDADE_AQUICULTURA = 30
+    TIPO_ATIVIDADE_LAZER_E_TURISMO = 40
+    TIPO_ATIVIDADE_OUTROS = 50
 
     tipo_atividade_choices = (
         (TIPO_ATIVIDADE_AGROPECUARIA, 'Agropecuária'),
@@ -1453,6 +1591,7 @@ class LicenciamentoAmbiental(AuditoriaAbstractModel):
     def save(self, *args, **kwargs):
         lote = self.lote
         lote.necessita_licenciamento_ambiental = 1
+        lote.possui_capineira = 1
         lote.save()
         super().save(*args, **kwargs)
 
@@ -1520,10 +1659,10 @@ class ProgramaSaude(AuditoriaAbstractModel):
 class AtividadeFisica(AuditoriaAbstractModel):
     lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='atividadesFisicas', on_delete=models.CASCADE)
 
-    ATIVIDADE_FISICA_FUTEBOL = 1
-    ATIVIDADE_FISICA_CAMINHADA_CORRIDA = 2
-    ATIVIDADE_FISICA_NENHUMA_ATIVIDADE_FISICA = 3
-    ATIVIDADE_FISICA_OUTROS = 4
+    ATIVIDADE_FISICA_FUTEBOL = 10
+    ATIVIDADE_FISICA_CAMINHADA_CORRIDA = 20
+    ATIVIDADE_FISICA_NENHUMA_ATIVIDADE_FISICA = 30
+    ATIVIDADE_FISICA_OUTROS = 40
 
     atividade_fisica_choices = (
         (ATIVIDADE_FISICA_FUTEBOL, 'Futebol'),
@@ -1545,16 +1684,16 @@ class AtividadeFisica(AuditoriaAbstractModel):
 class EspacoDisponivel(AuditoriaAbstractModel):
     lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='espacosDisponiveis', on_delete=models.CASCADE)
 
-    ESPACO_DISPONIVEL_QUADRA_DE_ESPORTES = 1
-    ESPACO_DISPONIVEL_CAMPO_DE_FUTEBOL = 2
-    ESPACO_DISPONIVEL_SALAO_DE_FESTAS = 3
-    ESPACO_DISPONIVEL_NAO_POSSUI = 4
+    ESPACO_DISPONIVEL_QUADRA_DE_ESPORTES = 10
+    ESPACO_DISPONIVEL_CAMPO_DE_FUTEBOL = 20
+    ESPACO_DISPONIVEL_SALAO_DE_FESTAS = 30
+    ESPACO_DISPONIVEL_NAO_POSSUI = 40
 
     espaco_disponivel_choices = (
-        (1, 'Quadra de esportes'),
-        (2, 'Campo de futebol'),
-        (3, 'Salão de festas'),
-        (4, 'Não possui')
+        (ESPACO_DISPONIVEL_QUADRA_DE_ESPORTES, 'Quadra de esportes'),
+        (ESPACO_DISPONIVEL_CAMPO_DE_FUTEBOL, 'Campo de futebol'),
+        (ESPACO_DISPONIVEL_SALAO_DE_FESTAS, 'Salão de festas'),
+        (ESPACO_DISPONIVEL_NAO_POSSUI, 'Não possui')
     )
     espaco_disponivel = models.IntegerField('Espaço disponível', choices=espaco_disponivel_choices)
 
@@ -1569,13 +1708,13 @@ class EspacoDisponivel(AuditoriaAbstractModel):
 class EstabelecimentoEnsino(AuditoriaAbstractModel):
     lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='estabelecimentosEnsino', on_delete=models.CASCADE)
 
-    ESTABELECIMENTO_ENSINO_PRE_ESCOLAR_CRECHE = 1
-    ESTABELECIMENTO_ENSINO_ENSINO_FUNDAMENTAL = 2
-    ESTABELECIMENTO_ENSINO_EJA = 3
-    ESTABELECIMENTO_ENSINO_ENSINO_MEDIO = 4
-    ESTABELECIMENTO_ENSINO_ENSINO_SUPERIOR = 5
-    ESTABELECIMENTO_ENSINO_ENSINO_PROFISSIONALIZANTE = 6
-    ESTABELECIMENTO_ENSINO_NAO_HA_ESTABELECIMENTO_DE_ENSINO_NO_PA = 7
+    ESTABELECIMENTO_ENSINO_PRE_ESCOLAR_CRECHE = 10
+    ESTABELECIMENTO_ENSINO_ENSINO_FUNDAMENTAL = 20
+    ESTABELECIMENTO_ENSINO_EJA = 30
+    ESTABELECIMENTO_ENSINO_ENSINO_MEDIO = 40
+    ESTABELECIMENTO_ENSINO_ENSINO_SUPERIOR = 50
+    ESTABELECIMENTO_ENSINO_ENSINO_PROFISSIONALIZANTE = 60
+    ESTABELECIMENTO_ENSINO_NAO_HA_ESTABELECIMENTO_DE_ENSINO_NO_PA = 70
 
     estabelecimento_ensino_choices = (
         (ESTABELECIMENTO_ENSINO_PRE_ESCOLAR_CRECHE, 'Pré-escolar (creche)'),
@@ -1602,11 +1741,11 @@ class NaoPossuiDocumento(AuditoriaAbstractModel):
         primary_key=True,
     )
 
-    certidao_nascimento = models.IntegerField('Certidão de Nascimento')
-    identidade = models.IntegerField('Identidade (RG) - a partir de 12 anos')
-    cpf = models.IntegerField('Cadastro de Pessoa Física (CPF)')
-    carteira_de_trabalho = models.IntegerField('Carteira de Trabalho (CTPS) - a partir de 14 anos')
-    certidao_de_casamento_ou_uniao_estavel = models.IntegerField('Certidão de Casamento ou União Estável')
+    certidao_nascimento = models.IntegerField('Certidão de Nascimento', blank=True, null=True)
+    identidade = models.IntegerField('Identidade (RG) - a partir de 12 anos', blank=True, null=True)
+    cpf = models.IntegerField('Cadastro de Pessoa Física (CPF)', blank=True, null=True)
+    carteira_de_trabalho = models.IntegerField('Carteira de Trabalho (CTPS) - a partir de 14 anos', blank=True, null=True)
+    certidao_de_casamento_ou_uniao_estavel = models.IntegerField('Certidão de Casamento ou União Estável', blank=True, null=True)
 
     def __str__(self):
         return 'Certidão de Nascimento: %s - Identidade (RG): %s - CPF: %s - Carteira de Trabalho (CTPS): %s - Certidão de Casamento ou União Estável: %s' % (
@@ -1700,15 +1839,15 @@ class Membro(AuditoriaAbstractModel):
     familia = models.ForeignKey(Familia, verbose_name='Familia', related_name='membros', on_delete=models.CASCADE)
     nome = models.CharField('Nome', max_length=100)
 
-    PARENTESCO_CONJUGE = 1
-    PARENTESCO_TITULAR = 2
-    PARENTESCO_IRMAO_IRMA = 3
-    PARENTESCO_TIO_TIA = 4
-    PARENTESCO_PRIMO_PRIMA = 5
-    PARENTESCO_FILHO_FILHA = 6
-    PARENTESCO_CUNHADO_CUNHADA = 7
-    PARENTESCO_GENRO_NORA = 8
-    PARENTESCO_NETO_NETA = 9
+    PARENTESCO_CONJUGE = 10
+    PARENTESCO_TITULAR = 20
+    PARENTESCO_IRMAO_IRMA = 30
+    PARENTESCO_TIO_TIA = 40
+    PARENTESCO_PRIMO_PRIMA = 50
+    PARENTESCO_FILHO_FILHA = 60
+    PARENTESCO_CUNHADO_CUNHADA = 70
+    PARENTESCO_GENRO_NORA = 80
+    PARENTESCO_NETO_NETA = 90
 
     parentesco_choices = (
         (PARENTESCO_CONJUGE, 'Cônjuge'),
@@ -1721,20 +1860,20 @@ class Membro(AuditoriaAbstractModel):
         (PARENTESCO_GENRO_NORA, 'Genro/Nora'),
         (PARENTESCO_NETO_NETA, 'Neto(a)')
     )
-    parentesco = models.IntegerField('Parentesco', choices=parentesco_choices)
+    parentesco = models.IntegerField('Parentesco', choices=parentesco_choices, blank=True, null=True)
     idade = models.IntegerField('Idade')
 
-    ESCOLARIDADE_NAO_ALFABETIZADO = 1
-    ESCOLARIDADE_1_4_ANO = 2
-    ESCOLARIDADE_5_9_ANO = 3
-    ESCOLARIDADE_FUNDAMENTAL_COMPLETO = 4
-    ESCOLARIDADE_EJA = 5
-    ESCOLARIDADE_MEDIO_INCOMPLETO = 6
-    ESCOLARIDADE_MEDIO_COMPLETO = 7
-    ESCOLARIDADE_SUPERIOR_INCOMPLETO = 8
-    ESCOLARIDADE_SUPERIOR_COMPLETO = 9
-    ESCOLARIDADE_POS_GRADUACAO_INCOMPLETA = 10
-    ESCOLARIDADE_POS_GRADUACAO_COMPLETA = 11
+    ESCOLARIDADE_NAO_ALFABETIZADO = 10
+    ESCOLARIDADE_1_4_ANO = 20
+    ESCOLARIDADE_5_9_ANO = 30
+    ESCOLARIDADE_FUNDAMENTAL_COMPLETO = 40
+    ESCOLARIDADE_EJA = 50
+    ESCOLARIDADE_MEDIO_INCOMPLETO = 60
+    ESCOLARIDADE_MEDIO_COMPLETO = 70
+    ESCOLARIDADE_SUPERIOR_INCOMPLETO = 80
+    ESCOLARIDADE_SUPERIOR_COMPLETO = 90
+    ESCOLARIDADE_POS_GRADUACAO_INCOMPLETA = 100
+    ESCOLARIDADE_POS_GRADUACAO_COMPLETA = 110
 
     escolaridade_choices = (
         (ESCOLARIDADE_NAO_ALFABETIZADO, 'Não alfabetizado'),
@@ -1761,9 +1900,9 @@ class Membro(AuditoriaAbstractModel):
     estuda = models.IntegerField('Estuda?', choices=sim_nao_choices)
     cpf = models.CharField('CPF', max_length=11, unique=True)
 
-    TRABALHO_ANTES_DO_LOTE_SEMPRE_TRABALHOU_NO_CAMPO = 1
-    TRABALHO_ANTES_DO_LOTE_TRABALHOU_PARTE_DO_TEMPO_NA_CIDADE = 2
-    TRABALHO_ANTES_DO_LOTE_NUNCA_TRABALHOU_NO_CAMPO_ANTES = 3
+    TRABALHO_ANTES_DO_LOTE_SEMPRE_TRABALHOU_NO_CAMPO = 10
+    TRABALHO_ANTES_DO_LOTE_TRABALHOU_PARTE_DO_TEMPO_NA_CIDADE = 20
+    TRABALHO_ANTES_DO_LOTE_NUNCA_TRABALHOU_NO_CAMPO_ANTES = 30
 
     trabalho_antes_do_lote_choices = (
         (TRABALHO_ANTES_DO_LOTE_SEMPRE_TRABALHOU_NO_CAMPO, 'Sempre trabalhou no campo'),
@@ -1804,10 +1943,10 @@ class RendaTrabalhoForaLote(AuditoriaAbstractModel):
 class UsoFrequente(AuditoriaAbstractModel):
     membro = models.ForeignKey(Membro, verbose_name='Membro', related_name='usos_frequentes', on_delete=models.CASCADE)
 
-    USO_FREQUENTE_BEBIDAS_ALCOOLICAS = 1
-    USO_FREQUENTE_CIGARROS = 2
-    USO_FREQUENTE_REMEDIOS_DE_ALTO_CUSTO = 3
-    USO_FREQUENTE_OUTROS = 4
+    USO_FREQUENTE_BEBIDAS_ALCOOLICAS = 10
+    USO_FREQUENTE_CIGARROS = 20
+    USO_FREQUENTE_REMEDIOS_DE_ALTO_CUSTO = 30
+    USO_FREQUENTE_OUTROS = 40
 
     uso_frequente_choices = (
         (USO_FREQUENTE_BEBIDAS_ALCOOLICAS, 'Bebidas alcoólicas'),
@@ -1830,10 +1969,10 @@ class OpcaoEnsinoUtilizada(AuditoriaAbstractModel):
     membro = models.OneToOneField(Membro, verbose_name='Membro', related_name='opcao_ensino_utilizada',
                                   on_delete=models.CASCADE, primary_key=True)
 
-    OPCAO_ENSINO_FREQUENTA_ESCOLA_EM_OUTRO_ASSENTAMENTO = 1
-    OPCAO_ENSINO_FREQUENTA_ESCOLA_NA_CIDADE_MAIS_PROXIMA = 2
-    OPCAO_ENSINO_FREQUENTA_DEIXA_DE_FREQUENTAR_A_ESCOLA = 3
-    OPCAO_ENSINO_OUTROS = 4
+    OPCAO_ENSINO_FREQUENTA_ESCOLA_EM_OUTRO_ASSENTAMENTO = 10
+    OPCAO_ENSINO_FREQUENTA_ESCOLA_NA_CIDADE_MAIS_PROXIMA = 20
+    OPCAO_ENSINO_FREQUENTA_DEIXA_DE_FREQUENTAR_A_ESCOLA = 30
+    OPCAO_ENSINO_OUTROS = 40
 
     opcao_ensino_choices = (
         (OPCAO_ENSINO_FREQUENTA_ESCOLA_EM_OUTRO_ASSENTAMENTO, 'Frequenta escola em outro assentamento'),
