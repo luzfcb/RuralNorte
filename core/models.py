@@ -1,5 +1,6 @@
 from django.db import models
 from cuser.fields import CurrentUserField
+from model_utils import Choices
 
 
 class AuditoriaAbstractModel(models.Model):
@@ -57,7 +58,7 @@ class ProjetoAssentamento(AuditoriaAbstractModel):
     CONTRATO_11 = 11
     CONTRATO_18 = 18
 
-    contrato_choices = (
+    contrato_choices = Choices(
         (CONTRATO_10, '10.000/2015'),
         (CONTRATO_11, '11.000/2015'),
         (CONTRATO_18, '18.000/2015')
@@ -69,7 +70,7 @@ class ProjetoAssentamento(AuditoriaAbstractModel):
     data_criacao = models.DateField('Data de Criação')
 
     def __str__(self):
-        return '%s - %s' % (self.codigo, self.nome)
+        return '%s | %s' % (self.codigo, self.nome)
 
     class Meta:
         verbose_name = 'Projeto de Assentamento'
@@ -82,7 +83,7 @@ class Lote(AuditoriaAbstractModel):
         ProjetoAssentamento, verbose_name='PA', related_name='lotes', on_delete=models.CASCADE
     )
     data_homologacao = models.DateField('Data Homologação', blank=True, null=True)
-    codigo_sipra = models.CharField('Código SIPRA', max_length=15)
+    codigo_sipra = models.CharField('Código SIPRA', max_length=15, blank=True, null=True)
     area = models.DecimalField('Área (ha)', max_digits=10, decimal_places=4)
     numero = models.IntegerField('Lote N.º')
     entrevistador = models.CharField('Nome do Entrevistador', max_length=50)
@@ -92,7 +93,7 @@ class Lote(AuditoriaAbstractModel):
     CHOICE_SIM = 1
     CHOICE_NAO = 0
 
-    sim_nao_choices = (
+    sim_nao_choices = Choices(
         (CHOICE_SIM, 'Sim'),
         (CHOICE_NAO, 'Não')
     )
@@ -119,7 +120,7 @@ class Lote(AuditoriaAbstractModel):
     TIPO_PAREDE_LONA = 60
     TIPO_PAREDE_OUTROS = 70
 
-    tipo_parede_externa_choices = (
+    tipo_parede_externa_choices = Choices(
         (TIPO_PAREDE_ALVENARIA, 'Alvenaria'),
         (TIPO_PAREDE_TABUAS_MADEIRA, 'Tábuas / Madeira'),
         (TIPO_PAREDE_TAPUMES_OU_CHAPAS_MADEIRA, 'Tapumes ou chapas de madeira'),
@@ -138,7 +139,7 @@ class Lote(AuditoriaAbstractModel):
     TIPO_INSTALACAO_ELETRICA_INSTALADA_PARA_MORADIA_E_OUTROS_USOS = 30
     TIPO_INSTALACAO_ELETRICA_OUTROS = 40
 
-    tipo_instalacao_eletrica_choices = (
+    tipo_instalacao_eletrica_choices = Choices(
         (TIPO_INSTALACAO_ELETRICA_NAO_INSTALADA, 'Não instalada'),
         (TIPO_INSTALACAO_ELETRICA_INSTALADA_APENAS_PARA_MORADIA, 'Instalada apenas para moradia'),
         (TIPO_INSTALACAO_ELETRICA_INSTALADA_PARA_MORADIA_E_OUTROS_USOS, 'Instalada para moradia e outros usos'),
@@ -154,7 +155,7 @@ class Lote(AuditoriaAbstractModel):
     TIPO_INSTALACAO_SANITARIA_PRIVADA_LATRINA = 30
     TIPO_INSTALACAO_SANITARIA_NENHUMA = 40
 
-    tipo_instalacao_sanitaria_choices = (
+    tipo_instalacao_sanitaria_choices = Choices(
         (TIPO_INSTALACAO_SANITARIA_BANHEIRO_COM_FOSSA_SEPTICA, 'Banheiro com fossa séptica'),
         (TIPO_INSTALACAO_SANITARIA_BANHEIRO_COM_FOSSA_NEGRA, 'Banheiro com fossa negra'),
         (TIPO_INSTALACAO_SANITARIA_PRIVADA_LATRINA, 'Privada / latrina'),
@@ -167,7 +168,8 @@ class Lote(AuditoriaAbstractModel):
 
     LOCALIZACAO_FONTE_DE_AGUA_DENTRO_DO_SEU_LOTE = 1
     LOCALIZACAO_FONTE_DE_AGUA_FORA_DO_SEU_LOTE = 2
-    localizacao_fonte_agua_choices = (
+
+    localizacao_fonte_agua_choices = Choices(
         (LOCALIZACAO_FONTE_DE_AGUA_DENTRO_DO_SEU_LOTE, 'Dentro do seu lote'),
         (LOCALIZACAO_FONTE_DE_AGUA_FORA_DO_SEU_LOTE, 'Fora do seu lote')
     )
@@ -182,7 +184,7 @@ class Lote(AuditoriaAbstractModel):
     QUANTAS_FAMILIAS_UTILIZAM_MESMA_FONTE_DE_AGUA_UMA_OUTRA_FAMILIA_ALEM_DA_SUA = 20
     QUANTAS_FAMILIAS_UTILIZAM_MESMA_FONTE_DE_AGUA_MAIS_DE_UMA = 30
 
-    quantas_familias_utilizam_mesma_fonte_agua_choices = (
+    quantas_familias_utilizam_mesma_fonte_agua_choices = Choices(
         (QUANTAS_FAMILIAS_UTILIZAM_MESMA_FONTE_DE_AGUA_NENHUMA, 'Nenhuma'),
         (QUANTAS_FAMILIAS_UTILIZAM_MESMA_FONTE_DE_AGUA_UMA_OUTRA_FAMILIA_ALEM_DA_SUA,
          'Uma outra família, além da sua família'),
@@ -204,7 +206,7 @@ class Lote(AuditoriaAbstractModel):
     AGUA_PARA_ANIMAIS_PLANTIO_NAO_EXISTE_AGUA_PARA_PLANTIO_IRRIGADO = 70
     AGUA_PARA_ANIMAIS_PLANTIO_OUTROS = 80
 
-    agua_para_animais_plantio_choices = (
+    agua_para_animais_plantio_choices = Choices(
         (AGUA_PARA_ANIMAIS_PLANTIO_SIM_OS_ANIMAIS_VAO_ATE_CURSO_DAGUA_OU_REPRESA,
          "Sim, os animais vão até um curso d'água ou represa"),
         (AGUA_PARA_ANIMAIS_PLANTIO_SIM_AGUA_PUXADA_DE_CURSO_DAGUA_OU_REPRESA,
@@ -232,7 +234,7 @@ class Lote(AuditoriaAbstractModel):
     REGULARIDADE_ABASTECIMENTO_AGUA_FALTA_AGUA_COM_FREQUENCIA = 30
     REGULARIDADE_ABASTECIMENTO_AGUA_NUNCA_TEM_AGUA = 40
 
-    regularidade_abastecimento_agua_choices = (
+    regularidade_abastecimento_agua_choices = Choices(
         (REGULARIDADE_ABASTECIMENTO_AGUA_SEMPRE_TEM_AGUA, 'Sempre tem água'),
         (REGULARIDADE_ABASTECIMENTO_AGUA_FALTA_AGUA_AS_VEZES, 'Falta água às vezes'),
         (REGULARIDADE_ABASTECIMENTO_AGUA_FALTA_AGUA_COM_FREQUENCIA, 'Falta água com frequência'),
@@ -249,7 +251,7 @@ class Lote(AuditoriaAbstractModel):
     TIPO_ESTRADA_DE_ACESSO_TRILHEIRO = 40
     TIPO_ESTRADA_DE_ACESSO_INEXISTENTE = 50
 
-    tipo_estrada_acesso_choices = (
+    tipo_estrada_acesso_choices = Choices(
         (TIPO_ESTRADA_DE_ACESSO_ASFALTO, 'Asfalto'),
         (TIPO_ESTRADA_DE_ACESSO_ESTRADA_CASCALHADA, 'Estrada cascalhada'),
         (TIPO_ESTRADA_DE_ACESSO_ESTRADA_DE_TERRA, 'Estrada de terra'),
@@ -266,7 +268,7 @@ class Lote(AuditoriaAbstractModel):
     SITUACAO_ESTRADA_ACESSO_RUIM = 30
     SITUACAO_ESTRADA_ACESSO_PESSIMA = 40
 
-    situacao_estrada_acesso_choices = (
+    situacao_estrada_acesso_choices = Choices(
         (SITUACAO_ESTRADA_ACESSO_BOA, 'Boa'),
         (SITUACAO_ESTRADA_ACESSO_RAZOAVEL, 'Razoável'),
         (SITUACAO_ESTRADA_ACESSO_RUIM, 'Ruim'),
@@ -282,7 +284,7 @@ class Lote(AuditoriaAbstractModel):
     SITUACAO_CERCADO_LOTE_PARCIALMENTE_CERCADO = 30
     SITUACAO_CERCADO_LOTE_NAO_ESTA_CERCADO = 40
 
-    situacao_cercado_lote_choices = (
+    situacao_cercado_lote_choices = Choices(
         (SITUACAO_CERCADO_LOTE_TOTALMENTE_CERCADO_COM_DIVISOES_INTERNAS, 'Totalmente cercado, com divisões internas'),
         (SITUACAO_CERCADO_LOTE_TOTALMENTE_CERCADO_SEM_DIVISOES_INTERNAS, 'Totalmente cercado, sem divisões internas'),
         (SITUACAO_CERCADO_LOTE_PARCIALMENTE_CERCADO, 'Parcialmente cercado'),
@@ -322,7 +324,7 @@ class Lote(AuditoriaAbstractModel):
     QUALIDADE_SERVICO_SAUDE_RUIM = 30
     QUALIDADE_SERVICO_SAUDE_PESSIMO = 40
 
-    qualidade_servico_saude_choices = (
+    qualidade_servico_saude_choices = Choices(
         (QUALIDADE_SERVICO_SAUDE_OTIMO, 'Ótimo'),
         (QUALIDADE_SERVICO_SAUDE_BOM, 'Bom'),
         (QUALIDADE_SERVICO_SAUDE_RUIM, 'Ruim'),
@@ -337,7 +339,7 @@ class Lote(AuditoriaAbstractModel):
     FREQUENCIA_ATIVIDADE_FISICA_MAIS_DE_DUAS_VEZES_POR_SEMANA = 30
     FREQUENCIA_ATIVIDADE_FISICA_NAO_PRATICA = 40
 
-    frequencia_atividade_fisica_choices = (
+    frequencia_atividade_fisica_choices = Choices(
         (FREQUENCIA_ATIVIDADE_FISICA_DIARIAMENTE, 'Diariamente'),
         (FREQUENCIA_ATIVIDADE_FISICA_DUAS_VEZES_POR_SEMANA, 'Duas vezes por semana'),
         (FREQUENCIA_ATIVIDADE_FISICA_MAIS_DE_DUAS_VEZES_POR_SEMANA, 'Mais de duas vezes por semana'),
@@ -349,7 +351,8 @@ class Lote(AuditoriaAbstractModel):
     OFERTA_TRANSPORTE_INTERNO_SIM = 1
     OFERTA_TRANSPORTE_INTERNO_NAO = 0
     OFERTA_TRANSPORTE_INTERNO_NAO_SE_APLICA = 99
-    oferta_transporte_interno_choices = (
+
+    oferta_transporte_interno_choices = Choices(
         (OFERTA_TRANSPORTE_INTERNO_SIM, 'Sim'),
         (OFERTA_TRANSPORTE_INTERNO_NAO, 'Não'),
         (OFERTA_TRANSPORTE_INTERNO_NAO_SE_APLICA, 'Não se aplica')
@@ -371,7 +374,7 @@ class DocumentoLote(AuditoriaAbstractModel):
     TIPO_DOCUMENTO_TITULO_DEFINITIVO_REGISTRADO_CARTORIO = 40
     TIPO_DOCUMENTO_MATRICULA_DA_PROPRIEDADE = 50
 
-    tipo_documento_choices = (
+    tipo_documento_choices = Choices(
         (TIPO_DOCUMENTO_CONTRATO_DE_ASSENTAMENTO, 'Contrato de Assentamento'),
         (TIPO_DOCUMENTO_CONTRATO_DE_CONCESSAO_DE_USO, 'Contrato de Concessão de Uso - CCU'),
         (TIPO_DOCUMENTO_TITULO_DEFINITIVO_NAO_REGISTRADO, 'Título Definitivo - não registrado'),
@@ -381,7 +384,7 @@ class DocumentoLote(AuditoriaAbstractModel):
     tipo_documento = models.IntegerField('Documento', choices=tipo_documento_choices)
 
     def __str__(self):
-        return str(self.tipo_documento)
+        return self.tipo_documento_choices[self.tipo_documento]
 
     class Meta:
         verbose_name = 'Documento do lote'
@@ -398,7 +401,7 @@ class BeneficioSocial(AuditoriaAbstractModel):
     TIPO_BENEFICIO_BOLSA_VERDE = 50
     TIPO_BENEFICIO_OUTROS = 60
 
-    tipo_beneficio_choices = (
+    tipo_beneficio_choices = Choices(
         (TIPO_BENEFICIO_APOSENTADORIA_POR_TEMPO_DE_SERVICO_IDADE, 'Aposentadoria por tempo de serviço/idade'),
         (TIPO_BENEFICIO_APOSENTADORIA_POR_INVALIDEZ, 'Aposentadoria por invalidez'),
         (TIPO_BENEFICIO_AUXILIO_MATERNIDADE, 'Auxílio maternidade'),
@@ -410,7 +413,7 @@ class BeneficioSocial(AuditoriaAbstractModel):
     outros = models.CharField('Outros', max_length=30, blank=True, null=True)
 
     def __str__(self):
-        return str(self.tipo_beneficio)
+        return self.tipo_beneficio_choices[self.tipo_beneficio]
 
     class Meta:
         verbose_name = 'Tipo de benefício'
@@ -427,7 +430,7 @@ class AutoDeclaracaoEtnia(AuditoriaAbstractModel):
     TIPO_DECLARACAO_ETNIA_ORIENTAIS = 50
     TIPO_DECLARACAO_ETNIA_OUTROS = 60
 
-    tipo_declaracao_etnia_choices = (
+    tipo_declaracao_etnia_choices = Choices(
         (TIPO_DECLARACAO_ETNIA_NEGROS, 'Negros'),
         (TIPO_DECLARACAO_ETNIA_PARDOS, 'Pardos'),
         (TIPO_DECLARACAO_ETNIA_BRANCOS, 'Brancos'),
@@ -440,7 +443,7 @@ class AutoDeclaracaoEtnia(AuditoriaAbstractModel):
     quantidade = models.IntegerField('Quantos?')
 
     def __str__(self):
-        return str(self.tipo_declaracao_etnia)
+        return self.tipo_declaracao_etnia_choices[self.tipo_declaracao_etnia]
 
     class Meta:
         verbose_name = 'Quantos moradores se declaram?'
@@ -462,7 +465,7 @@ class EstruturaOrganizativa(AuditoriaAbstractModel):
     TIPO_ESTRUTURA_ORGANIZATIVA_ASSOCIACAO_DE_PAIS_E_MESTRES = 90
     TIPO_ESTRUTURA_ORGANIZATIVA_GRUPOS_DE_LASER_E_CULTURA = 100
 
-    tipo_estrutura_organizativa_choices = (
+    tipo_estrutura_organizativa_choices = Choices(
         (TIPO_ESTRUTURA_ORGANIZATIVA_ASSOCIACAO_COMUNITARIA, 'Associação comunitária'),
         (TIPO_ESTRUTURA_ORGANIZATIVA_COOPERATIVAS_PRODUCAO_CREDITOS, 'Cooperativas (produção, créditos, etc.)'),
         (TIPO_ESTRUTURA_ORGANIZATIVA_ASSOCIACAO_OU_GRUPOS_DE_MULHERES, 'Associação ou grupos de mulheres'),
@@ -482,7 +485,7 @@ class EstruturaOrganizativa(AuditoriaAbstractModel):
     FREQUENCIA_RARAMENTE = 30
     FREQUENCIA_NAO_PARTICIPA = 40
 
-    frequencia_choices = (
+    frequencia_choices = Choices(
         (FREQUENCIA_FREQUENTE, 'Frequente (>70%)'),
         (FREQUENCIA_REGULARMENTE, 'Regularmente (50% a 70%)'),
         (FREQUENCIA_RARAMENTE, 'Raramente (<50%)'),
@@ -491,7 +494,8 @@ class EstruturaOrganizativa(AuditoriaAbstractModel):
     frequencia = models.IntegerField('Frequência', choices=frequencia_choices)
 
     def __str__(self):
-        return '%s - %s' % (str(self.tipo_estrutura_organizativa), str(self.frequencia))
+        # return '%s - %s' % (str(self.tipo_estrutura_organizativa), str(self.frequencia))
+        return '%s - %s' % (self.tipo_estrutura_organizativa_choices[self.tipo_estrutura_organizativa], self.frequencia_choices[self.frequencia])
 
     class Meta:
         verbose_name = 'Estruturas organizativa interna existente'
@@ -511,7 +515,7 @@ class FonteAgua(AuditoriaAbstractModel):
     FONTE_DE_AGUA_REDE_DE_AGUA_ENCANADA = 80
     FONTE_DE_AGUA_OUTRA = 90
 
-    fonte_agua_choices = (
+    fonte_agua_choices = Choices(
         (FONTE_DE_AGUA_POCO_ARTESIANO, 'Poço artesiano'),
         (FONTE_DE_AGUA_NASCENTE_OU_VERTENTE, 'Nascente ou vertente'),
         (FONTE_DE_AGUA_CORREGOS_OU_RIOS, 'Córregos ou Rios'),
@@ -543,7 +547,7 @@ class TratamentoAgua(AuditoriaAbstractModel):
     TRATAMENTO_AGUA_DESSALINIZACAO = 50
     TRATAMENTO_AGUA_OUTRA = 60
 
-    tratamento_agua_choices = (
+    tratamento_agua_choices = Choices(
         (TRATAMENTO_AGUA_NAO_HA_TRATAMENTO, 'Não há tratamento'),
         (TRATAMENTO_AGUA_CLORACAO, 'Cloração'),
         (TRATAMENTO_AGUA_FERVURA, 'Fervura'),
@@ -575,7 +579,7 @@ class ConstrucaoLote(AuditoriaAbstractModel):
     CONSTRUCAO_NO_LOTE_AGROINDUSTRIA = 90
     CONSTRUCAO_NO_LOTE_OUTROS = 100
 
-    construcao_no_lote_choices = (
+    construcao_no_lote_choices = Choices(
         (CONSTRUCAO_NO_LOTE_GALPAO, 'Galpão'),
         (CONSTRUCAO_NO_LOTE_CURRAL, 'Curral'),
         (CONSTRUCAO_NO_LOTE_CHIQUEIRO, 'Chiqueiro'),
@@ -621,7 +625,7 @@ class BemProdutivo(AuditoriaAbstractModel):
     BEM_PRODUTIVO_MOTOSSERRA = 170
     BEM_PRODUTIVO_OUTROS = 180
 
-    bem_produtivo_choices = (
+    bem_produtivo_choices = Choices(
         (BEM_PRODUTIVO_TRATOR, 'Trator'),
         (BEM_PRODUTIVO_CAMINHAO, 'Caminhão'),
         (BEM_PRODUTIVO_CAMINHONETE, 'Caminhonete'),
@@ -666,7 +670,7 @@ class AplicacaoCredito(AuditoriaAbstractModel):
     TIPO_APLICACAO_CREDITO_REFORMA_MORADIA = 80
     TIPO_APLICACAO_CREDITO_PNHR_REFORMA = 90
 
-    tipo_aplicacao_credito_choices = (
+    tipo_aplicacao_credito_choices = Choices(
         (TIPO_APLICACAO_CREDITO_APOIO_INICIAL_ANTES_DE_2015, 'Apoio inicial (antes de 2015)'),
         (TIPO_APLICACAO_CREDITO_APOIO_INICIAL_I_APOS_2015, 'Apoio inicial I (após 2015)'),
         (TIPO_APLICACAO_CREDITO_APOIO_INICIAL_II_APOS_2015, 'Apoio inicial II (após 2015)'),
@@ -699,7 +703,7 @@ class CreditoBancario(AuditoriaAbstractModel):
     CREDITO_BANCARIO_RECUPERACAO_COMPLEMENTAR = 60
     CREDITO_BANCARIO_OUTROS = 70
 
-    credito_bancario_choices = (
+    credito_bancario_choices = Choices(
         (CREDITO_BANCARIO_MICRO_CREDITO_PRODUTIVO_A, 'Micro Crédito Produtivo (A)'),
         (CREDITO_BANCARIO_A, 'A'),
         (CREDITO_BANCARIO_A_C, 'A/C'),
@@ -711,9 +715,13 @@ class CreditoBancario(AuditoriaAbstractModel):
     credito_bancario = models.IntegerField('Tipo de crédito', choices=credito_bancario_choices)
     outros = models.CharField('Outros', max_length=30, blank=True, null=True)
     valor = models.DecimalField('Valor (R$)', max_digits=10, decimal_places=2)
-    sim_nao_choices = (
-        (1, 'Sim'),
-        (0, 'Não')
+
+    CHOICE_SIM = 1
+    CHOICE_NAO = 0
+
+    sim_nao_choices = Choices(
+        (CHOICE_SIM, 'Sim'),
+        (CHOICE_NAO, 'Não')
     )
     adimplente = models.IntegerField('Adimplente?', choices=sim_nao_choices)
 
@@ -739,7 +747,8 @@ class ProducaoVegetal(AuditoriaAbstractModel):
     TIPO_PRODUCAO_MANDIOCA_DE_MESA = 80
     TIPO_PRODUCAO_MILHO = 90
 
-    CULTURA = ((TIPO_PRODUCAO_AMENDOIM, 'Amendoim'),
+    CULTURA = Choices(
+            (TIPO_PRODUCAO_AMENDOIM, 'Amendoim'),
                (TIPO_PRODUCAO_ARROZ, 'Arroz'),
                (TIPO_PRODUCAO_BATATA_DOCE, 'Batata-doce'),
                (TIPO_PRODUCAO_CANA_DE_ACUCAR, 'Cana-de-Açúcar'),
@@ -766,7 +775,7 @@ class ProducaoVegetal(AuditoriaAbstractModel):
     TIPO_PRODUCAO_QUIABO = 240
     TIPO_PRODUCAO_TOMATE = 250
 
-    OLERICULTURA = (
+    OLERICULTURA = Choices(
         (TIPO_PRODUCAO_ALFACE, 'Alface'),
         (TIPO_PRODUCAO_CEBOLINHA, 'Cebolinha'),
         (TIPO_PRODUCAO_COUVE, 'Couve'),
@@ -802,7 +811,7 @@ class ProducaoVegetal(AuditoriaAbstractModel):
     TIPO_PRODUCAO_TANGERINA = 400
     TIPO_PRODUCAO_UVA = 410
 
-    FRUTICULTURA = (
+    FRUTICULTURA = Choices(
         (TIPO_PRODUCAO_ABACATE, 'Abacate'),
         (TIPO_PRODUCAO_ACEROLA, 'Acerola'),
         (TIPO_PRODUCAO_BANANA, 'Banana'),
@@ -844,7 +853,7 @@ class ProducaoVegetal(AuditoriaAbstractModel):
     UNIDADE_MEDIDA_KG = 1
     UNIDADE_MEDIDA_UN = 2
 
-    unidade_medida_choices = (
+    unidade_medida_choices = Choices(
         (UNIDADE_MEDIDA_KG, 'Kg'),
         (UNIDADE_MEDIDA_UN, 'un')
     )
@@ -856,7 +865,7 @@ class ProducaoVegetal(AuditoriaAbstractModel):
     IRRIGACAO_SIM = 1
     IRRIGACAO_NAO = 0
 
-    irrigacao_choices = (
+    irrigacao_choices = Choices(
         (IRRIGACAO_SIM, 'Sim'),
         (IRRIGACAO_NAO, 'Não')
     )
@@ -869,7 +878,7 @@ class ProducaoVegetal(AuditoriaAbstractModel):
     TIPO_IRRIGACAO_GOTEJAMENTO = 30
     TIPO_IRRIGACAO_OUTROS = 40
 
-    tipo_irrigacao_choices = (
+    tipo_irrigacao_choices = Choices(
         (TIPO_IRRIGACAO_ASPERSAO, 'Aspersão'),
         (TIPO_IRRIGACAO_SULCO, 'Sulco'),
         (TIPO_IRRIGACAO_GOTEJAMENTO, 'Gotejamento'),
@@ -884,7 +893,7 @@ class ProducaoVegetal(AuditoriaAbstractModel):
     CANAL_COMERCIALIZACAO_VENDA_PARA_AGENTES_ATRAVESSADORES = 50
     CANAL_COMERCIALIZACAO_OUTROS = 60
 
-    canal_comercializacao_choices = (
+    canal_comercializacao_choices = Choices(
         (CANAL_COMERCIALIZACAO_VENDA_DIRETA_AO_CONSUMIDOR, 'Venda direta ao consumidor (de casa em casa)'),
         (CANAL_COMERCIALIZACAO_VENDA_EM_FEIRAS, 'Venda em feiras'),
         (CANAL_COMERCIALIZACAO_ENTREGA_PARA_SUPERMERCADOS_MERCEARIAS_AÇOUGUES, 'Entrega para supermercados, mercearias, açougues, etc'),
@@ -900,7 +909,7 @@ class ProducaoVegetal(AuditoriaAbstractModel):
     MERCADO_INSTITUCIONAL_BIODIESEL = 40
     MERCADO_INSTITUCIONAL_OUTROS = 50
 
-    mercado_institucional_choices = (
+    mercado_institucional_choices = Choices(
         (MERCADO_INSTITUCIONAL_PAA_CONAB, 'PAA-CONAB'),
         (MERCADO_INSTITUCIONAL_PAA_PREFEITURA_MDS, 'PAA-Prefeitura / MDS'),
         (MERCADO_INSTITUCIONAL_ALIMENTACAO_ESCOLAR_PNAE, 'Alimentação Escolar - PNAE'),
@@ -985,7 +994,7 @@ class AtividadeExtrativista(AuditoriaAbstractModel):
     ESPECIFICACAO_PEQUI = 60
     ESPECIFICACAO_OUTROS = 70
 
-    especificacao_choices = (
+    especificacao_choices = Choices(
         (ESPECIFICACAO_ACAI, 'Açaí(Kg)'),
         (ESPECIFICACAO_BABACU, 'Babaçu(Kg)'),
         (ESPECIFICACAO_BURITI, 'Buriti(Kg)'),
@@ -1007,7 +1016,7 @@ class AtividadeExtrativista(AuditoriaAbstractModel):
     CANAL_COMERCIALIZACAO_VENDA_PARA_AGENTES_ATRAVESSADORES = 50
     CANAL_COMERCIALIZACAO_OUTROS = 60
 
-    canal_comercializacao_choices = (
+    canal_comercializacao_choices = Choices(
         (CANAL_COMERCIALIZACAO_VENDA_DIRETA_AO_CONSUMIDOR, 'Venda direta ao consumidor (de casa em casa)'),
         (CANAL_COMERCIALIZACAO_VENDA_EM_FEIRAS, 'Venda em feiras'),
         (CANAL_COMERCIALIZACAO_ENTREGA_PARA_SUPERMERCADOS_MERCEARIAS_AÇOUGUES,
@@ -1026,7 +1035,7 @@ class AtividadeExtrativista(AuditoriaAbstractModel):
     MERCADO_INSTITUCIONAL_BIODIESEL = 40
     MERCADO_INSTITUCIONAL_OUTROS = 50
 
-    mercado_institucional_choices = (
+    mercado_institucional_choices = Choices(
         (MERCADO_INSTITUCIONAL_PAA_CONAB, 'PAA-CONAB'),
         (MERCADO_INSTITUCIONAL_PAA_PREFEITURA_MDS, 'PAA-Prefeitura / MDS'),
         (MERCADO_INSTITUCIONAL_ALIMENTACAO_ESCOLAR_PNAE, 'Alimentação Escolar - PNAE'),
@@ -1053,7 +1062,7 @@ class ProducaoFlorestal(AuditoriaAbstractModel):
     ESPECIFICACAO_SERINGUEIRA_M3_MADEIRA = 40
     ESPECIFICACAO_OUTROS = 50
 
-    especificacao_choices = (
+    especificacao_choices = Choices(
         (ESPECIFICACAO_EUCALIPTO, 'Eucalipto(m³)'),
         (ESPECIFICACAO_TECA, 'Teca(m³)'),
         (ESPECIFICACAO_SERINGUEIRA_KG_LATEX, 'Seringueira(Kg/látex)'),
@@ -1073,7 +1082,7 @@ class ProducaoFlorestal(AuditoriaAbstractModel):
     CANAL_COMERCIALIZACAO_VENDA_PARA_AGENTES_ATRAVESSADORES = 50
     CANAL_COMERCIALIZACAO_OUTROS = 60
 
-    canal_comercializacao_choices = (
+    canal_comercializacao_choices = Choices(
         (CANAL_COMERCIALIZACAO_VENDA_DIRETA_AO_CONSUMIDOR, 'Venda direta ao consumidor (de casa em casa)'),
         (CANAL_COMERCIALIZACAO_VENDA_EM_FEIRAS, 'Venda em feiras'),
         (CANAL_COMERCIALIZACAO_ENTREGA_PARA_SUPERMERCADOS_MERCEARIAS_AÇOUGUES,
@@ -1103,7 +1112,7 @@ class ProducaoAnimal(AuditoriaAbstractModel):
     TIPO_CRIACAO_GADO_LEITEIRO = 1
     TIPO_CRIACAO_GADO_DE_CORTE = 2
 
-    tipo_criacao_choices = (
+    tipo_criacao_choices = Choices(
         (TIPO_CRIACAO_GADO_LEITEIRO, 'Gado Leiteiro'),
         (TIPO_CRIACAO_GADO_DE_CORTE, 'Gado de Corte')
     )
@@ -1116,7 +1125,7 @@ class ProducaoAnimal(AuditoriaAbstractModel):
     ESPECIFICACAO_BEZERRAS = 50
     ESPECIFICACAO_BOI = 60
 
-    BOVINOCULTURA = ((ESPECIFICACAO_TOUROS, 'Touros'),
+    BOVINOCULTURA = Choices((ESPECIFICACAO_TOUROS, 'Touros'),
                      (ESPECIFICACAO_VACAS, 'Vacas'),
                      (ESPECIFICACAO_NOVILHAS_MAIS_DE_2_ANOS, 'Novilhas(os) + de 02 anos'),
                      (ESPECIFICACAO_NOVILHAS_MAIS_DE_1_ANO, 'Novilhas(os) + de 01 ano'),
@@ -1130,7 +1139,7 @@ class ProducaoAnimal(AuditoriaAbstractModel):
     ESPECIFICACAO_EQUINOS_MUARES = 110
     ESPECIFICACAO_CAPRINOS = 120
 
-    OUTRA_CRIACAO = ((ESPECIFICACAO_FRANGO_DE_CORTE_CAIPIRA, 'Frango de corte caipira'),
+    OUTRA_CRIACAO = Choices((ESPECIFICACAO_FRANGO_DE_CORTE_CAIPIRA, 'Frango de corte caipira'),
                      (ESPECIFICACAO_GALINHA_CAIPIRA_SOMENTE_FRANGOS_E_ADULTOS,
                       'Galinha caipira (somente frangos(as) e adultos)'),
                      (ESPECIFICACAO_SUINOS, 'Suínos'),
@@ -1202,7 +1211,7 @@ class DescarteAnimal(AuditoriaAbstractModel):
     ESPECIFICACAO_BEZERRAS = 50
     ESPECIFICACAO_BOI = 60
 
-    especificacao_choices = (
+    especificacao_choices = Choices(
         (ESPECIFICACAO_TOUROS, 'Touros'),
         (ESPECIFICACAO_VACAS, 'Vacas'),
         (ESPECIFICACAO_NOVILHAS_MAIS_DE_2_ANOS, 'Novilhas(os) + de 02 anos'),
@@ -1220,7 +1229,7 @@ class DescarteAnimal(AuditoriaAbstractModel):
     CANAL_COMERCIALIZACAO_VENDA_PARA_AGENTES_ATRAVESSADORES = 30
     CANAL_COMERCIALIZACAO_OUTROS = 40
 
-    canal_comercializacao_choices = (
+    canal_comercializacao_choices = Choices(
         (CANAL_COMERCIALIZACAO_VENDA_PARA_OUTRO_PRODUTOR, 'Venda para outro produtor'),
         (CANAL_COMERCIALIZACAO_ENTREGA_PARA_FRIGORIFICO_ACOUGUE, 'Entrega para frigorífico/açougue'),
         (CANAL_COMERCIALIZACAO_VENDA_PARA_AGENTES_ATRAVESSADORES, 'Venda para agentes "atravessadores"'),
@@ -1283,7 +1292,7 @@ class Produto(AuditoriaAbstractModel):
     ESPECIFICACAO_OVOS = 40
     ESPECIFICACAO_PEIXES = 50
 
-    ORIGEM_ANIMAL = ((ESPECIFICACAO_CARNE, 'Carne(Kg)'),
+    ORIGEM_ANIMAL = Choices((ESPECIFICACAO_CARNE, 'Carne(Kg)'),
                      (ESPECIFICACAO_LEITE, 'Leite(L)'),
                      (ESPECIFICACAO_MEL, 'Mel(Kg)'),
                      (ESPECIFICACAO_OVOS, 'Ovos(Dz)'),
@@ -1298,7 +1307,7 @@ class Produto(AuditoriaAbstractModel):
     ESPECIFICACAO_QUEIJO = 120
     ESPECIFICACAO_RAPADURA = 130
 
-    PROCESSADO_BENEFICIADO = ((ESPECIFICACAO_BANHA, 'Banha(Kg)'),
+    PROCESSADO_BENEFICIADO = Choices((ESPECIFICACAO_BANHA, 'Banha(Kg)'),
                               (ESPECIFICACAO_CONSERVAS, 'Conservas(Un)'),
                               (ESPECIFICACAO_DOCES, 'Doces(Un)'),
                               (ESPECIFICACAO_FARINHA_DE_MANDIOCA, 'Farinha Mandioca(Kg'),
@@ -1325,7 +1334,7 @@ class Produto(AuditoriaAbstractModel):
     CANAL_COMERCIALIZACAO_VENDA_PARA_AGENTES_ATRAVESSADORES = 50
     CANAL_COMERCIALIZACAO_OUTROS = 60
 
-    canal_comercializacao_choices = (
+    canal_comercializacao_choices = Choices(
         (CANAL_COMERCIALIZACAO_VENDA_DIRETA_AO_CONSUMIDOR, 'Venda direta ao consumidor (de casa em casa)'),
         (CANAL_COMERCIALIZACAO_VENDA_EM_FEIRAS, 'Venda em feiras'),
         (CANAL_COMERCIALIZACAO_ENTREGA_PARA_SUPERMERCADOS_MERCEARIAS_AÇOUGUES,
@@ -1344,7 +1353,7 @@ class Produto(AuditoriaAbstractModel):
     MERCADO_INSTITUCIONAL_BIODIESEL = 40
     MERCADO_INSTITUCIONAL_OUTROS = 50
 
-    mercado_institucional_choices = (
+    mercado_institucional_choices = Choices(
         (MERCADO_INSTITUCIONAL_PAA_CONAB, 'PAA-CONAB'),
         (MERCADO_INSTITUCIONAL_PAA_PREFEITURA_MDS, 'PAA-Prefeitura / MDS'),
         (MERCADO_INSTITUCIONAL_ALIMENTACAO_ESCOLAR_PNAE, 'Alimentação Escolar - PNAE'),
@@ -1382,7 +1391,7 @@ class NivelTecnologicoProducaoAnimal(AuditoriaAbstractModel):
     CHOICE_SIM = 1
     CHOICE_NAO = 0
 
-    sim_nao_choices = (
+    sim_nao_choices = Choices(
         (CHOICE_SIM, 'Sim'),
         (CHOICE_NAO, 'Não')
     )
@@ -1391,7 +1400,7 @@ class NivelTecnologicoProducaoAnimal(AuditoriaAbstractModel):
     TIPO_CAPINEIRA_NAPIER = 20
     TIPO_CAPINEIRA_NAO_SE_APLICA = 99
 
-    tipo_capineira_choices = (
+    tipo_capineira_choices = Choices(
         (TIPO_CAPINEIRA_CANA, 'Cana'),
         (TIPO_CAPINEIRA_NAPIER, 'Napier'),
         (TIPO_CAPINEIRA_NAO_SE_APLICA, 'Não se aplica')
@@ -1445,7 +1454,7 @@ class ProblemaAmbiental(AuditoriaAbstractModel):
     TIPO_PROBLEMA_DESMATAMENTO = 100
     TIPO_PROBLEMA_OUTROS = 110
 
-    tipo_problema_choices = (
+    tipo_problema_choices = Choices(
         (TIPO_PROBLEMA_EROSAO, 'Erosão (laminar, sulco, voçoroca)'),
         (TIPO_PROBLEMA_COMPACTACAO_DO_SOLO, 'Compactação do solo'),
         (TIPO_PROBLEMA_CONTAMINACAO_POR_USO_DE_AGROTOXICOS_DESTINACAO_INADEQUADA_DE_EMBALAGENS,
@@ -1486,7 +1495,7 @@ class PraticaConservacionista(AuditoriaAbstractModel):
     TIPO_PRATICA_AGROFLORESTA = 70
     TIPO_PRATICA_PLANTIOS_DE_ARVORES_PARA_PROTECAO_DE_MANACIAIS_AREAS_DEGRADADAS = 80
 
-    tipo_pratica_choices = (
+    tipo_pratica_choices = Choices(
         (TIPO_PRATICA_ADUBACAO_VERDE, 'Adubação verde'),
         (TIPO_PRATICA_CURVAS_EM_NIVEL, 'Curvas em nível'),
         (TIPO_PRATICA_ROTACAO_CONSORCIO_DE_CULTURA, 'Rotação/consórcio de culturas'),
@@ -1520,7 +1529,7 @@ class DestinoLixoDomestico(AuditoriaAbstractModel):
     DESTINO_RECICLA_REAPROVEITA_LIXO_INORGANICO = 50
     DESTINO_DEPOSITA_A_CEU_ABERTO_NO_LOTE = 60
 
-    destino_choices = (
+    destino_choices = Choices(
         (DESTINO_ESPALHADO_NO_LOTE, 'Espalhado no lote'),
         (DESTINO_QUEIMA, 'Queima'),
         (DESTINO_ENTERRA, 'Enterra'),
@@ -1549,7 +1558,7 @@ class DestinoMaterialOrganico(AuditoriaAbstractModel):
     DESTINO_ENTERRA_JUNTO_COM_INORGANICO = 30
     DESTINO_DEPOSITA_A_CEU_ABERTO_NO_LOTE = 40
 
-    destino_choices = (
+    destino_choices = Choices(
         (DESTINO_USO_PARA_ALIMENTACAO_DE_ANIMAIS, 'Uso para alimentação de animais'),
         (DESTINO_FAZ_COMPOSTAGEM, 'Faz compostagem'),
         (DESTINO_ENTERRA_JUNTO_COM_INORGANICO, 'Enterra junto com inorgânico'),
@@ -1575,7 +1584,7 @@ class LicenciamentoAmbiental(AuditoriaAbstractModel):
     TIPO_ATIVIDADE_LAZER_E_TURISMO = 40
     TIPO_ATIVIDADE_OUTROS = 50
 
-    tipo_atividade_choices = (
+    tipo_atividade_choices = Choices(
         (TIPO_ATIVIDADE_AGROPECUARIA, 'Agropecuária'),
         (TIPO_ATIVIDADE_IRRIGACAO, 'Irrigação'),
         (TIPO_ATIVIDADE_AQUICULTURA, 'Aquicultura'),
@@ -1609,7 +1618,7 @@ class AtendimentoSaude(AuditoriaAbstractModel):
     LOCAL_PA = 1
     LOCAL_CIDADE = 2
 
-    local_choices = (
+    local_choices = Choices(
         (LOCAL_PA, 'P.A'),
         (LOCAL_CIDADE, 'Cidade')
     )
@@ -1638,7 +1647,7 @@ class ProgramaSaude(AuditoriaAbstractModel):
     PROGRAMA_SAUDE_CAMPANHA_DE_VACINACAO = 50
     PROGRAMA_SAUDE_SAUDE_DA_MULHER = 60
 
-    programa_saude_choices = (
+    programa_saude_choices = Choices(
         (PROGRAMA_SAUDE_PSF, 'Programa Saúde da Família - PSF'),
         (PROGRAMA_SAUDE_AGENTES_COMUNITARIOS_DE_SAUDE, 'Agentes Comunitários de Saúde'),
         (PROGRAMA_SAUDE_ATENDIMENTO_MEDICO, 'Atendimento médico'),
@@ -1664,7 +1673,7 @@ class AtividadeFisica(AuditoriaAbstractModel):
     ATIVIDADE_FISICA_NENHUMA_ATIVIDADE_FISICA = 30
     ATIVIDADE_FISICA_OUTROS = 40
 
-    atividade_fisica_choices = (
+    atividade_fisica_choices = Choices(
         (ATIVIDADE_FISICA_FUTEBOL, 'Futebol'),
         (ATIVIDADE_FISICA_CAMINHADA_CORRIDA, 'Caminhada/corrida'),
         (ATIVIDADE_FISICA_NENHUMA_ATIVIDADE_FISICA, 'Nenhuma atividade física'),
@@ -1689,7 +1698,7 @@ class EspacoDisponivel(AuditoriaAbstractModel):
     ESPACO_DISPONIVEL_SALAO_DE_FESTAS = 30
     ESPACO_DISPONIVEL_NAO_POSSUI = 40
 
-    espaco_disponivel_choices = (
+    espaco_disponivel_choices = Choices(
         (ESPACO_DISPONIVEL_QUADRA_DE_ESPORTES, 'Quadra de esportes'),
         (ESPACO_DISPONIVEL_CAMPO_DE_FUTEBOL, 'Campo de futebol'),
         (ESPACO_DISPONIVEL_SALAO_DE_FESTAS, 'Salão de festas'),
@@ -1716,7 +1725,7 @@ class EstabelecimentoEnsino(AuditoriaAbstractModel):
     ESTABELECIMENTO_ENSINO_ENSINO_PROFISSIONALIZANTE = 60
     ESTABELECIMENTO_ENSINO_NAO_HA_ESTABELECIMENTO_DE_ENSINO_NO_PA = 70
 
-    estabelecimento_ensino_choices = (
+    estabelecimento_ensino_choices = Choices(
         (ESTABELECIMENTO_ENSINO_PRE_ESCOLAR_CRECHE, 'Pré-escolar (creche)'),
         (ESTABELECIMENTO_ENSINO_ENSINO_FUNDAMENTAL, 'Ensino Fundamental'),
         (ESTABELECIMENTO_ENSINO_EJA, 'EJA'),
@@ -1829,18 +1838,15 @@ class Familia(AuditoriaAbstractModel):
     lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='familias', on_delete=models.CASCADE)
 
     def __str__(self):
-        nomes = ''
-        for membro in self.membros.all():
-            nomes += membro.nome + ', '
-        return nomes
+        return ', '.join(self.membros.values_list('nome', flat=True))
 
 
 class Membro(AuditoriaAbstractModel):
     familia = models.ForeignKey(Familia, verbose_name='Familia', related_name='membros', on_delete=models.CASCADE)
     nome = models.CharField('Nome', max_length=100)
 
-    PARENTESCO_CONJUGE = 10
-    PARENTESCO_TITULAR = 20
+    PARENTESCO_TITULAR = 10
+    PARENTESCO_CONJUGE = 20
     PARENTESCO_IRMAO_IRMA = 30
     PARENTESCO_TIO_TIA = 40
     PARENTESCO_PRIMO_PRIMA = 50
@@ -1848,19 +1854,21 @@ class Membro(AuditoriaAbstractModel):
     PARENTESCO_CUNHADO_CUNHADA = 70
     PARENTESCO_GENRO_NORA = 80
     PARENTESCO_NETO_NETA = 90
+    PARENTESCO_AGREGADO = 100
 
-    parentesco_choices = (
-        (PARENTESCO_CONJUGE, 'Cônjuge'),
+    parentesco_choices = Choices(
         (PARENTESCO_TITULAR, 'Titular'),
-        (PARENTESCO_CONJUGE, 'Irmão(a)'),
-        (PARENTESCO_CONJUGE, 'Tio(a)'),
-        (PARENTESCO_CONJUGE, 'Primo(a)'),
-        (PARENTESCO_CONJUGE, 'Filho(a)'),
-        (PARENTESCO_CONJUGE, 'Cunhado(a)'),
+        (PARENTESCO_CONJUGE, 'Cônjuge'),
+        (PARENTESCO_IRMAO_IRMA, 'Irmão(a)'),
+        (PARENTESCO_TIO_TIA, 'Tio(a)'),
+        (PARENTESCO_PRIMO_PRIMA, 'Primo(a)'),
+        (PARENTESCO_FILHO_FILHA, 'Filho(a)'),
+        (PARENTESCO_CUNHADO_CUNHADA, 'Cunhado(a)'),
         (PARENTESCO_GENRO_NORA, 'Genro/Nora'),
-        (PARENTESCO_NETO_NETA, 'Neto(a)')
+        (PARENTESCO_NETO_NETA, 'Neto(a)'),
+        (PARENTESCO_AGREGADO, 'Agregado(a)')
     )
-    parentesco = models.IntegerField('Parentesco', choices=parentesco_choices, blank=True, null=True)
+    parentesco = models.IntegerField('Parentesco', choices=parentesco_choices)
     idade = models.IntegerField('Idade')
 
     ESCOLARIDADE_NAO_ALFABETIZADO = 10
@@ -1875,7 +1883,7 @@ class Membro(AuditoriaAbstractModel):
     ESCOLARIDADE_POS_GRADUACAO_INCOMPLETA = 100
     ESCOLARIDADE_POS_GRADUACAO_COMPLETA = 110
 
-    escolaridade_choices = (
+    escolaridade_choices = Choices(
         (ESCOLARIDADE_NAO_ALFABETIZADO, 'Não alfabetizado'),
         (ESCOLARIDADE_1_4_ANO, '1º ao 4º ano'),
         (ESCOLARIDADE_5_9_ANO, '5º ao 9º ano'),
@@ -1893,18 +1901,18 @@ class Membro(AuditoriaAbstractModel):
     CHOICE_SIM = 1
     CHOICE_NAO = 0
 
-    sim_nao_choices = (
+    sim_nao_choices = Choices(
         (CHOICE_SIM, 'Sim'),
         (CHOICE_NAO, 'Não')
     )
     estuda = models.IntegerField('Estuda?', choices=sim_nao_choices)
-    cpf = models.CharField('CPF', max_length=11, unique=True)
+    cpf = models.CharField('CPF', max_length=11, unique=True, blank=True, null=True)
 
     TRABALHO_ANTES_DO_LOTE_SEMPRE_TRABALHOU_NO_CAMPO = 10
     TRABALHO_ANTES_DO_LOTE_TRABALHOU_PARTE_DO_TEMPO_NA_CIDADE = 20
     TRABALHO_ANTES_DO_LOTE_NUNCA_TRABALHOU_NO_CAMPO_ANTES = 30
 
-    trabalho_antes_do_lote_choices = (
+    trabalho_antes_do_lote_choices = Choices(
         (TRABALHO_ANTES_DO_LOTE_SEMPRE_TRABALHOU_NO_CAMPO, 'Sempre trabalhou no campo'),
         (TRABALHO_ANTES_DO_LOTE_TRABALHOU_PARTE_DO_TEMPO_NA_CIDADE, 'Trabalhou parte do tempo na cidade'),
         (TRABALHO_ANTES_DO_LOTE_NUNCA_TRABALHOU_NO_CAMPO_ANTES, 'Nunca trabalhou no campo antes')
@@ -1948,7 +1956,7 @@ class UsoFrequente(AuditoriaAbstractModel):
     USO_FREQUENTE_REMEDIOS_DE_ALTO_CUSTO = 30
     USO_FREQUENTE_OUTROS = 40
 
-    uso_frequente_choices = (
+    uso_frequente_choices = Choices(
         (USO_FREQUENTE_BEBIDAS_ALCOOLICAS, 'Bebidas alcoólicas'),
         (USO_FREQUENTE_CIGARROS, 'Cigarros'),
         (USO_FREQUENTE_REMEDIOS_DE_ALTO_CUSTO, 'Remédios de alto custo'),
@@ -1974,7 +1982,7 @@ class OpcaoEnsinoUtilizada(AuditoriaAbstractModel):
     OPCAO_ENSINO_FREQUENTA_DEIXA_DE_FREQUENTAR_A_ESCOLA = 30
     OPCAO_ENSINO_OUTROS = 40
 
-    opcao_ensino_choices = (
+    opcao_ensino_choices = Choices(
         (OPCAO_ENSINO_FREQUENTA_ESCOLA_EM_OUTRO_ASSENTAMENTO, 'Frequenta escola em outro assentamento'),
         (OPCAO_ENSINO_FREQUENTA_ESCOLA_NA_CIDADE_MAIS_PROXIMA, 'Frequenta escola na cidade mais próxima'),
         (OPCAO_ENSINO_FREQUENTA_DEIXA_DE_FREQUENTAR_A_ESCOLA, 'Deixa de frequentar a escola'),
@@ -1987,7 +1995,7 @@ class OpcaoEnsinoUtilizada(AuditoriaAbstractModel):
     CHOICE_SIM = 1
     CHOICE_NAO = 0
 
-    sim_nao_choices = (
+    sim_nao_choices = Choices(
         (CHOICE_SIM, 'Sim'),
         (CHOICE_NAO, 'Não')
     )

@@ -1,7 +1,11 @@
 from django.contrib import admin
 import nested_admin
+from django.db.models import Q
+
 from . import models
 from django import forms
+from django.utils.safestring import mark_safe
+from django.template.defaultfilters import date
 
 
 class CulturaFormAdmin(forms.ModelForm):
@@ -316,14 +320,86 @@ class NaoPossuiDocumentoInlineAdmin(admin.StackedInline):
     exclude = ['desativado_por', 'desativado_em']
 
 
+class ContratoListFilter(admin.SimpleListFilter):
+    title = 'Contrato'
+    parameter_name = 'contrato'
+
+    def lookups(self, request, model_admin):
+        return models.ProjetoAssentamento.contrato_choices
+
+    def queryset(self, request, queryset):
+        value = self.value()
+        if value:
+            value = int(value)
+            if value == models.ProjetoAssentamento.CONTRATO_10:
+                queryset = queryset.filter(
+                    Q(projeto_assentamento__contrato=models.ProjetoAssentamento.CONTRATO_10)
+                )
+            if value == models.ProjetoAssentamento.CONTRATO_11:
+                queryset = queryset.filter(
+                    Q(projeto_assentamento__contrato=models.ProjetoAssentamento.CONTRATO_11)
+                )
+            if value == models.ProjetoAssentamento.CONTRATO_18:
+                queryset = queryset.filter(
+                    Q(projeto_assentamento__contrato=models.ProjetoAssentamento.CONTRATO_18)
+                )
+        return queryset
+
+
 class LoteAdmin(nested_admin.NestedModelAdmin):
+    def beneficiarios(self, obj):
+        titular_conjuge = models.Membro.objects.only(
+            'nome',
+            'parentesco'
+        ).filter(
+            familia__lote_id=obj.pk,
+            parentesco__in=(
+                models.Membro.PARENTESCO_TITULAR, models.Membro.PARENTESCO_CONJUGE
+            )
+        ).order_by('parentesco')
+        membros = []
+        for membro in titular_conjuge:
+            print(membro)
+            membros.append('({}) {}'.format(membro.parentesco_choices[membro.parentesco], membro.nome))
+        return mark_safe('''<br/>'''.join(membros))
+
+    def data_de_homologacao(self, obj):
+        if obj.data_homologacao:
+            return date(obj.data_homologacao, 'd/m/Y')
+        return '-'
+
+    data_de_homologacao.admin_order_field = 'data_homologacao'
+
+    def ocupante_regular(self, obj):
+        if obj.ocupante_irregular == models.Lote.CHOICE_SIM:
+            return False
+        return True
+
+    ocupante_regular.boolean = True
+    ocupante_regular.admin_order_field = 'ocupante_irregular'
+
+    beneficiarios.short_description = 'Nome do(s) Beneficiário(s)'
+    beneficiarios.allow_tags = True
+
+    def get_contrato(self, obj):
+        return obj.projeto_assentamento.contrato_choices[obj.projeto_assentamento.contrato]
+
+    get_contrato.short_description = 'Contrato'
+    get_contrato.admin_order_field = 'projeto_assentamento__contrato'
+
+    def get_projeto_assentamento(self, obj):
+        return obj.projeto_assentamento
+
+    get_projeto_assentamento.short_description = 'Projeto de Assentamento'
+    get_projeto_assentamento.admin_order_field = 'projeto_assentamento'
+
     list_display = (
-        'codigo_sipra', 'data_homologacao', 'area', 'numero', 'projeto_assentamento', 'outra_familia_no_lote', 'cad_unico', 'ocupante_irregular',
-        'moradia_assentamento'
+        'codigo_sipra', 'get_contrato', 'get_projeto_assentamento', 'beneficiarios', 'data_de_homologacao', 'numero', 'area', 'cad_unico', 'ocupante_regular'
     )
 
     search_fields = ['codigo_sipra', 'numero']
     list_filter = [
+        ContratoListFilter,
         'projeto_assentamento', 'entrevistador', 'outra_familia_no_lote', 'cad_unico', 'ocupante_irregular',
         'recebe_beneficio_social', 'moradia_assentamento', 'tipo_parede_externa', 'tipo_instalacao_eletrica',
         'tipo_instalacao_sanitaria', 'localizacao_fonte_agua', 'abastecimento_agua_suficiente',
@@ -353,3 +429,4 @@ class LoteAdmin(nested_admin.NestedModelAdmin):
 
 admin.site.register(models.ProjetoAssentamento, ProjetoAssentamentoAdmin)
 admin.site.register(models.Lote, LoteAdmin)
+admin.site.disable_action('delete_selected')
