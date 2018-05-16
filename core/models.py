@@ -107,10 +107,10 @@ class Lote(AuditoriaAbstractModel):
         'Em caso afirmativo, há quanto tempo?', max_length=30, blank=True, null=True
     )
     recebe_beneficio_social = models.IntegerField(
-        'Algum dos membros da família recebe algum tipo de Benefício Social?',
+        '3. Algum dos membros da família recebe algum tipo de Benefício Social?',
         choices=sim_nao_choices
     )
-    moradia_assentamento = models.IntegerField('Possui moradia no assentamento?', choices=sim_nao_choices)
+    moradia_assentamento = models.IntegerField('7. Possui moradia no assentamento?', choices=sim_nao_choices)
 
     TIPO_PAREDE_ALVENARIA = 10
     TIPO_PAREDE_TABUAS_MADEIRA = 20
@@ -130,7 +130,7 @@ class Lote(AuditoriaAbstractModel):
         (TIPO_PAREDE_OUTROS, 'Outros')
     )
     tipo_parede_externa = models.IntegerField(
-        'Qual tipo de parede externa predominante da moradia?', choices=tipo_parede_externa_choices,
+        '8. Qual tipo de parede externa predominante da moradia?', choices=tipo_parede_externa_choices,
         blank=True, null=True
     )
 
@@ -146,7 +146,7 @@ class Lote(AuditoriaAbstractModel):
         (TIPO_INSTALACAO_ELETRICA_OUTROS, 'Outros')
     )
     tipo_instalacao_eletrica = models.IntegerField(
-        'Instalação de energia elétrica?', choices=tipo_instalacao_eletrica_choices,
+        '9. Instalação de energia elétrica?', choices=tipo_instalacao_eletrica_choices,
         blank=True, null=True
     )
 
@@ -162,7 +162,7 @@ class Lote(AuditoriaAbstractModel):
         (TIPO_INSTALACAO_SANITARIA_NENHUMA, 'Nenhuma')
     )
     tipo_instalacao_sanitaria = models.IntegerField(
-        'Qual é o tipo de instalação sanitária?', choices=tipo_instalacao_sanitaria_choices,
+        '10. Qual é o tipo de instalação sanitária?', choices=tipo_instalacao_sanitaria_choices,
         blank=True, null=True
     )
 
@@ -174,10 +174,10 @@ class Lote(AuditoriaAbstractModel):
         (LOCALIZACAO_FONTE_DE_AGUA_FORA_DO_SEU_LOTE, 'Fora do seu lote')
     )
     localizacao_fonte_agua = models.IntegerField(
-        'Onde está localizada a fonte de água que abastece sua residência?', choices=localizacao_fonte_agua_choices
+        '13. Onde está localizada a fonte de água que abastece sua residência?', choices=localizacao_fonte_agua_choices
     )
     abastecimento_agua_suficiente = models.IntegerField(
-        'A água que abastece a residência é suficiente?', choices=sim_nao_choices
+        '14. A água que abastece a residência é suficiente?', choices=sim_nao_choices
     )
 
     QUANTAS_FAMILIAS_UTILIZAM_MESMA_FONTE_DE_AGUA_NENHUMA = 10
@@ -191,7 +191,7 @@ class Lote(AuditoriaAbstractModel):
         (QUANTAS_FAMILIAS_UTILIZAM_MESMA_FONTE_DE_AGUA_MAIS_DE_UMA, 'Mais de uma')
     )
     quantas_familias_utilizam_mesma_fonte_agua = models.IntegerField(
-        'Quantas famílias (além da sua) fazem o uso da mesma fonte de água que abastece o seu lote?',
+        '15. Quantas famílias (além da sua) fazem o uso da mesma fonte de água que abastece o seu lote?',
         choices=quantas_familias_utilizam_mesma_fonte_agua_choices
     )
     quantidade_familias_utilizacao_mesma_fonte_agua = models.IntegerField('Mais de uma. Quantas?', blank=True,
@@ -223,7 +223,7 @@ class Lote(AuditoriaAbstractModel):
         (AGUA_PARA_ANIMAIS_PLANTIO_OUTROS, 'Outros')
     )
     agua_para_animais_plantio = models.IntegerField(
-        'No lote tem água para os animais / Plantio?', choices=agua_para_animais_plantio_choices
+        '16. No lote tem água para os animais / Plantio?', choices=agua_para_animais_plantio_choices
     )
     agua_para_animais_plantio_outros = models.CharField(
         'Água para animais/plantio (Outros)', max_length=50, blank=True, null=True
@@ -241,7 +241,7 @@ class Lote(AuditoriaAbstractModel):
         (REGULARIDADE_ABASTECIMENTO_AGUA_NUNCA_TEM_AGUA, 'Nunca tem água')
     )
     regularidade_abastecimento_agua = models.IntegerField(
-        'Regularidade de abastecimento de água',
+        '17. Regularidade de abastecimento de água',
         choices=regularidade_abastecimento_agua_choices
     )
 
@@ -259,7 +259,7 @@ class Lote(AuditoriaAbstractModel):
         (TIPO_ESTRADA_DE_ACESSO_INEXISTENTE, 'Inexistente')
     )
     tipo_estrada_acesso = models.IntegerField(
-        'Como é o acesso ao lote?',
+        '18. Como é o acesso ao lote?',
         choices=tipo_estrada_acesso_choices
     )
 
@@ -275,7 +275,7 @@ class Lote(AuditoriaAbstractModel):
         (SITUACAO_ESTRADA_ACESSO_PESSIMA, 'Péssima')
     )
     situacao_estrada_acesso = models.IntegerField(
-        'Situação anual da estrada principal acesso ao lote?',
+        '19. Situação anual da estrada principal acesso ao lote?',
         choices=situacao_estrada_acesso_choices
     )
 
@@ -291,32 +291,32 @@ class Lote(AuditoriaAbstractModel):
         (SITUACAO_CERCADO_LOTE_NAO_ESTA_CERCADO, 'Não está cercado')
     )
     situacao_cercado_lote = models.IntegerField(
-        'Como está cercado o lote?',
+        '20. Como está cercado o lote?',
         choices=situacao_cercado_lote_choices
     )
     area_preservacao_permanente = models.IntegerField(
-        'Existe Área de Preservação Permanente (APP) dentro do seu lote/parcela?', choices=sim_nao_choices
+        '38. Existe Área de Preservação Permanente (APP) dentro do seu lote/parcela?', choices=sim_nao_choices
     )
     area_preservacao_permanente_cercada = models.IntegerField(
-        'A Área de Preservação Permanente está cercada ou isolada?', choices=sim_nao_choices
+        '39. A Área de Preservação Permanente está cercada ou isolada?', choices=sim_nao_choices
     )
     possui_capineira = models.IntegerField(
         'Possui Capineira?', default=0
     )
     possui_pastagem_em_pastejo_rotacionado = models.IntegerField(
-        'Possui Pastagem em Pastejo Rotacionado?', choices=sim_nao_choices
+        '34. Possui Pastagem em Pastejo Rotacionado?', choices=sim_nao_choices
     )
     area_pastejo_rotacionado = models.DecimalField(
         'Tamanho da área em sistema de Pastejo Rotacionado', max_digits=10, decimal_places=4, blank=True, null=True
     )
     pratica_inseminacao_artificial_no_rebanho_leiteiro = models.IntegerField(
-        'Pratica inseminação aritificial no rebanho leiteiro?', choices=sim_nao_choices
+        '35. Pratica inseminação aritificial no rebanho leiteiro?', choices=sim_nao_choices
     )
     necessita_licenciamento_ambiental = models.IntegerField(
         'Necessita de licenciamento ambiental de atividade?', default=0
     )
     necessita_autoriacao_exploracao_florestal_queima_controlada = models.IntegerField(
-        'Necessita de autorização de exploração florestal e/ou queima controlada?', choices=sim_nao_choices
+        '45. Necessita de autorização de exploração florestal e/ou queima controlada?', choices=sim_nao_choices
     )
 
     QUALIDADE_SERVICO_SAUDE_OTIMO = 10
@@ -331,7 +331,7 @@ class Lote(AuditoriaAbstractModel):
         (QUALIDADE_SERVICO_SAUDE_PESSIMO, 'Péssimo')
     )
     qualidade_servico_saude = models.IntegerField(
-        'Como os moradores consideram o serviço de saúde no assentamento?', choices=qualidade_servico_saude_choices
+        '48. Como os moradores consideram o serviço de saúde no assentamento?', choices=qualidade_servico_saude_choices
     )
 
     FREQUENCIA_ATIVIDADE_FISICA_DIARIAMENTE = 10
@@ -346,7 +346,7 @@ class Lote(AuditoriaAbstractModel):
         (FREQUENCIA_ATIVIDADE_FISICA_NAO_PRATICA, 'Não pratica')
     )
     frequencia_atividade_fisica = models.IntegerField(
-        'Com que frequência praticam atividades físicas ou esportes?', choices=frequencia_atividade_fisica_choices
+        '51. Com que frequência praticam atividades físicas ou esportes?', choices=frequencia_atividade_fisica_choices
     )
     OFERTA_TRANSPORTE_INTERNO_SIM = 1
     OFERTA_TRANSPORTE_INTERNO_NAO = 0
@@ -358,7 +358,7 @@ class Lote(AuditoriaAbstractModel):
         (OFERTA_TRANSPORTE_INTERNO_NAO_SE_APLICA, 'Não se aplica')
     )
     oferta_transporte_interno = models.IntegerField(
-        'Para a escola do assentamento há oferta de transporte interno?', choices=oferta_transporte_interno_choices
+        '54. Para a escola do assentamento há oferta de transporte interno?', choices=oferta_transporte_interno_choices
     )
 
     def __str__(self):
@@ -387,8 +387,8 @@ class DocumentoLote(AuditoriaAbstractModel):
         return self.tipo_documento_choices[self.tipo_documento]
 
     class Meta:
-        verbose_name = 'Documento do lote'
-        verbose_name_plural = 'Quais documentos o lote possui?'
+        verbose_name = ''
+        verbose_name_plural = '1. Quais documentos o lote possui?'
 
 
 class BeneficioSocial(AuditoriaAbstractModel):
@@ -409,15 +409,15 @@ class BeneficioSocial(AuditoriaAbstractModel):
         (TIPO_BENEFICIO_BOLSA_VERDE, 'Bolsa verde'),
         (TIPO_BENEFICIO_OUTROS, 'Outros')
     )
-    tipo_beneficio = models.IntegerField('Qual documento o lote possui?', choices=tipo_beneficio_choices)
+    tipo_beneficio = models.IntegerField('Benefício', choices=tipo_beneficio_choices)
     outros = models.CharField('Outros', max_length=30, blank=True, null=True)
 
     def __str__(self):
         return self.tipo_beneficio_choices[self.tipo_beneficio]
 
     class Meta:
-        verbose_name = 'Tipo de benefício'
-        verbose_name_plural = 'Quais os tipos de benefício?'
+        verbose_name = ''
+        verbose_name_plural = '4. Quais os tipos de benefício?'
 
 
 class AutoDeclaracaoEtnia(AuditoriaAbstractModel):
@@ -443,11 +443,11 @@ class AutoDeclaracaoEtnia(AuditoriaAbstractModel):
     quantidade = models.IntegerField('Quantos?')
 
     def __str__(self):
-        return self.tipo_declaracao_etnia_choices[self.tipo_declaracao_etnia]
+        return '%s - %s' % (self.tipo_declaracao_etnia_choices[self.tipo_declaracao_etnia], self.quantidade)
 
     class Meta:
-        verbose_name = 'Quantos moradores se declaram?'
-        verbose_name_plural = 'Quantos moradores se declaram?'
+        verbose_name = 'Auto declaração'
+        verbose_name_plural = '5. Quantos moradores se declaram'
 
 
 class EstruturaOrganizativa(AuditoriaAbstractModel):
@@ -494,12 +494,11 @@ class EstruturaOrganizativa(AuditoriaAbstractModel):
     frequencia = models.IntegerField('Frequência', choices=frequencia_choices)
 
     def __str__(self):
-        # return '%s - %s' % (str(self.tipo_estrutura_organizativa), str(self.frequencia))
         return '%s - %s' % (self.tipo_estrutura_organizativa_choices[self.tipo_estrutura_organizativa], self.frequencia_choices[self.frequencia])
 
     class Meta:
-        verbose_name = 'Estruturas organizativa interna existente'
-        verbose_name_plural = 'Das estruturas organizativas internas ao assentamento diga qual existe no assentamento e de quais os membros da família participam'
+        verbose_name = 'Estruturas organizativa'
+        verbose_name_plural = '6. Das estruturas organizativas internas ao assentamento diga qual existe no assentamento e de quais os membros da família participam'
 
 
 class FonteAgua(AuditoriaAbstractModel):
@@ -530,11 +529,14 @@ class FonteAgua(AuditoriaAbstractModel):
     outra = models.CharField('Outra (Especificar)', max_length=30, blank=True, null=True)
 
     def __str__(self):
-        return str(self.fonte_agua)
+        retorno = self.fonte_agua_choices[self.fonte_agua]
+        if self.outra:
+            retorno = retorno + ' - ' + self.outra
+        return retorno
 
     class Meta:
-        verbose_name = 'Abastecimento de água'
-        verbose_name_plural = 'De onde vem a água que abastece a família?'
+        verbose_name = ''
+        verbose_name_plural = '11. De onde vem a água que abastece a família?'
 
 
 class TratamentoAgua(AuditoriaAbstractModel):
@@ -553,16 +555,20 @@ class TratamentoAgua(AuditoriaAbstractModel):
         (TRATAMENTO_AGUA_FERVURA, 'Fervura'),
         (TRATAMENTO_AGUA_FILTRAGEM, 'Filtragem'),
         (TRATAMENTO_AGUA_DESSALINIZACAO, 'Dessalinização'),
-        (TRATAMENTO_AGUA_OUTRA, 'Outra')
+        (TRATAMENTO_AGUA_OUTRA, 'Outros')
     )
     tratamento_agua = models.IntegerField('Forma de tratamento', choices=tratamento_agua_choices)
+    outros = models.CharField('Outros (Especificar)', max_length=30, blank=True, null=True)
 
     def __str__(self):
-        return str(self.tratamento_agua)
+        retorno = self.tratamento_agua_choices[self.tratamento_agua]
+        if self.outros:
+            retorno = retorno + ' - ' + self.outros
+        return retorno
 
     class Meta:
-        verbose_name = 'Tratamento da água'
-        verbose_name_plural = 'Qual a forma tratamento da água para consumo?'
+        verbose_name = ''
+        verbose_name_plural = '12. Qual a forma tratamento da água para consumo?'
 
 
 class ConstrucaoLote(AuditoriaAbstractModel):
@@ -596,11 +602,15 @@ class ConstrucaoLote(AuditoriaAbstractModel):
     quantidade = models.IntegerField('Quantidade')
 
     def __str__(self):
-        return str(self.construcao_no_lote)
+        retorno = ''
+        if self.outros:
+            retorno = '{} ({}) - {}'.format(self.construcao_no_lote_choices[self.construcao_no_lote], self.outros, self.quantidade)
+        retorno = '{} - {}'.format(self.construcao_no_lote_choices[self.construcao_no_lote], self.quantidade)
+        return retorno
 
     class Meta:
-        verbose_name = 'Contruído no lote'
-        verbose_name_plural = 'O que tem construído no lote?'
+        verbose_name = 'Construção'
+        verbose_name_plural = '21. O que tem construído no lote?'
 
 
 class BemProdutivo(AuditoriaAbstractModel):
@@ -650,11 +660,16 @@ class BemProdutivo(AuditoriaAbstractModel):
     quantidade = models.IntegerField('Quantidade')
 
     def __str__(self):
-        return str(self.bem_produtivo)
+        retorno = ''
+        if self.outros:
+            retorno = '{} ({}) - {}'.format(self.bem_produtivo_choices[self.bem_produtivo], self.outros,
+                                            self.quantidade)
+        retorno = '{} - {}'.format(self.bem_produtivo_choices[self.bem_produtivo], self.quantidade)
+        return retorno
 
     class Meta:
         verbose_name = 'Bem produtivo'
-        verbose_name_plural = 'Bens produtivos disponíveis no lote'
+        verbose_name_plural = '22. Bens produtivos disponíveis no lote'
 
 
 class AplicacaoCredito(AuditoriaAbstractModel):
@@ -685,11 +700,11 @@ class AplicacaoCredito(AuditoriaAbstractModel):
     valor = models.DecimalField('Valor (R$)', max_digits=10, decimal_places=2)
 
     def __str__(self):
-        return str(self.tipo_aplicacao_credito)
+        return '{} - R$ {}'.format(self.tipo_aplicacao_credito_choices[self.tipo_aplicacao_credito], self.valor)
 
     class Meta:
-        verbose_name = 'Aplicação do crédito no lote'
-        verbose_name_plural = 'Com relação aos créditos, como está a aplicação no lote?'
+        verbose_name = ''
+        verbose_name_plural = '23. Com relação aos créditos, como está a aplicação no lote?'
 
 
 class CreditoBancario(AuditoriaAbstractModel):
@@ -726,11 +741,15 @@ class CreditoBancario(AuditoriaAbstractModel):
     adimplente = models.IntegerField('Adimplente?', choices=sim_nao_choices)
 
     def __str__(self):
-        return str(self.credito_bancario)
+        retorno = ''
+        if self.outros:
+            retorno = '{} ({}) - R$ {} - Adimplente: {}'.format(self.credito_bancario_choices[self.credito_bancario], self.outros, self.valor, self.sim_nao_choices[self.adimplente])
+        retorno = '{} - R$ {} - Adimplente: {}'.format(self.credito_bancario_choices[self.credito_bancario], self.valor, self.sim_nao_choices[self.adimplente])
+        return retorno
 
     class Meta:
-        verbose_name = 'Aplicação do crédito bancário na parcela'
-        verbose_name_plural = 'Com relação aos créditos bancários, como está a aplicação na parcela?'
+        verbose_name = ''
+        verbose_name_plural = '24. Com relação aos créditos bancários, como está a aplicação na parcela?'
 
 
 class ProducaoVegetal(AuditoriaAbstractModel):
@@ -928,7 +947,11 @@ class Cultura(ProducaoVegetal):
     objects = CulturaManager()
 
     def __str__(self):
-        return '%s - %s' % ('Produção Vegetal (Cultura)', str(self.tipo_producao))
+        retorno = ''
+        if self.medida_area_plantada == self.MEDIDA_HA:
+            retorno = '{} - {}ha'.format(self.tipo_producao_choices[self.tipo_producao], self.area_plantada)
+        retorno = '{} - {}m2'.format(self.tipo_producao_choices[self.tipo_producao], self.area_plantada)
+        return retorno
 
     def save(self, *args, **kwargs):
         self.classificacao = 1
@@ -936,8 +959,8 @@ class Cultura(ProducaoVegetal):
 
     class Meta:
         proxy = True
-        verbose_name = 'Produção Vegetal - Cultura'
-        verbose_name_plural = 'Produções Vegetais - Culturas'
+        verbose_name = ''
+        verbose_name_plural = '25. Agora falaremos sobre a produção/culturas, plantadas na sua lavoura/roça no último ano agrícola'
 
 
 class OlericulturaManager(models.Manager):
@@ -949,7 +972,11 @@ class Olericultura(ProducaoVegetal):
     objects = OlericulturaManager()
 
     def __str__(self):
-        return '%s - %s' % ('Produção Vegetal (Olericultura)', str(self.tipo_producao))
+        retorno = ''
+        if self.medida_area_plantada == self.MEDIDA_HA:
+            retorno = '{} - {}ha'.format(self.tipo_producao_choices[self.tipo_producao], self.area_plantada)
+        retorno = '{} - {}m2'.format(self.tipo_producao_choices[self.tipo_producao], self.area_plantada)
+        return retorno
 
     def save(self, *args, **kwargs):
         self.classificacao = 2
@@ -957,8 +984,8 @@ class Olericultura(ProducaoVegetal):
 
     class Meta:
         proxy = True
-        verbose_name = 'Produção Vegetal - Olericultura'
-        verbose_name_plural = 'Produções Vegetais - Olericulturas'
+        verbose_name = ''
+        verbose_name_plural = '26. Olericulturas - Legumes e Verduras no último ano agrícola'
 
 
 class FruticulturaManager(models.Manager):
@@ -970,7 +997,11 @@ class Fruticultura(ProducaoVegetal):
     objects = FruticulturaManager()
 
     def __str__(self):
-        return '%s - %s' % ('Produção Vegetal (Fruticultura)', str(self.tipo_producao))
+        retorno = ''
+        if self.medida_area_plantada == self.MEDIDA_HA:
+            retorno = '{} - {}ha'.format(self.tipo_producao_choices[self.tipo_producao], self.area_plantada)
+        retorno = '{} - {}m2'.format(self.tipo_producao_choices[self.tipo_producao], self.area_plantada)
+        return retorno
 
     def save(self, *args, **kwargs):
         self.classificacao = 3
@@ -978,8 +1009,8 @@ class Fruticultura(ProducaoVegetal):
 
     class Meta:
         proxy = True
-        verbose_name = 'Produção Vegetal - Fruticultura'
-        verbose_name_plural = 'Produções Vegetais - Fruticulturas'
+        verbose_name = ''
+        verbose_name_plural = '27. Fruticultura referente ao último ano agrícola'
 
 
 class AtividadeExtrativista(AuditoriaAbstractModel):
@@ -1046,11 +1077,15 @@ class AtividadeExtrativista(AuditoriaAbstractModel):
                                                 blank=True, null=True)
 
     def __str__(self):
-        return '%s - %s' % ('Atividade extrativista', str(self.especificacao))
+        retorno = ''
+        if self.outros:
+            retorno = '{} ({}) - {} fruto(s), {} palmito(s)'.format(self.especificacao_choices[self.especificacao], self.outros, self.quantidade_frutos_ano, self.quantidade_palmitos_ano)
+        retorno = '{} - {} fruto(s), {} palmito(s)'.format(self.especificacao_choices[self.especificacao], self.quantidade_frutos_ano, self.quantidade_palmitos_ano)
+        return retorno
 
     class Meta:
-        verbose_name = 'Atividade Extrativista'
-        verbose_name_plural = 'Atividades Extrativistas'
+        verbose_name = ''
+        verbose_name_plural = '29. Produtos de atividade extrativista do último ano agrícola'
 
 
 class ProducaoFlorestal(AuditoriaAbstractModel):
@@ -1098,11 +1133,16 @@ class ProducaoFlorestal(AuditoriaAbstractModel):
 
 
     def __str__(self):
-        return '%s - %s' % ('Produção Florestal', str(self.especificacao))
+        retorno = ''
+        if self.outros:
+            retorno = '{} ({}) - {}'.format(self.especificacao_choices[self.especificacao], self.outros,
+                                            self.quantidade_frutos_ano)
+        retorno = '{} - {}'.format(self.especificacao_choices[self.especificacao], self.quantidade_frutos_ano)
+        return retorno
 
     class Meta:
-        verbose_name = 'Produção Florestal'
-        verbose_name_plural = 'Produções Florestais'
+        verbose_name = ''
+        verbose_name_plural = '30. Produção Florestal do último ano agrícola'
 
 
 class ProducaoAnimal(AuditoriaAbstractModel):
@@ -1166,7 +1206,7 @@ class Bovinocultura(ProducaoAnimal):
     objects = BovinoculturaManager()
 
     def __str__(self):
-        return '%s - %s' % (str(self.tipo_criacao), str(self.especificacao))
+        return '{} - {}: {} cabeça(s), R$ {} por cabeça'.format(self.tipo_criacao_choices[self.tipo_criacao], self.especificacao_choices[self.especificacao], self.quantidade_cabecas, self.valor_cabeca)
 
     def save(self, *args, **kwargs):
         self.classificacao = 1
@@ -1174,8 +1214,8 @@ class Bovinocultura(ProducaoAnimal):
 
     class Meta:
         proxy = True
-        verbose_name = 'Produção Animal - Bovinocultura (Efetivo Atual)'
-        verbose_name_plural = 'Produção Animal - Bovinocultura (Efetivo Atual)'
+        verbose_name = ''
+        verbose_name_plural = '31. Sobre o Efetivo Animal do último ano agrícola (Bovinocultura)'
 
 
 class OutraCriacaoManager(models.Manager):
@@ -1187,7 +1227,7 @@ class OutraCriacao(ProducaoAnimal):
     objects = OutraCriacaoManager()
 
     def __str__(self):
-        return '%s - %s' % (str(self.tipo_criacao), str(self.especificacao))
+        return '{}: {} cabeça(s), R$ {} por cabeça'.format(self.especificacao_choices[self.especificacao], self.quantidade_cabecas, self.valor_cabeca)
 
     def save(self, *args, **kwargs):
         self.classificacao = 2
@@ -1196,8 +1236,8 @@ class OutraCriacao(ProducaoAnimal):
 
     class Meta:
         proxy = True
-        verbose_name = 'Produção Animal - Outras Criações Animais (Efetivo Atual)'
-        verbose_name_plural = 'Produção Animal - Outras Criações Animais (Efetivo Atual)'
+        verbose_name = ''
+        verbose_name_plural = '31. Sobre o Efetivo Animal do último ano agrícola (Outras Criações)'
 
 
 class DescarteAnimal(AuditoriaAbstractModel):
@@ -1249,7 +1289,9 @@ class BovinoculturaLeiteira(DescarteAnimal):
     objects = BovinoculturaLeiteiraManager()
 
     def __str__(self):
-        return '%s - %s' % (str(self.tipo_criacao), str(self.especificacao))
+        return '{} - Consumo: {} cabeça(s), Comércio: {} cabeça(s)'.format(
+            self.especificacao_choices[self.especificacao], self.quantidade_cabecas_consumo,
+            self.quantidade_cabecas_comercio)
 
     def save(self, *args, **kwargs):
         self.tipo_criacao = 1
@@ -1257,7 +1299,7 @@ class BovinoculturaLeiteira(DescarteAnimal):
 
     class Meta:
         proxy = True
-        verbose_name = 'Descarte Animal - Bovinocultura Leiteira'
+        verbose_name = ''
         verbose_name_plural = 'Descarte Animal - Bovinocultura Leiteira'
 
 
@@ -1270,7 +1312,9 @@ class BovinoculturaCorte(DescarteAnimal):
     objects = BovinoculturaCorteManager()
 
     def __str__(self):
-        return '%s - %s' % (str(self.tipo_criacao), str(self.especificacao))
+        return '{} - Consumo: {} cabeça(s), Comércio: {} cabeça(s)'.format(
+            self.especificacao_choices[self.especificacao], self.quantidade_cabecas_consumo,
+            self.quantidade_cabecas_comercio)
 
     def save(self, *args, **kwargs):
         self.tipo_criacao = 2
@@ -1278,7 +1322,7 @@ class BovinoculturaCorte(DescarteAnimal):
 
     class Meta:
         proxy = True
-        verbose_name = 'Descarte Animal - Bovinocultura de Corte'
+        verbose_name = ''
         verbose_name_plural = 'Descarte Animal - Bovinocultura de Corte'
 
 
@@ -1373,7 +1417,7 @@ class OrigemAnimal(Produto):
     objects = OrigemAnimalManager()
 
     def __str__(self):
-        return '%s - %s' % (str(self.classificacao), str(self.especificacao))
+        return '{} - Consumo: {}, Comércio: {}'.format(self.especificacao_choices[self.especificacao], self.producao_consumo, self.producao_comercio)
 
     def save(self, *args, **kwargs):
         self.classificacao = 1
@@ -1381,20 +1425,12 @@ class OrigemAnimal(Produto):
 
     class Meta:
         proxy = True
-        verbose_name = 'Produto de origem animal produzido'
-        verbose_name_plural = 'Sobre os produtos de origem animal produzidos no último ano agrícola'
+        verbose_name = ''
+        verbose_name_plural = '32. Sobre os produtos de origem animal produzidos no último ano agrícola'
 
 
 class NivelTecnologicoProducaoAnimal(AuditoriaAbstractModel):
     lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='niveisTecnologicosProducaoAnimal', on_delete=models.CASCADE)
-
-    CHOICE_SIM = 1
-    CHOICE_NAO = 0
-
-    sim_nao_choices = Choices(
-        (CHOICE_SIM, 'Sim'),
-        (CHOICE_NAO, 'Não')
-    )
 
     TIPO_CAPINEIRA_CANA = 10
     TIPO_CAPINEIRA_NAPIER = 20
@@ -1411,10 +1447,11 @@ class NivelTecnologicoProducaoAnimal(AuditoriaAbstractModel):
     )
 
     def __str__(self):
+        return '{}: {}ha'.format(self.tipo_capineira_choices[self.tipo_capineira], self.area_capineira)
         return str(self.tipo_capineira)
 
     class Meta:
-        verbose_name = 'Sobre o Nível Tecnológico da Produção Animal'
+        verbose_name = ''
         verbose_name_plural = 'Sobre o Nível Tecnológico da Produção Animal'
 
 
@@ -1427,7 +1464,8 @@ class ProcessadoBeneficiado(Produto):
     objects = ProcessadoBeneficiadoManager()
 
     def __str__(self):
-        return '%s - %s' % (str(self.classificacao), str(self.especificacao))
+        return '{} - Consumo: {}, Comércio: {}'.format(self.especificacao_choices[self.especificacao],
+                                                       self.producao_consumo, self.producao_comercio)
 
     def save(self, *args, **kwargs):
         self.classificacao = 2
@@ -1435,8 +1473,8 @@ class ProcessadoBeneficiado(Produto):
 
     class Meta:
         proxy = True
-        verbose_name = 'Produto processado ou beneficiado'
-        verbose_name_plural = 'Sobre os produtos processados ou beneficiados no estabelecimento, no último ano agrícola (agroindústria)'
+        verbose_name = ''
+        verbose_name_plural = '36. Sobre os produtos processados ou beneficiados no estabelecimento, no último ano agrícola (agroindústria)'
 
 
 class ProblemaAmbiental(AuditoriaAbstractModel):
@@ -1475,11 +1513,14 @@ class ProblemaAmbiental(AuditoriaAbstractModel):
     outros = models.CharField('Outros (Especificar)', max_length=50, blank=True, null=True)
 
     def __str__(self):
-        return str(self.tipo_problema)
+        retorno = self.tipo_problema_choices[self.tipo_problema]
+        if self.outros:
+            retorno = retorno + ' (' + self.outros + ')'
+        return retorno
 
     class Meta:
-        verbose_name = 'Problema ambiental'
-        verbose_name_plural = 'Quais são os problemas ambientais existentes no lote?'
+        verbose_name = ''
+        verbose_name_plural = '40. Quais são os problemas ambientais existentes no lote?'
 
 
 class PraticaConservacionista(AuditoriaAbstractModel):
@@ -1509,11 +1550,11 @@ class PraticaConservacionista(AuditoriaAbstractModel):
     tipo_pratica = models.IntegerField('Prática Conservacionista', choices=tipo_pratica_choices)
 
     def __str__(self):
-        return str(self.tipo_pratica)
+        return self.tipo_pratica_choices[self.tipo_pratica]
 
     class Meta:
-        verbose_name = 'Prática conservacionista praticada'
-        verbose_name_plural = 'Quais são as práticas conservacionistas praticadas na propriedade?'
+        verbose_name = ''
+        verbose_name_plural = '41. Quais são as práticas conservacionistas praticadas na propriedade?'
 
 
 class DestinoLixoDomestico(AuditoriaAbstractModel):
@@ -1540,11 +1581,11 @@ class DestinoLixoDomestico(AuditoriaAbstractModel):
     destino = models.IntegerField('Destino', choices=destino_choices)
 
     def __str__(self):
-        return str(self.destino)
+        return self.destino_choices[self.destino]
 
     class Meta:
-        verbose_name = 'Destino do lixo doméstico não orgânico?'
-        verbose_name_plural = 'Qual é o destino do lixo doméstico não orgânico?'
+        verbose_name = ''
+        verbose_name_plural = '42. Qual o destino do lixo doméstico não orgânico?'
 
 
 class DestinoMaterialOrganico(AuditoriaAbstractModel):
@@ -1567,11 +1608,11 @@ class DestinoMaterialOrganico(AuditoriaAbstractModel):
     destino = models.IntegerField('Destino', choices=destino_choices)
 
     def __str__(self):
-        return str(self.destino)
+        return self.destino_choices[self.destino]
 
     class Meta:
-        verbose_name = 'Destino do material orgânico?'
-        verbose_name_plural = 'Qual o destino do material orgânico?'
+        verbose_name = ''
+        verbose_name_plural = '43. Qual o destino do material orgânico?'
 
 
 class LicenciamentoAmbiental(AuditoriaAbstractModel):
@@ -1595,7 +1636,10 @@ class LicenciamentoAmbiental(AuditoriaAbstractModel):
     outros = models.CharField('Outros (Especificar)', max_length=50, blank=True, null=True)
 
     def __str__(self):
-        return str(self.tipo_atividade)
+        retorno = self.tipo_atividade_choices[self.tipo_atividade]
+        if self.outros:
+            retorno = retorno + '(' + self.outros + ')'
+        return retorno
 
     def save(self, *args, **kwargs):
         lote = self.lote
@@ -1605,7 +1649,7 @@ class LicenciamentoAmbiental(AuditoriaAbstractModel):
         super().save(*args, **kwargs)
 
     class Meta:
-        verbose_name = 'Licenciamento ambiental'
+        verbose_name = ''
         verbose_name_plural = 'Necessita de licenciamento ambiental para alguma atividade?'
 
 
@@ -1629,12 +1673,13 @@ class AtendimentoSaude(AuditoriaAbstractModel):
     outros_especificacao = models.CharField('Outros (Especificar)', max_length=50, blank=True, null=True)
 
     def __str__(self):
-        return 'Hospital: %s - Posto de saúde: %s - Farmácia: %s' % (
-            str(self.hospital), str(self.posto_saude), str(self.farmacia))
+        return 'Hospital: {}, Posto de saúde: {}, Farmácia: {}'.format(
+            self.local_choices[self.hospital], self.local_choices[self.posto_saude], self.local_choices[self.farmacia]
+        )
 
     class Meta:
-        verbose_name = 'Local de atendimento à saúde'
-        verbose_name_plural = 'Onde é feito o atendimento à saúde para as famílias do assentamento?'
+        verbose_name = ''
+        verbose_name_plural = '46. Onde é feito o atendimento à saúde para as famílias do assentamento?'
 
 
 class ProgramaSaude(AuditoriaAbstractModel):
@@ -1658,11 +1703,11 @@ class ProgramaSaude(AuditoriaAbstractModel):
     programa_saude = models.IntegerField('Programa/Tipo de atendimento à saúde', choices=programa_saude_choices)
 
     def __str__(self):
-        return str(self.programa_saude)
+        return self.programa_saude_choices[self.programa_saude]
 
     class Meta:
-        verbose_name = 'Programa ou tipo de atendimento à saúde disponibilizado no P.A'
-        verbose_name_plural = 'Quais programas ou tipos de atendimento à saúde são disponibilizados no P.A?'
+        verbose_name = ''
+        verbose_name_plural = '47. Quais os programas ou tipos de atendimento à saúde são disponibilizados no P.A?'
 
 
 class AtividadeFisica(AuditoriaAbstractModel):
@@ -1683,11 +1728,14 @@ class AtividadeFisica(AuditoriaAbstractModel):
     outros = models.CharField('Outros (Especificar)', max_length=50, blank=True, null=True)
 
     def __str__(self):
-        return str(self.atividade_fisica)
+        retorno = self.atividade_fisica_choices[self.atividade_fisica]
+        if self.outros:
+            retorno = retorno + '(' + self.outros + ')'
+        return retorno
 
     class Meta:
-        verbose_name = 'Esporte/atividade física praticada'
-        verbose_name_plural = 'Quais são os esportes/atividades físicas praticados pelos familiares com maior frequência?'
+        verbose_name = ''
+        verbose_name_plural = '50. Quais são os esportes/atividades físicas praticados pelos familiares com maior frequência?'
 
 
 class EspacoDisponivel(AuditoriaAbstractModel):
@@ -1707,11 +1755,11 @@ class EspacoDisponivel(AuditoriaAbstractModel):
     espaco_disponivel = models.IntegerField('Espaço disponível', choices=espaco_disponivel_choices)
 
     def __str__(self):
-        return str(self.espaco_disponivel)
+        return self.espaco_disponivel_choices[self.espaco_disponivel]
 
     class Meta:
-        verbose_name = 'Espaço disponível para a prática de esporte/recreação'
-        verbose_name_plural = 'No assentamento quais são os espaços disponíveis para a prática de esporte ou para a recreação?'
+        verbose_name = ''
+        verbose_name_plural = '52. No assentamento quais são os espaços disponíveis para a prática de esporte ou para a recreação?'
 
 
 class EstabelecimentoEnsino(AuditoriaAbstractModel):
@@ -1737,11 +1785,11 @@ class EstabelecimentoEnsino(AuditoriaAbstractModel):
     estabelecimento_ensino = models.IntegerField('Estabelecimento de ensino', choices=estabelecimento_ensino_choices)
 
     def __str__(self):
-        return str(self.estabelecimento_ensino)
+        return self.estabelecimento_ensino_choices[self.estabelecimento_ensino]
 
     class Meta:
-        verbose_name = 'Estabelecimento de ensino disponível no assentamento'
-        verbose_name_plural = 'Que tipo de estabelecimento de ensino está disponível no assentamento?'
+        verbose_name = ''
+        verbose_name_plural = '53. Que tipo de estabelecimento de ensino está disponível no assentamento?'
 
 
 class NaoPossuiDocumento(AuditoriaAbstractModel):
@@ -1757,12 +1805,13 @@ class NaoPossuiDocumento(AuditoriaAbstractModel):
     certidao_de_casamento_ou_uniao_estavel = models.IntegerField('Certidão de Casamento ou União Estável', blank=True, null=True)
 
     def __str__(self):
-        return 'Certidão de Nascimento: %s - Identidade (RG): %s - CPF: %s - Carteira de Trabalho (CTPS): %s - Certidão de Casamento ou União Estável: %s' % (
-            str(self.certidao_nascimento), str(self.identidade), str(self.cpf), str(self.carteira_de_trabalho), str(self.certidao_de_casamento_ou_uniao_estavel))
+        return 'Certidão de Nascimento: {}, Identidade (RG): {}, CPF: {}, Carteira de Trabalho (CTPS): {}, Certidão de Casamento ou União Estável: {}'.format(
+            self.certidao_nascimento, self.identidade, self.cpf, self.carteira_de_trabalho, self.certidao_de_casamento_ou_uniao_estavel
+        )
 
     class Meta:
-        verbose_name = 'Com relação à documentação, quantas pessoas NÃO POSSUEM os documentos relacionados abaixo?'
-        verbose_name_plural = 'Com relação à documentação, quantas pessoas NÃO POSSUEM os documentos relacionados abaixo?'
+        verbose_name = ''
+        verbose_name_plural = '56. Com relação à documentação, quantas pessoas NÃO POSSUEM os documentos relacionados abaixo?'
 
 
 # class Pessoa(AuditoriaAbstractModel):
@@ -1839,6 +1888,10 @@ class Familia(AuditoriaAbstractModel):
 
     def __str__(self):
         return ', '.join(self.membros.values_list('nome', flat=True))
+
+    class Meta:
+        verbose_name = 'Família'
+        verbose_name_plural = 'Famílias'
 
 
 class Membro(AuditoriaAbstractModel):
@@ -1933,6 +1986,10 @@ class Contato(AuditoriaAbstractModel):
     def __str__(self):
         return self.telefone
 
+    class Meta:
+        verbose_name = 'Contato'
+        verbose_name_plural = 'Contatos'
+
 
 class RendaTrabalhoForaLote(AuditoriaAbstractModel):
     membro = models.OneToOneField(Membro, verbose_name='Membro', related_name='renda_trabalho_fora_lote',
@@ -1941,11 +1998,11 @@ class RendaTrabalhoForaLote(AuditoriaAbstractModel):
     valor = models.DecimalField('Valor da Diária (R$/dia)', max_digits=7, decimal_places=2)
 
     def __str__(self):
-        return 'R$ %s' % (str(self.quantidade_dias_ano * self.valor))
+        return 'Dias/ano: {} - R$/diária: R$ {}'.format(self.quantidade_dias_ano, self.valor)
 
     class Meta:
         verbose_name = 'Renda de trabalho fora do lote'
-        verbose_name_plural = 'Sobre a renda de trabalho fora do lote'
+        verbose_name_plural = '37. Sobre a renda de trabalho fora do lote'
 
 
 class UsoFrequente(AuditoriaAbstractModel):
@@ -1970,7 +2027,7 @@ class UsoFrequente(AuditoriaAbstractModel):
 
     class Meta:
         verbose_name = 'Faz o uso frequente de'
-        verbose_name_plural = 'Quais os tipos de usos frequentes?'
+        verbose_name_plural = '49. Quais os tipos de usos frequentes?'
 
 
 class OpcaoEnsinoUtilizada(AuditoriaAbstractModel):
@@ -2006,4 +2063,4 @@ class OpcaoEnsinoUtilizada(AuditoriaAbstractModel):
 
     class Meta:
         verbose_name = 'Opção de ensino utilizada:'
-        verbose_name_plural = 'Quais as opções de ensino utilizadas pelo membro?'
+        verbose_name_plural = '55. No caso de não haver oferta de estabelecimento de ensino apropriado no assentamento, qual a opção utilizada pelos familiares?'

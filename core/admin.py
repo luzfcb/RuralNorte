@@ -363,20 +363,22 @@ class LoteAdmin(nested_admin.NestedModelAdmin):
             membros.append('({}) {}'.format(membro.parentesco_choices[membro.parentesco], membro.nome))
         return mark_safe('''<br/>'''.join(membros))
 
-    def data_de_homologacao(self, obj):
+    def get_data_homologacao(self, obj):
         if obj.data_homologacao:
             return date(obj.data_homologacao, 'd/m/Y')
         return '-'
 
-    data_de_homologacao.admin_order_field = 'data_homologacao'
+    get_data_homologacao.admin_order_field = 'data_homologacao'
+    get_data_homologacao.short_description = 'Data de Homologação'
 
-    def ocupante_regular(self, obj):
+    def get_ocupante_regular(self, obj):
         if obj.ocupante_irregular == models.Lote.CHOICE_SIM:
             return False
         return True
 
-    ocupante_regular.boolean = True
-    ocupante_regular.admin_order_field = 'ocupante_irregular'
+    get_ocupante_regular.boolean = True
+    get_ocupante_regular.short_description = 'Ocupante Regular'
+    get_ocupante_regular.admin_order_field = 'ocupante_irregular'
 
     beneficiarios.short_description = 'Nome do(s) Beneficiário(s)'
     beneficiarios.allow_tags = True
@@ -394,7 +396,7 @@ class LoteAdmin(nested_admin.NestedModelAdmin):
     get_projeto_assentamento.admin_order_field = 'projeto_assentamento'
 
     list_display = (
-        'codigo_sipra', 'get_contrato', 'get_projeto_assentamento', 'beneficiarios', 'data_de_homologacao', 'numero', 'area', 'cad_unico', 'ocupante_regular'
+        'codigo_sipra', 'get_contrato', 'get_projeto_assentamento', 'beneficiarios', 'get_data_homologacao', 'numero', 'area', 'cad_unico', 'get_ocupante_regular'
     )
 
     search_fields = ['codigo_sipra', 'numero']
