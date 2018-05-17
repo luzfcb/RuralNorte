@@ -531,7 +531,7 @@ class FonteAgua(AuditoriaAbstractModel):
     def __str__(self):
         retorno = self.fonte_agua_choices[self.fonte_agua]
         if self.outra:
-            retorno = retorno + ' - ' + self.outra
+            retorno = retorno + '(' + self.outra + ')'
         return retorno
 
     class Meta:
