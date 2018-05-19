@@ -1451,6 +1451,9 @@ class OrigemAnimal(Produto):
 class NivelTecnologicoProducaoAnimal(AuditoriaAbstractModel):
     lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='niveisTecnologicosProducaoAnimal', on_delete=models.CASCADE)
 
+    CHOICE_SIM = 1
+    CHOICE_NAO = 0
+
     TIPO_CAPINEIRA_CANA = 10
     TIPO_CAPINEIRA_NAPIER = 20
     TIPO_CAPINEIRA_NAO_SE_APLICA = 99
@@ -1468,6 +1471,12 @@ class NivelTecnologicoProducaoAnimal(AuditoriaAbstractModel):
     def __str__(self):
         return '{}: {}ha'.format(self.tipo_capineira_choices[self.tipo_capineira], self.area_capineira)
         return str(self.tipo_capineira)
+
+    def save(self, *args, **kwargs):
+        lote = self.lote
+        lote.possui_capineira = self.CHOICE_SIM
+        lote.save()
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = ''
