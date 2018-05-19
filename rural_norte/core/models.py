@@ -1665,7 +1665,7 @@ class LicenciamentoAmbiental(AuditoriaAbstractModel):
 
     def save(self, *args, **kwargs):
         lote = self.lote
-        lote.necessita_licenciamento_ambiental = CHOICE_SIM
+        lote.necessita_licenciamento_ambiental = self.CHOICE_SIM
         lote.save()
         super().save(*args, **kwargs)
 
