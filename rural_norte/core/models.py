@@ -302,7 +302,7 @@ class Lote(AuditoriaAbstractModel):
         '39. A Área de Preservação Permanente está cercada ou isolada?', choices=sim_nao_choices
     )
     possui_capineira = models.IntegerField(
-        'Possui Capineira?', default=0
+        'Possui Capineira?', default=CHOICE_NAO
     )
     possui_pastagem_em_pastejo_rotacionado = models.IntegerField(
         '34. Possui Pastagem em Pastejo Rotacionado?', choices=sim_nao_choices
@@ -314,7 +314,7 @@ class Lote(AuditoriaAbstractModel):
         '35. Pratica inseminação aritificial no rebanho leiteiro?', choices=sim_nao_choices
     )
     necessita_licenciamento_ambiental = models.IntegerField(
-        'Necessita de licenciamento ambiental de atividade?', default=0
+        'Necessita de licenciamento ambiental de atividade?', default=CHOICE_NAO
     )
     necessita_autoriacao_exploracao_florestal_queima_controlada = models.IntegerField(
         '45. Necessita de autorização de exploração florestal e/ou queima controlada?', choices=sim_nao_choices
@@ -755,6 +755,10 @@ class CreditoBancario(AuditoriaAbstractModel):
 
 class ProducaoVegetal(AuditoriaAbstractModel):
     lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='producoesVegetais', on_delete=models.CASCADE)
+
+    CLASSIFICACAO_CULTURA = 1
+    CLASSIFICACAO_OLERICULTURA = 2
+    CLASSIFICACAO_FRUTICULTURA = 3
     classificacao = models.IntegerField('Classificação')
 
     TIPO_PRODUCAO_AMENDOIM = 10
@@ -941,7 +945,7 @@ class ProducaoVegetal(AuditoriaAbstractModel):
 
 class CulturaManager(models.Manager):
     def get_queryset(self):
-        return super(CulturaManager, self).get_queryset().filter(classificacao=1)
+        return super(CulturaManager, self).get_queryset().filter(classificacao=Cultura.CLASSIFICACAO_CULTURA)
 
 
 class Cultura(ProducaoVegetal):
@@ -955,7 +959,7 @@ class Cultura(ProducaoVegetal):
         return retorno
 
     def save(self, *args, **kwargs):
-        self.classificacao = 1
+        self.classificacao = self.CLASSIFICACAO_CULTURA
         super().save(*args, **kwargs)
 
     class Meta:
@@ -966,7 +970,7 @@ class Cultura(ProducaoVegetal):
 
 class OlericulturaManager(models.Manager):
     def get_queryset(self):
-        return super(OlericulturaManager, self).get_queryset().filter(classificacao=2)
+        return super(OlericulturaManager, self).get_queryset().filter(classificacao=Olericultura.CLASSIFICACAO_OLERICULTURA)
 
 
 class Olericultura(ProducaoVegetal):
@@ -980,7 +984,7 @@ class Olericultura(ProducaoVegetal):
         return retorno
 
     def save(self, *args, **kwargs):
-        self.classificacao = 2
+        self.classificacao = self.CLASSIFICACAO_OLERICULTURA
         super().save(*args, **kwargs)
 
     class Meta:
@@ -991,7 +995,7 @@ class Olericultura(ProducaoVegetal):
 
 class FruticulturaManager(models.Manager):
     def get_queryset(self):
-        return super(FruticulturaManager, self).get_queryset().filter(classificacao=3)
+        return super(FruticulturaManager, self).get_queryset().filter(classificacao=Fruticultura.CLASSIFICACAO_FRUTICULTURA)
 
 
 class Fruticultura(ProducaoVegetal):
@@ -1005,7 +1009,7 @@ class Fruticultura(ProducaoVegetal):
         return retorno
 
     def save(self, *args, **kwargs):
-        self.classificacao = 3
+        self.classificacao = self.CLASSIFICACAO_FRUTICULTURA
         super().save(*args, **kwargs)
 
     class Meta:
@@ -1148,10 +1152,15 @@ class ProducaoFlorestal(AuditoriaAbstractModel):
 
 class ProducaoAnimal(AuditoriaAbstractModel):
     lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='producoesAnimais', on_delete=models.CASCADE)
+
+    CLASSIFICACAO_BOVINOCULTURA = 1
+    CLASSIFICACAO_OUTRA_CRIACAO = 2
+
     classificacao = models.IntegerField('Classificação')
 
     TIPO_CRIACAO_GADO_LEITEIRO = 1
     TIPO_CRIACAO_GADO_DE_CORTE = 2
+    TIPO_CRIACAO_OUTROS = 99
 
     tipo_criacao_choices = Choices(
         (TIPO_CRIACAO_GADO_LEITEIRO, 'Gado Leiteiro'),
@@ -1200,7 +1209,7 @@ class ProducaoAnimal(AuditoriaAbstractModel):
 
 class BovinoculturaManager(models.Manager):
     def get_queryset(self):
-        return super(BovinoculturaManager, self).get_queryset().filter(classificacao=1)
+        return super(BovinoculturaManager, self).get_queryset().filter(classificacao=Bovinocultura.CLASSIFICACAO_BOVINOCULTURA)
 
 
 class Bovinocultura(ProducaoAnimal):
@@ -1210,7 +1219,7 @@ class Bovinocultura(ProducaoAnimal):
         return '{} - {}: {} cabeça(s), R$ {} por cabeça'.format(self.tipo_criacao_choices[self.tipo_criacao], self.especificacao_choices[self.especificacao], self.quantidade_cabecas, self.valor_cabeca)
 
     def save(self, *args, **kwargs):
-        self.classificacao = 1
+        self.classificacao = self.CLASSIFICACAO_BOVINOCULTURA
         super().save(*args, **kwargs)
 
     class Meta:
@@ -1221,7 +1230,7 @@ class Bovinocultura(ProducaoAnimal):
 
 class OutraCriacaoManager(models.Manager):
     def get_queryset(self):
-        return super(OutraCriacaoManager, self).get_queryset().filter(classificacao=2)
+        return super(OutraCriacaoManager, self).get_queryset().filter(classificacao=OutraCriacao.CLASSIFICACAO_OUTRA_CRIACAO)
 
 
 class OutraCriacao(ProducaoAnimal):
@@ -1231,8 +1240,8 @@ class OutraCriacao(ProducaoAnimal):
         return '{}: {} cabeça(s), R$ {} por cabeça'.format(self.especificacao_choices[self.especificacao], self.quantidade_cabecas, self.valor_cabeca)
 
     def save(self, *args, **kwargs):
-        self.classificacao = 2
-        self.tipo_criacao = 3
+        self.classificacao = self.CLASSIFICACAO_OUTRA_CRIACAO
+        self.tipo_criacao = self.TIPO_CRIACAO_OUTROS
         super().save(*args, **kwargs)
 
     class Meta:
@@ -1243,6 +1252,11 @@ class OutraCriacao(ProducaoAnimal):
 
 class DescarteAnimal(AuditoriaAbstractModel):
     lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='descartesAnimais', on_delete=models.CASCADE)
+
+    TIPO_CRIACAO_GADO_LEITEIRO = 1
+    TIPO_CRIACAO_GADO_DE_CORTE = 2
+    TIPO_CRIACAO_OUTROS = 99
+
     tipo_criacao = models.IntegerField('Tipo de criação')
 
     ESPECIFICACAO_TOUROS = 10
@@ -1283,7 +1297,7 @@ class DescarteAnimal(AuditoriaAbstractModel):
 
 class BovinoculturaLeiteiraManager(models.Manager):
     def get_queryset(self):
-        return super(BovinoculturaLeiteiraManager, self).get_queryset().filter(tipo_criacao=1)
+        return super(BovinoculturaLeiteiraManager, self).get_queryset().filter(tipo_criacao=BovinoculturaLeiteira.TIPO_CRIACAO_GADO_LEITEIRO)
 
 
 class BovinoculturaLeiteira(DescarteAnimal):
@@ -1295,7 +1309,7 @@ class BovinoculturaLeiteira(DescarteAnimal):
             self.quantidade_cabecas_comercio)
 
     def save(self, *args, **kwargs):
-        self.tipo_criacao = 1
+        self.tipo_criacao = self.TIPO_CRIACAO_GADO_LEITEIRO
         super().save(*args, **kwargs)
 
     class Meta:
@@ -1306,7 +1320,7 @@ class BovinoculturaLeiteira(DescarteAnimal):
 
 class BovinoculturaCorteManager(models.Manager):
     def get_queryset(self):
-        return super(BovinoculturaCorteManager, self).get_queryset().filter(tipo_criacao=2)
+        return super(BovinoculturaCorteManager, self).get_queryset().filter(tipo_criacao=BovinoculturaCorte.TIPO_CRIACAO_GADO_DE_CORTE)
 
 
 class BovinoculturaCorte(DescarteAnimal):
@@ -1318,7 +1332,7 @@ class BovinoculturaCorte(DescarteAnimal):
             self.quantidade_cabecas_comercio)
 
     def save(self, *args, **kwargs):
-        self.tipo_criacao = 2
+        self.tipo_criacao = self.TIPO_CRIACAO_GADO_DE_CORTE
         super().save(*args, **kwargs)
 
     class Meta:
@@ -1329,6 +1343,10 @@ class BovinoculturaCorte(DescarteAnimal):
 
 class Produto(AuditoriaAbstractModel):
     lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='produtosOrigemAnimal', on_delete=models.CASCADE)
+
+    CLASSIFICACAO_ORIGEM_ANIMAL = 1
+    CLASSIFICACAO_PROCESSADO_BENEFICIADO = 2
+
     classificacao = models.IntegerField('Classificação')
 
     ESPECIFICACAO_CARNE = 10
@@ -1411,7 +1429,7 @@ class Produto(AuditoriaAbstractModel):
 
 class OrigemAnimalManager(models.Manager):
     def get_queryset(self):
-        return super(OrigemAnimalManager, self).get_queryset().filter(classificacao=1)
+        return super(OrigemAnimalManager, self).get_queryset().filter(classificacao=OrigemAnimal.CLASSIFICACAO_ORIGEM_ANIMAL)
 
 
 class OrigemAnimal(Produto):
@@ -1421,7 +1439,7 @@ class OrigemAnimal(Produto):
         return '{} - Consumo: {}, Comércio: {}'.format(self.especificacao_choices[self.especificacao], self.producao_consumo, self.producao_comercio)
 
     def save(self, *args, **kwargs):
-        self.classificacao = 1
+        self.classificacao = self.CLASSIFICACAO_ORIGEM_ANIMAL
         super().save(*args, **kwargs)
 
     class Meta:
@@ -1458,7 +1476,7 @@ class NivelTecnologicoProducaoAnimal(AuditoriaAbstractModel):
 
 class ProcessadoBeneficiadoManager(models.Manager):
     def get_queryset(self):
-        return super(ProcessadoBeneficiadoManager, self).get_queryset().filter(classificacao=2)
+        return super(ProcessadoBeneficiadoManager, self).get_queryset().filter(classificacao=ProcessadoBeneficiado.CLASSIFICACAO_PROCESSADO_BENEFICIADO)
 
 
 class ProcessadoBeneficiado(Produto):
@@ -1469,7 +1487,7 @@ class ProcessadoBeneficiado(Produto):
                                                        self.producao_consumo, self.producao_comercio)
 
     def save(self, *args, **kwargs):
-        self.classificacao = 2
+        self.classificacao = self.CLASSIFICACAO_PROCESSADO_BENEFICIADO
         super().save(*args, **kwargs)
 
     class Meta:
@@ -1620,6 +1638,9 @@ class LicenciamentoAmbiental(AuditoriaAbstractModel):
     lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='licenciamentosAmbientais',
                              on_delete=models.CASCADE)
 
+    CHOICE_SIM = 1
+    CHOICE_NAO = 0
+
     TIPO_ATIVIDADE_AGROPECUARIA = 10
     TIPO_ATIVIDADE_IRRIGACAO = 20
     TIPO_ATIVIDADE_AQUICULTURA = 30
@@ -1644,8 +1665,7 @@ class LicenciamentoAmbiental(AuditoriaAbstractModel):
 
     def save(self, *args, **kwargs):
         lote = self.lote
-        lote.necessita_licenciamento_ambiental = 1
-        lote.possui_capineira = 1
+        lote.necessita_licenciamento_ambiental = CHOICE_SIM
         lote.save()
         super().save(*args, **kwargs)
 
