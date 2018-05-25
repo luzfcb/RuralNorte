@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}Campo Diagnósticos{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h2>Campo Diagnósticos</h2>
+
+  <div class="list-group">
+    {% for lote in object_list %}
+      <a href="{% url 'core:lote-detail' lote.id %}" class="list-group-item">
+        <h4 class="list-group-item-heading">{{ lote }}</h4>
+      </a>
+    {% endfor %}
+  </div>
+</div>
+{% endblock content %}

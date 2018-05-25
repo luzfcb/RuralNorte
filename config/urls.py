@@ -19,6 +19,10 @@ urlpatterns = [
         "users/",
         include("rural_norte.users.urls", namespace="users"),
     ),
+    path(
+        "core/",
+        include("rural_norte.core.urls", namespace="core"),
+    ),
     path("accounts/", include("allauth.urls")),
     path('_nested_admin/', include('nested_admin.urls')),
     path('grappelli/', include('grappelli.urls')),

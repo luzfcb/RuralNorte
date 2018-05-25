@@ -69,6 +69,7 @@ class ProjetoAssentamento(AuditoriaAbstractModel):
     nome = models.CharField('Nome do PA', max_length=50)
     municipio = models.CharField('Município', max_length=100)
     data_criacao = models.DateField('Data de Criação')
+    capacidade_projeto = models.IntegerField('Capacidade do Projeto')
 
     def __str__(self):
         return '%s | %s' % (self.codigo, self.nome)
@@ -302,19 +303,19 @@ class Lote(AuditoriaAbstractModel):
         '39. A Área de Preservação Permanente está cercada ou isolada?', choices=sim_nao_choices
     )
     possui_capineira = models.IntegerField(
-        'Possui Capineira?', default=CHOICE_NAO
+        'Possui Capineira?', choices=sim_nao_choices, default=CHOICE_NAO
     )
     possui_pastagem_em_pastejo_rotacionado = models.IntegerField(
         '34. Possui Pastagem em Pastejo Rotacionado?', choices=sim_nao_choices
     )
     area_pastejo_rotacionado = models.DecimalField(
-        'Tamanho da área em sistema de Pastejo Rotacionado', max_digits=10, decimal_places=4, blank=True, null=True
+        'Tamanho da área em sistema de Pastejo Rotacionado (ha)', max_digits=10, decimal_places=4, blank=True, null=True
     )
     pratica_inseminacao_artificial_no_rebanho_leiteiro = models.IntegerField(
         '35. Pratica inseminação aritificial no rebanho leiteiro?', choices=sim_nao_choices
     )
     necessita_licenciamento_ambiental = models.IntegerField(
-        'Necessita de licenciamento ambiental de atividade?', default=CHOICE_NAO
+        'Necessita de licenciamento ambiental de atividade?', choices=sim_nao_choices, default=CHOICE_NAO
     )
     necessita_autoriacao_exploracao_florestal_queima_controlada = models.IntegerField(
         '45. Necessita de autorização de exploração florestal e/ou queima controlada?', choices=sim_nao_choices
@@ -364,6 +365,10 @@ class Lote(AuditoriaAbstractModel):
 
     def __str__(self):
         return '%s - %s' % (self.projeto_assentamento.nome, self.codigo_sipra)
+
+    class Meta:
+        verbose_name = 'Campo Diagnóstico'
+        verbose_name_plural = 'Campo Diagnósticos'
 
 
 class DocumentoLote(AuditoriaAbstractModel):
@@ -1111,7 +1116,7 @@ class ProducaoFlorestal(AuditoriaAbstractModel):
     )
     especificacao = models.IntegerField('Especificação', choices=especificacao_choices)
     outros = models.CharField('Outros', max_length=30, blank=True, null=True)
-    quantidade_produzida_ano = models.IntegerField('Quantidade Colhida / Ano - Fruto(s)')
+    quantidade_produzida_ano = models.IntegerField('Quantidade produzida/ano')
     area_plantada = models.DecimalField('Área plantada (ha)', max_digits=10, decimal_places=4)
     valor = models.DecimalField('R$/Unidade colhida', max_digits=10, decimal_places=2)
 
@@ -1141,8 +1146,8 @@ class ProducaoFlorestal(AuditoriaAbstractModel):
         retorno = ''
         if self.outros:
             retorno = '{} ({}) - {}'.format(self.especificacao_choices[self.especificacao], self.outros,
-                                            self.quantidade_frutos_ano)
-        retorno = '{} - {}'.format(self.especificacao_choices[self.especificacao], self.quantidade_frutos_ano)
+                                            self.quantidade_produzida_ano)
+        retorno = '{} - {}'.format(self.especificacao_choices[self.especificacao], self.quantidade_produzida_ano)
         return retorno
 
     class Meta:
@@ -1388,7 +1393,7 @@ class Produto(AuditoriaAbstractModel):
     outros = models.CharField('Outros (Especificar)', max_length=30, blank=True, null=True)
     producao_consumo = models.IntegerField('Produção (Consumo)')
     producao_comercio = models.IntegerField('Produção (Comércio)')
-    valor = models.DecimalField('Valor R$/Unidade', max_digits=7, decimal_places=2)
+    valor = models.DecimalField('Valor R$', max_digits=7, decimal_places=2)
 
     CANAL_COMERCIALIZACAO_VENDA_DIRETA_AO_CONSUMIDOR = 10
     CANAL_COMERCIALIZACAO_VENDA_EM_FEIRAS = 20
@@ -2053,7 +2058,8 @@ class UsoFrequente(AuditoriaAbstractModel):
     outros = models.CharField('Outros (Especificar)', max_length=50, blank=True, null=True)
 
     def __str__(self):
-        return str(self.uso_frequente)
+        return self.uso_frequente_choices[self.uso_frequente]
+
 
     class Meta:
         verbose_name = 'Faz o uso frequente de'
@@ -2089,7 +2095,7 @@ class OpcaoEnsinoUtilizada(AuditoriaAbstractModel):
     oferta_de_transporte = models.IntegerField('Há oferta de transporte para a escola?', choices=sim_nao_choices)
 
     def __str__(self):
-        return str(self.opcao_ensino)
+        return self.opcao_ensino_choices[self.opcao_ensino]
 
     class Meta:
         verbose_name = 'Opção de ensino utilizada:'

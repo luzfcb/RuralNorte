@@ -1,0 +1,2187 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Campo Diagnóstico: {{ object }}{% endblock %}
+
+{% block content %}
+  <br/>
+  <h3>Campo Diagnóstico: {{ object }}</h3>
+  <br/>
+
+  <table class="table table-bordered">
+    <thead>
+    <tr>
+      <th scope="col" class="table-secondary" style="text-align: center;">Superintedência Regional</th>
+      <th scope="col" class="table-secondary" style="text-align: center;">Município</th>
+      <th scope="col" class="table-secondary" style="text-align: center;">UF</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="width: 33%; text-align: center;">INCRA - SR26</td>
+      <td style="width: 34%; text-align: center;">{{ object.projeto_assentamento.municipio }}</td>
+      <td style="width: 33%; text-align: center;">TO</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <table class="table table-bordered">
+    <thead>
+    <tr>
+      <th scope="col" class="table-secondary" style="text-align: center;">Nome do Projeto de Assentamento</th>
+      <th scope="col" class="table-secondary" style="text-align: center;">Código SIPRA</th>
+      <th scope="col" class="table-secondary" style="text-align: center;">Área (ha)</th>
+      <th scope="col" class="table-secondary" style="text-align: center;">Lote N.º</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="width: 35%; text-align: center;">{{ object.projeto_assentamento.nome }}</td>
+      <td style="width: 35%; text-align: center;">{{ object.codigo_sipra }}</td>
+      <td style="width: 15%; text-align: center;">{{ object.area }}</td>
+      <td style="width: 15%; text-align: center;">{{ object.numero }}</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <table class="table table-bordered">
+    <thead>
+    <tr>
+      <th scope="col" class="table-secondary" style="text-align: center;">Nome Entrevistador</th>
+      <th scope="col" class="table-secondary" style="text-align: center;">Coordenadas em UTM</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>{{ object.entrevistador }}</td>
+      <td>
+        <div class="container">
+          <div class="row">
+            <div class="col-sm">
+              <b>X</b>
+              {{ object.coordenada_x }}
+            </div>
+            <div class="col-sm">
+              <b>Y</b>
+              {{ object.coordenada_y }}
+            </div>
+          </div>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <table class="table table-bordered" style="margin-bottom: 0;">
+    <thead>
+    <tr>
+      <th scope="col" class="table-secondary" style="text-align: center;">DADOS PESSOAIS</th>
+    </tr>
+    </thead>
+  </table>
+
+  <table class="table table-bordered" style="margin-bottom: 0;">
+    <thead>
+    <tr>
+      <th scope="col" class="table-secondary" style="text-align: center;">Informações Sobre Familiares Residentes no Lote</th>
+    </tr>
+    </thead>
+  </table>
+
+  {% for familia in object.familias.all %}
+    <table class="table table-bordered">
+      <thead>
+      <tr>
+        <th scope="col" class="table-secondary" style="text-align: center;">Código</th>
+        <th scope="col" class="table-secondary" style="text-align: center;">Nome</th>
+        <th scope="col" class="table-secondary" style="text-align: center;">Parentesco</th>
+        <th scope="col" class="table-secondary" style="text-align: center;">Idade</th>
+        <th scope="col" class="table-secondary" style="text-align: center;">Escolaridade</th>
+        <th scope="col" class="table-secondary" style="text-align: center;">Estuda?</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for membro in familia.membros.all %}
+        <tr>
+          <td style="text-align: center;">{{ membro.id }}</td>
+          <td>{{ membro.nome }}</td>
+          <td style="text-align: center;">{{ membro.get_parentesco_display }}</td>
+          <td style="text-align: center;">{{ membro.idade }}</td>
+          <td style="text-align: center;">{{ membro.get_escolaridade_display }}</td>
+          <td style="text-align: center;">{{ membro.get_estuda_display }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  {% endfor %}
+
+  <div class="container">
+    <div class="row" style="margin-bottom: 10px;">
+      <b>Contato:</b>
+    </div>
+    <div class="row">
+      {% for contato in object.contatos.all %}
+        <div style="margin-left: 10px; margin-right: 5px;">
+          <b>Telefone {{ forloop.counter }}:</b>
+        </div>
+        <div style="margin-right: 10px;">
+          {{ contato.telefone }}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="container" style="margin-top: 10px;">
+    <div class="row">
+      <div style="margin-right: 5px;">
+        <b>CAD - Único:</b>
+      </div>
+      <div>
+        {{ object.get_cad_unico_display }}
+      </div>
+    </div>
+  </div>
+
+  <div class="container" style="margin-top: 10px;">
+    <div class="row">
+      <div style="margin-right: 5px;">
+        <b>Ocupante irregular?</b>
+      </div>
+      <div>
+        {{ object.get_ocupante_irregular_display }}
+      </div>
+    </div>
+  </div>
+
+  {% if object.ocupante_irregular %}
+    <div class="container" style="margin-top: 10px;">
+      <div class="row">
+        <div style="margin-right: 5px;">
+          <b>Em caso afirmativo, há quanto tempo?</b>
+        </div>
+        <div>
+          {{ object.ocupante_irregular_tempo|default:"" }}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="container" style="margin-top: 10px;">
+    <div class="row" style="margin-bottom: 5px;">
+      <b>1. Qual documento o lote possui?</b>
+    </div>
+    <div class="row" style="width: 50%;">
+      <table class="table table-bordered">
+        <tbody>
+        {% for documento in object.documentos.all %}
+          <tr>
+            <td scope="col">{{ documento.get_tipo_documento_display }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="container" style="margin-top: 10px;">
+    <div class="row" style="margin-bottom: 5px;">
+      <b>2. Antes entrarem no lote, trabalhava onde?</b>
+    </div>
+    <div class="row">
+      {% for familia in object.familias.all %}
+        {% for membro in familia.membros.all %}
+          {% if membro.get_parentesco_display == 'Titular' %}
+            <div class="col">
+              <table class="table table-bordered">
+                <thead>
+                <tr>
+                  <th scope="col">Titular: {{ membro.nome }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td scope="col">Sempre trabalhou no campo</td>
+                  {% if membro.trabalho_antes_do_lote == membro.TRABALHO_ANTES_DO_LOTE_SEMPRE_TRABALHOU_NO_CAMPO %}
+                    <td scope="col" style="text-align: center;">Sim</td>
+                  {% else %}
+                    <td scope="col" style="text-align: center;">Não</td>
+                  {% endif %}
+                </tr>
+                <tr>
+                  <td scope="col">Trabalhou parte do tempo na cidade</td>
+                  {% if membro.trabalho_antes_do_lote == membro.TRABALHO_ANTES_DO_LOTE_TRABALHOU_PARTE_DO_TEMPO_NA_CIDADE %}
+                    <td scope="col" style="text-align: center;">Sim</td>
+                  {% else %}
+                    <td scope="col" style="text-align: center;">Não</td>
+                  {% endif %}
+                </tr>
+                <tr>
+                  <td scope="col">Nunca trabalhou no campo antes</td>
+                  {% if membro.trabalho_antes_do_lote == membro.TRABALHO_ANTES_DO_LOTE_NUNCA_TRABALHOU_NO_CAMPO_ANTES %}
+                    <td scope="col" style="text-align: center;">Sim</td>
+                  {% else %}
+                    <td scope="col" style="text-align: center;">Não</td>
+                  {% endif %}
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          {% elif membro.get_parentesco_display == 'Cônjuge' %}
+            <div class="col">
+              <table class="table table-bordered">
+                <thead>
+                <tr>
+                  <th scope="col">Cônjuge: {{ membro.nome }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td scope="col">Sempre trabalhou no campo</td>
+                  {% if membro.trabalho_antes_do_lote == membro.TRABALHO_ANTES_DO_LOTE_SEMPRE_TRABALHOU_NO_CAMPO %}
+                    <td scope="col" style="text-align: center;">Sim</td>
+                  {% else %}
+                    <td scope="col" style="text-align: center;">Não</td>
+                  {% endif %}
+                </tr>
+                <tr>
+                  <td scope="col">Trabalhou parte do tempo na cidade</td>
+                  {% if membro.trabalho_antes_do_lote == membro.TRABALHO_ANTES_DO_LOTE_TRABALHOU_PARTE_DO_TEMPO_NA_CIDADE %}
+                    <td scope="col" style="text-align: center;">Sim</td>
+                  {% else %}
+                    <td scope="col" style="text-align: center;">Não</td>
+                  {% endif %}
+                </tr>
+                <tr>
+                  <td scope="col">Nunca trabalhou no campo antes</td>
+                  {% if membro.trabalho_antes_do_lote == membro.TRABALHO_ANTES_DO_LOTE_NUNCA_TRABALHOU_NO_CAMPO_ANTES %}
+                    <td scope="col" style="text-align: center;">Sim</td>
+                  {% else %}
+                    <td scope="col" style="text-align: center;">Não</td>
+                  {% endif %}
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          {% endif %}
+        {% endfor %}
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="container" style="margin-top: 10px;">
+    <div class="row">
+      <div style="margin-right: 5px;">
+        <b>3. Algum dos membros da família recebe algun tipo de Benefício Social?</b>
+      </div>
+      <div>
+        {{ object.get_recebe_beneficio_social_display }}
+      </div>
+    </div>
+  </div>
+
+  <div class="row" style="margin-top: 10px;">
+    <div class="col">
+      {% if object.recebe_beneficio_social == object.CHOICE_SIM %}
+        <div class="container" style="margin-top: 10px;">
+          <div class="row" style="margin-bottom: 5px;">
+            <b>4. Qual o Tipo de benefício?</b>
+          </div>
+          <div class="row">
+            <table class="table table-bordered">
+              <tbody>
+              {% for beneficio in object.beneficios.all %}
+                <tr>
+                  {% if beneficio.tipo_beneficio == TIPO_BENEFICIO_OUTROS %}
+                    <td scope="col">{{ beneficio.get_tipo_beneficio_display }}: {{ beneficio.outros }}</td>
+                  {% else %}
+                    <td scope="col">{{ beneficio.get_tipo_beneficio_display }}</td>
+                  {% endif %}
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+    <div class="col">
+      <div class="container" style="margin-top: 10px;">
+        <div class="row" style="margin-bottom: 5px;">
+          <b>5. Quantos moradores se declaram:</b>
+        </div>
+        <div class="row">
+          <table class="table table-bordered">
+            <thead>
+            <tr>
+              <th scope="col" style="text-align: center;">Auto Declaração</th>
+              <th scope="col" style="text-align: center;">Quantidade</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for autodeclaracao in object.autoDeclaracoes.all %}
+              <tr>
+                {% if autodeclaracao.tipo_declaracao_etnia == autodeclaracao.TIPO_DECLARACAO_ETNIA_OUTROS %}
+                  <td scope="col">{{ autodeclaracao.get_tipo_declaracao_etnia_display }}: {{ autodeclaracao.outros }}</td>
+                {% else %}
+                  <td scope="col" style="text-align: center;">{{ autodeclaracao.get_tipo_declaracao_etnia_display }}</td>
+                {% endif %}
+                <td  style="text-align: center;">
+                  {{ autodeclaracao.quantidade }}
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" style="margin-top: 10px;">
+    <div class="row" style="margin-bottom: 5px;">
+      <b>6. Das estruturas organizativas <u>internas</u> ao assentamento diga qual existe no seu assentamento e de quais os membros da família participam.</b>
+    </div>
+    <div class="row">
+      <table class="table table-bordered">
+        <thead>
+        <tr>
+          <th scope="col" style="text-align: center;">Relação do tipo de organização (Formal e informal)</th>
+          <th scope="col" style="text-align: center;">Participação de membros da família (Frequência)</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for estrutura_organizativa in object.estruturasOrganizativas.all %}
+          <tr>
+            <td scope="col">{{ estrutura_organizativa.get_tipo_estrutura_organizativa_display }}</td>
+            <td scope="col"  style="text-align: center;">{{ estrutura_organizativa.get_frequencia_display }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="container" style="margin-top: 10px; text-align: center;">
+    <h3>INFRAESTRUTURA</h3>
+  </div>
+
+  <div class="container" style="margin-top: 10px;">
+    <div class="row">
+      <div style="margin-right: 5px;">
+        <b>7. Possui moradia no assentamento?</b>
+      </div>
+      <div>
+        {{ object.get_moradia_assentamento_display }}
+      </div>
+    </div>
+  </div>
+
+  <div class="row" style="margin-top: 10px;">
+    <div class="col">
+      <div class="container" style="margin-top: 10px;">
+        <div class="row" style="margin-bottom: 5px;">
+          <b>8. Qual tipo de parede externa predominante da moradia?</b>
+        </div>
+        <div class="row">
+          <table class="table table-bordered">
+            <tbody>
+            <tr>
+              <td scope="col">Alvenaria</td>
+              {% if object.tipo_parede_externa == object.TIPO_PAREDE_ALVENARIA %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td scope="col">Tábuas / Madeira</td>
+              {% if object.tipo_parede_externa == object.TIPO_PAREDE_TABUAS_MADEIRA %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td scope="col">Tapumes ou chapas de madeira</td>
+              {% if object.tipo_parede_externa == object.TIPO_PAREDE_TAPUMES_OU_CHAPAS_MADEIRA %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td scope="col">Folha de zinco</td>
+              {% if object.tipo_parede_externa == object.TIPO_PAREDE_FOLHAS_DE_ZINCO %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td scope="col">Barro ou adobe</td>
+              {% if object.tipo_parede_externa == object.TIPO_PAREDE_BARRO_OU_ADOBE %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td scope="col">Lona</td>
+              {% if object.tipo_parede_externa == object.TIPO_PAREDE_LONA %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td scope="col">Outros</td>
+              {% if object.tipo_parede_externa == object.TIPO_PAREDE_OUTROS %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="col">
+        <div class="container" style="margin-top: 10px;">
+          <div class="row" style="margin-bottom: 5px;">
+            <b>9. Instalação de energia elétrica.</b>
+          </div>
+          <div class="row">
+            <table class="table table-bordered">
+              <tbody>
+              <tr>
+                <td scope="col">Não instalada</td>
+                {% if object.tipo_instalacao_eletrica == object.TIPO_INSTALACAO_ELETRICA_NAO_INSTALADA %}
+                  <td scope="col" style="text-align: center;">Sim</td>
+                {% else %}
+                  <td scope="col" style="text-align: center;">Não</td>
+                {% endif %}
+              </tr>
+              <tr>
+                <td scope="col">Instalada apenas para moradia</td>
+                {% if object.tipo_instalacao_eletrica == object.TIPO_INSTALACAO_ELETRICA_INSTALADA_APENAS_PARA_MORADIA %}
+                  <td scope="col" style="text-align: center;">Sim</td>
+                {% else %}
+                  <td scope="col" style="text-align: center;">Não</td>
+                {% endif %}
+              </tr>
+              <tr>
+                <td scope="col">Instalada para moradia e outros usos</td>
+                {% if object.tipo_instalacao_eletrica == object.TIPO_INSTALACAO_ELETRICA_INSTALADA_PARA_MORADIA_E_OUTROS_USOS %}
+                  <td scope="col" style="text-align: center;">Sim</td>
+                {% else %}
+                  <td scope="col" style="text-align: center;">Não</td>
+                {% endif %}
+              </tr>
+              <tr>
+                <td scope="col">Outros</td>
+                {% if object.tipo_instalacao_eletrica == object.TIPO_INSTALACAO_ELETRICA_OUTROS %}
+                  <td scope="col" style="text-align: center;">Sim</td>
+                {% else %}
+                  <td scope="col" style="text-align: center;">Não</td>
+                {% endif %}
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="container" style="margin-top: 10px;">
+          <div class="row" style="margin-bottom: 5px;">
+            <b>10. Qual é o tipo de instalação sanitária?</b>
+          </div>
+          <div class="row">
+            <table class="table table-bordered">
+              <tbody>
+              <tr>
+                <td scope="col">Banheiro com fossa séptica</td>
+                {% if object.tipo_instalacao_sanitaria == object.TIPO_INSTALACAO_SANITARIA_BANHEIRO_COM_FOSSA_SEPTICA %}
+                  <td scope="col" style="text-align: center;">Sim</td>
+                {% else %}
+                  <td scope="col" style="text-align: center;">Não</td>
+                {% endif %}
+              </tr>
+              <tr>
+                <td scope="col">Banheiro com fossa negra</td>
+                {% if object.tipo_instalacao_sanitaria == object.TIPO_INSTALACAO_SANITARIA_BANHEIRO_COM_FOSSA_NEGRA %}
+                  <td scope="col" style="text-align: center;">Sim</td>
+                {% else %}
+                  <td scope="col" style="text-align: center;">Não</td>
+                {% endif %}
+              </tr>
+              <tr>
+                <td scope="col">Privada / latrina</td>
+                {% if object.tipo_instalacao_sanitaria == object.TIPO_INSTALACAO_SANITARIA_PRIVADA_LATRINA %}
+                  <td scope="col" style="text-align: center;">Sim</td>
+                {% else %}
+                  <td scope="col" style="text-align: center;">Não</td>
+                {% endif %}
+              </tr>
+              <tr>
+                <td scope="col">Nenhuma</td>
+                {% if object.tipo_instalacao_sanitaria == object.TIPO_INSTALACAO_SANITARIA_NENHUMA %}
+                  <td scope="col" style="text-align: center;">Sim</td>
+                {% else %}
+                  <td scope="col" style="text-align: center;">Não</td>
+                {% endif %}
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" style="margin-top: 10px;">
+    <div class="col">
+      <div class="container" style="margin-top: 10px;">
+        <div class="row" style="margin-bottom: 5px;">
+          <b>11. De onde vem a água que abastece a família?</b>
+        </div>
+        <div class="row">
+          <table class="table table-bordered">
+            <tbody>
+            {% for fonte in object.fontesAgua.all %}
+              <tr>
+                {% if fonte.fonte_agua == fonte.FONTE_DE_AGUA_OUTRA %}
+                  <td scope="col">{{ fonte.get_fonte_agua_display }}: {{ fonte.outra }}</td>
+                {% else %}
+                  <td scope="col">{{ fonte.get_fonte_agua_display }}</td>
+                {% endif %}
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="container" style="margin-top: 10px;">
+        <div class="row" style="margin-bottom: 5px;">
+          <b>12. Qual a forma de tratamento da água para consumo?</b>
+        </div>
+        <div class="row">
+          <table class="table table-bordered">
+            <tbody>
+            {% for forma_tratamento in object.tratamentosAgua.all %}
+              <tr>
+                {% if forma_tratamento.tratamento_agua == forma_tratamento.TRATAMENTO_AGUA_OUTRA %}
+                  <td scope="col">{{ forma_tratamento.get_tratamento_agua_display }}: {{ forma_tratamento.outros }}</td>
+                {% else %}
+                  <td scope="col">{{ forma_tratamento.get_tratamento_agua_display }}</td>
+                {% endif %}
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" style="margin-top: 10px;">
+    <div class="col">
+      <div class="container" style="margin-top: 10px;">
+        <div class="row" style="margin-bottom: 5px;">
+          <b>13. Onde está localizada a fonte de água que abastece sua residência?</b>
+        </div>
+        <div class="row">
+          <table class="table table-bordered">
+            <tbody>
+            <tr>
+              <td scope="col">Dentro do seu lote</td>
+              {% if object.localizacao_fonte_agua == object.LOCALIZACAO_FONTE_DE_AGUA_DENTRO_DO_SEU_LOTE %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td scope="col">Fora do seu lote</td>
+              {% if object.localizacao_fonte_agua == object.LOCALIZACAO_FONTE_DE_AGUA_FORA_DO_SEU_LOTE %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="container" style="margin-top: 10px;">
+        <div class="row">
+          <div style="margin-right: 5px;">
+            <b>14. A água que abastece a residências é suficiente?</b>
+          </div>
+          <div>
+            {{ object.get_abastecimento_agua_suficiente_display }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" style="margin-top: 10px;">
+    <div class="col">
+      <div class="container" style="margin-top: 10px;">
+        <div class="row" style="margin-bottom: 5px;">
+          <b>15. Quantas famílias (<u>além da sua</u>) fazem o uso da <u>mesma</u> fonte de águae que abastece o seu lote?</b>
+        </div>
+        <div class="row">
+          <table class="table table-bordered">
+            <tbody>
+            <tr>
+              <td scope="col">Nenhuma</td>
+              {% if object.quantas_familias_utilizam_mesma_fonte_agua == object.QUANTAS_FAMILIAS_UTILIZAM_MESMA_FONTE_DE_AGUA_NENHUMA %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td scope="col">Uma outra família, além da sua família</td>
+              {% if object.quantas_familias_utilizam_mesma_fonte_agua == object.QUANTAS_FAMILIAS_UTILIZAM_MESMA_FONTE_DE_AGUA_UMA_OUTRA_FAMILIA_ALEM_DA_SUA %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td scope="col">Mais de uma. Quantas?</td>
+              {% if object.quantas_familias_utilizam_mesma_fonte_agua == object.QUANTAS_FAMILIAS_UTILIZAM_MESMA_FONTE_DE_AGUA_MAIS_DE_UMA %}
+                <td scope="col">{{ object.quantidade_familias_utilizacao_mesma_fonte_agua }}</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">0</td>
+              {% endif %}
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="container" style="margin-top: 10px;">
+        <div class="row" style="margin-bottom: 5px;">
+          <b>17. Regularidade de abastecimento de água.</b>
+        </div>
+        <div class="row">
+          <table class="table table-bordered">
+            <tbody>
+            <tr>
+              <td scope="col">Sempre tem água</td>
+              {% if object.regularidade_abastecimento_agua == object.REGULARIDADE_ABASTECIMENTO_AGUA_SEMPRE_TEM_AGUA %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td scope="col">Falta água às vezes</td>
+              {% if object.regularidade_abastecimento_agua == object.REGULARIDADE_ABASTECIMENTO_AGUA_FALTA_AGUA_AS_VEZES %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td scope="col">Falta água com frequência</td>
+              {% if object.regularidade_abastecimento_agua == object.REGULARIDADE_ABASTECIMENTO_AGUA_FALTA_AGUA_COM_FREQUENCIA %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td scope="col">Nunca tem água</td>
+              {% if object.regularidade_abastecimento_agua == object.REGULARIDADE_ABASTECIMENTO_AGUA_NUNCA_TEM_AGUA %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="container" style="margin-top: 10px;">
+        <div class="row" style="margin-bottom: 5px;">
+          <b>16. No lote tem água para os animais / Plantio?</b>
+        </div>
+        <div class="row">
+          <table class="table table-bordered">
+            <tbody>
+            <tr>
+              <td scope="col">Sim, os animais vão até um curso d'água ou represa</td>
+              {% if object.agua_para_animais_plantio == object.AGUA_PARA_ANIMAIS_PLANTIO_SIM_OS_ANIMAIS_VAO_ATE_CURSO_DAGUA_OU_REPRESA %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td scope="col">Sim, a água é puxada de um curso d'água ou represa</td>
+              {% if object.agua_para_animais_plantio == object.AGUA_PARA_ANIMAIS_PLANTIO_SIM_AGUA_PUXADA_DE_CURSO_DAGUA_OU_REPRESA %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td scope="col">Sim, temos um poço exclusivo para os animais</td>
+              {% if object.agua_para_animais_plantio == object.AGUA_PARA_ANIMAIS_PLANTIO_SIM_TEMOS_POCO_EXCLUSIVO_PARA_ANIMAIS %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td scope="col">Sim, é a mesma água que vem para a casa</td>
+              {% if object.agua_para_animais_plantio == object.AGUA_PARA_ANIMAIS_PLANTIO_SIM_MESMA_AGUA_QUE_VEM_PARA_CASA %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td scope="col">Não há água para animais</td>
+              {% if object.agua_para_animais_plantio == object.AGUA_PARA_ANIMAIS_PLANTIO_NAO_HA_AGUA_PARA_ANIMAIS %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td scope="col">Sim, existe água para plantio(s) irrigado(s)</td>
+              {% if object.agua_para_animais_plantio == object.AGUA_PARA_ANIMAIS_PLANTIO_SIM_EXISTE_AGUA_PARA_PLANTIO_IRRIGADO %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td scope="col">Não existe água para plantio(s) irrigado(s)</td>
+              {% if object.agua_para_animais_plantio == object.AGUA_PARA_ANIMAIS_PLANTIO_NAO_EXISTE_AGUA_PARA_PLANTIO_IRRIGADO %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td scope="col">Outros: {{ object.agua_para_animais_plantio_outros|default:"" }}</td>
+              {% if object.agua_para_animais_plantio == object.AGUA_PARA_ANIMAIS_PLANTIO_OUTROS %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" style="margin-top: 10px;">
+    <div class="col">
+      <div class="container" style="margin-top: 10px;">
+        <div class="row" style="margin-bottom: 5px;">
+          <b>18. Como é o acesso ao lote?</b>
+        </div>
+        <div class="row">
+          <table class="table table-bordered">
+            <tbody>
+            <tr>
+              <td scope="col">Asfalto</td>
+              {% if object.tipo_estrada_acesso == object.TIPO_ESTRADA_DE_ACESSO_ASFALTO %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td scope="col">Estrada cascalhada</td>
+              {% if object.tipo_estrada_acesso == object.TIPO_ESTRADA_DE_ACESSO_ESTRADA_CASCALHADA %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td scope="col">Estrada de terra</td>
+              {% if object.tipo_estrada_acesso == object.TIPO_ESTRADA_DE_ACESSO_ESTRADA_DE_TERRA %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td scope="col">Trilheiro</td>
+              {% if object.tipo_estrada_acesso == object.TIPO_ESTRADA_DE_ACESSO_TRILHEIRO %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td scope="col">Inexistente</td>
+              {% if object.tipo_estrada_acesso == object.TIPO_ESTRADA_DE_ACESSO_INEXISTENTE %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="container" style="margin-top: 10px;">
+        <div class="row" style="margin-bottom: 5px;">
+          <b>19. Situação anual da estrada principal acesso ao lote?</b>
+        </div>
+        <div class="row">
+          <table class="table table-bordered">
+            <tbody>
+            <tr>
+              <td scope="col">Boa</td>
+              {% if object.situacao_estrada_acesso == object.SITUACAO_ESTRADA_ACESSO_BOA %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td scope="col">Razoável</td>
+              {% if object.situacao_estrada_acesso == object.SITUACAO_ESTRADA_ACESSO_RAZOAVEL %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td scope="col">Ruim</td>
+              {% if object.situacao_estrada_acesso == object.SITUACAO_ESTRADA_ACESSO_RUIM %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td scope="col">Péssima</td>
+              {% if object.situacao_estrada_acesso == object.SITUACAO_ESTRADA_ACESSO_PESSIMA %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" style="margin-top: 10px;">
+    <div class="col">
+      <div class="container" style="margin-top: 10px;">
+        <div class="row" style="margin-bottom: 5px;">
+          <b>20. Como está cercado o Lote?</b>
+        </div>
+        <div class="row">
+          <table class="table table-bordered">
+            <tbody>
+            <tr>
+              <td scope="col">Totalmente cercado, com divisões internas</td>
+              {% if object.situacao_cercado_lote == object.SITUACAO_CERCADO_LOTE_TOTALMENTE_CERCADO_COM_DIVISOES_INTERNAS %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td scope="col">Totalmente cercado, sem divisões internas</td>
+              {% if object.situacao_cercado_lote == object.SITUACAO_CERCADO_LOTE_TOTALMENTE_CERCADO_SEM_DIVISOES_INTERNAS %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td scope="col">Parcialmente cercado</td>
+              {% if object.situacao_cercado_lote == object.SITUACAO_CERCADO_LOTE_PARCIALMENTE_CERCADO %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td scope="col">Não está cercado</td>
+              {% if object.situacao_cercado_lote == object.SITUACAO_CERCADO_LOTE_NAO_ESTA_CERCADO %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="container" style="margin-top: 10px;">
+        <div class="row" style="margin-bottom: 5px;">
+          <b>21. O que tem construído no lote?</b>
+        </div>
+        <div class="row">
+          <table class="table table-bordered">
+            <thead>
+            <tr>
+              <th scope="col" style="text-align: center;">Construção</th>
+              <th scope="col" style="text-align: center;">Quantidade</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for construcao in object.construcoesLote.all %}
+              <tr>
+                {% if construcao.construcao_no_lote == construcao.CONSTRUCAO_NO_LOTE_OUTROS %}
+                  <td scope="col">{{ construcao.get_construcao_no_lote_display }}: {{ construcao.outros }}</td>
+                {% else %}
+                  <td scope="col">{{ construcao.get_construcao_no_lote_display }}</td>
+                {% endif %}
+                <td scope="col" style="text-align: center;">{{ construcao.quantidade }}</td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" style="margin-top: 10px;">
+    <div class="col">
+      <div class="container" style="margin-top: 10px;">
+        <div class="row" style="margin-bottom: 5px;">
+          <b>22. Bens produtivos disponíveis no lote.</b>
+        </div>
+        <div class="row">
+          <table class="table table-bordered">
+            <thead>
+            <tr>
+              <th scope="col" style="text-align: center;">Bem produtivo</th>
+              <th scope="col" style="text-align: center;">Quantidade</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for bem in object.bensProdutivos.all %}
+              <tr>
+                {% if bem.bem_produtivo == bem.CONSTRUCAO_NO_LOTE_OUTROS %}
+                  <td scope="col">{{ bem.get_bem_produtivo_display }}: {{ bem.outros }}</td>
+                {% else %}
+                  <td scope="col">{{ bem.get_bem_produtivo_display }}</td>
+                {% endif %}
+                <td scope="col" style="text-align: center;">{{ bem.quantidade }}</td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="container">
+        <div class="row" style="margin-bottom: 5px;">
+          <b>23. Com relação aos créditos, como está a aplicação no lote?</b>
+        </div>
+        <div class="row">
+          <table class="table table-bordered">
+            <thead>
+            <tr>
+              <th scope="col" style="text-align: center;">Crédito Instalação Incra</th>
+              <th scope="col" style="text-align: center;">Valor (R$)</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for aplicacao_credito in object.aplicacoesCredito.all %}
+              <tr>
+                <td scope="col">{{ aplicacao_credito.get_tipo_aplicacao_credito_display }}</td>
+                <td scope="col" style="text-align: center;">{{ aplicacao_credito.valor }}</td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" style="margin-top: 10px;">
+    <div class="row" style="margin-bottom: 5px;">
+      <b>24. Com relação aos créditos bancários, como está a aplicação na parcela?</b>
+    </div>
+    <div class="row">
+      <table class="table table-bordered">
+        <thead>
+        <tr>
+          <th scope="col" style="text-align: center;">PRONAF - Modalidades</th>
+          <th scope="col" style="text-align: center;">Valor (R$)</th>
+          <th scope="col" style="text-align: center;">Adimplente</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for credito_bancario in object.creditosBancarios.all %}
+          <tr>
+            {% if credito_bancario.credito_bancario == credito_bancario.CREDITO_BANCARIO_OUTROS %}
+              <td scope="col">{{ credito_bancario.get_credito_bancario_display }}: {{ credito_bancario.outros }}</td>
+            {% else %}
+              <td scope="col">{{ credito_bancario.get_credito_bancario_display }}</td>
+            {% endif %}
+            <td scope="col" style="text-align: center;">{{ credito_bancario.valor }}</td>
+            <td scope="col" style="text-align: center;">{{ credito_bancario.get_adimplente_display }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="container" style="margin-top: 10px; text-align: center;">
+    <h3>PRODUÇÃO VEGETAL</h3>
+  </div>
+
+  {% for producao_vegetal in object.producoesVegetais.all %}
+    {% if producao_vegetal.classificacao == producao_vegetal.CLASSIFICACAO_CULTURA %}
+      <div class="container" style="margin-top: 10px;">
+        <div class="row" style="margin-bottom: 5px;">
+          <b>25. Agora falaremos sobre a produção/culturas, plantadas na sua lavoura/roça no último ano agrícola.</b>
+        </div>
+        <div class="row">
+          <table class="table table-bordered">
+            <thead>
+            <tr>
+              <th scope="col" style="text-align: center;">Culturas plantadas no último ano agrícola</th>
+              <th scope="col" style="text-align: center;">Área plantada</th>
+              <th scope="col" style="text-align: center;">Produção Colhida - Consumo</th>
+              <th scope="col" style="text-align: center;">Produção Colhida - Comércio</th>
+              <th scope="col" style="text-align: center;">Valor-R$</th>
+              <th scope="col" style="text-align: center;">Formas/Canais de Comercialização</th>
+              <th scope="col" style="text-align: center;">Mercado Institucional</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              {% if producao_vegetal.tipo_producao == producao_vegetal.TIPO_PRODUCAO_OUTROS %}
+                <td scope="col">{{ producao_vegetal.get_tipo_producao_display }}: {{ producao_vegetal.tipo_producao_outros }}</td>
+              {% else %}
+                <td scope="col">{{ producao_vegetal.get_tipo_producao_display }}</td>
+              {% endif %}
+              <td scope="col" style="text-align: center;">{{ producao_vegetal.area_plantada }} ({{ producao_vegetal.get_medida_area_plantada_display }})</td>
+              <td scope="col" style="text-align: center;">{{ producao_vegetal.producao_consumo }} ({{ producao_vegetal.get_producao_unidade_medida_display }})</td>
+              <td scope="col" style="text-align: center;">{{ producao_vegetal.producao_comercio }} ({{ producao_vegetal.get_producao_unidade_medida_display }})</td>
+              <td scope="col" style="text-align: center;">{{ producao_vegetal.valor }} ({{ producao_vegetal.get_producao_unidade_medida_display }})</td>
+              <td scope="col">{{ producao_vegetal.get_canal_comercializacao_display|default:"-" }}</td>
+              <td scope="col">{{ producao_vegetal.get_mercado_institucional_display|default:"-" }}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    {% elif producao_vegetal.classificacao == producao_vegetal.CLASSIFICACAO_OLERICULTURA %}
+      <div class="container" style="margin-top: 10px;">
+        <div class="row" style="margin-bottom: 5px;">
+          <b>26. Olericultura - Legumes e Verduras no <u>último ano agrícola</u>.</b>
+        </div>
+        <div class="row">
+          <table class="table table-bordered">
+            <thead>
+            <tr>
+              <th scope="col" style="text-align: center;">Culturas plantadas no último ano agrícola</th>
+              <th scope="col" style="text-align: center;">Área plantada</th>
+              <th scope="col" style="text-align: center;">Produção Colhida - Consumo</th>
+              <th scope="col" style="text-align: center;">Produção Colhida - Comércio</th>
+              <th scope="col" style="text-align: center;">Valor-R$</th>
+              <th scope="col" style="text-align: center;">Formas/Canais de Comercialização</th>
+              <th scope="col" style="text-align: center;">Mercado Institucional</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              {% if producao_vegetal.tipo_producao == producao_vegetal.TIPO_PRODUCAO_OUTROS %}
+                <td scope="col">{{ producao_vegetal.get_tipo_producao_display }}: {{ producao_vegetal.tipo_producao_outros }}</td>
+              {% else %}
+                <td scope="col">{{ producao_vegetal.get_tipo_producao_display }}</td>
+              {% endif %}
+              <td scope="col" style="text-align: center;">{{ producao_vegetal.area_plantada }} ({{ producao_vegetal.get_medida_area_plantada_display }})</td>
+              <td scope="col" style="text-align: center;">{{ producao_vegetal.producao_consumo }} ({{ producao_vegetal.get_producao_unidade_medida_display }})</td>
+              <td scope="col" style="text-align: center;">{{ producao_vegetal.producao_comercio }} ({{ producao_vegetal.get_producao_unidade_medida_display }})</td>
+              <td scope="col" style="text-align: center;">{{ producao_vegetal.valor }} ({{ producao_vegetal.get_producao_unidade_medida_display }})</td>
+              <td scope="col">{{ producao_vegetal.get_canal_comercializacao_display|default:"-" }}</td>
+              <td scope="col">{{ producao_vegetal.get_mercado_institucional_display|default:"-" }}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    {% elif producao_vegetal.classificacao == producao_vegetal.CLASSIFICACAO_FRUTICULTURA %}
+      <div class="container" style="margin-top: 10px;">
+        <div class="row" style="margin-bottom: 5px;">
+          <b>27. Fruticultura referente ao <u>último ano agrícola</u>.</b>
+        </div>
+        <div class="row">
+          <table class="table table-bordered">
+            <thead>
+            <tr>
+              <th scope="col" style="text-align: center;">Culturas plantadas no último ano agrícola</th>
+              <th scope="col" style="text-align: center;">Área plantada</th>
+              <th scope="col" style="text-align: center;">Produção Colhida - Consumo</th>
+              <th scope="col" style="text-align: center;">Produção Colhida - Comércio</th>
+              <th scope="col" style="text-align: center;">Valor-R$</th>
+              <th scope="col" style="text-align: center;">Formas/Canais de Comercialização</th>
+              <th scope="col" style="text-align: center;">Mercado Institucional</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              {% if producao_vegetal.tipo_producao == producao_vegetal.TIPO_PRODUCAO_OUTROS %}
+                <td scope="col">{{ producao_vegetal.get_tipo_producao_display }}: {{ producao_vegetal.tipo_producao_outros }}</td>
+              {% else %}
+                <td scope="col">{{ producao_vegetal.get_tipo_producao_display }}</td>
+              {% endif %}
+              <td scope="col" style="text-align: center;">{{ producao_vegetal.area_plantada }} ({{ producao_vegetal.get_medida_area_plantada_display }})</td>
+              <td scope="col" style="text-align: center;">{{ producao_vegetal.producao_consumo }} ({{ producao_vegetal.get_producao_unidade_medida_display }})</td>
+              <td scope="col" style="text-align: center;">{{ producao_vegetal.producao_comercio }} ({{ producao_vegetal.get_producao_unidade_medida_display }})</td>
+              <td scope="col" style="text-align: center;">{{ producao_vegetal.valor }} ({{ producao_vegetal.get_producao_unidade_medida_display }})</td>
+              <td scope="col">{{ producao_vegetal.get_canal_comercializacao_display|default:"-" }}</td>
+              <td scope="col">{{ producao_vegetal.get_mercado_institucional_display|default:"-" }}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    {% endif %}
+  {% endfor %}
+
+  {% for producao_vegetal in object.producoesVegetais.all %}
+    {% if producao_vegetal.irrigacao == producao_vegetal.IRRIGACAO_SIM %}
+      <div class="container" style="margin-top: 10px;">
+        <div class="row" style="margin-bottom: 5px;">
+          <b>28. Sobre o nível Tecnológico de Produção, <u>Relativo às questões 25, 26 e 27</u>, existe(m) alguma(s) cultura(s) irrigada(s)?</b>
+        </div>
+        <div class="row">
+          <table class="table table-bordered">
+            <thead>
+            <tr>
+              <th scope="col" style="text-align: center;">Plantio</th>
+              <th scope="col" style="text-align: center;">Área irrigada</th>
+              <th scope="col" style="text-align: center;">Tipo</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td scope="col">{{ producao_vegetal.get_tipo_producao_display }}</td>
+              <td scope="col" style="text-align: center;">{{ producao_vegetal.area_irrigada }} ({{ producao_vegetal.get_medida_area_irrigada_display }})</td>
+              <td scope="col" style="text-align: center;">{{ producao_vegetal.get_tipo_irrigacao_display }}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    {% endif %}
+  {% endfor %}
+
+  <div class="container" style="margin-top: 10px;">
+    <div class="row" style="margin-bottom: 5px;">
+      <b>29. Produtos da atividade extrativista do <u>último ano agrícola</u>.</b>
+    </div>
+    <div class="row">
+      <table class="table table-bordered">
+        <thead>
+        <tr>
+          <th scope="col" style="text-align: center;">Especificação</th>
+          <th scope="col" style="text-align: center;">Quantidade Colhida / Ano - Frutos</th>
+          <th scope="col" style="text-align: center;">Quantidade Colhida / Ano - Palmito</th>
+          <th scope="col" style="text-align: center;">Valor R$/Kg</th>
+          <th scope="col" style="text-align: center;">Formas/Canais de Comercialização</th>
+          <th scope="col" style="text-align: center;">Mercado Institucional</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for atividade_extrativista in object.atividadesExtrativistas.all %}
+          <tr>
+            {% if atividade_extrativista.especificacao == atividade_extrativista.ESPECIFICACAO_OUTROS %}
+              <td scope="col">{{ atividade_extrativista.get_especificacao_display }}: {{ atividade_extrativista.outros }}</td>
+            {% else %}
+              <td scope="col">{{ atividade_extrativista.get_especificacao_display }}</td>
+            {% endif %}
+            <td scope="col" style="text-align: center;">{{ atividade_extrativista.quantidade_frutos_ano }} Kg</td>
+            <td scope="col" style="text-align: center;">{{ atividade_extrativista.quantidade_palmitos_ano }} Kg</td>
+            <td scope="col" style="text-align: center;">{{ atividade_extrativista.valor }}</td>
+            <td scope="col">{{ atividade_extrativista.get_canal_comercializacao_display|default:"-" }}</td>
+            <td scope="col">{{ atividade_extrativista.get_mercado_institucional_display|default:"-" }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="container" style="margin-top: 10px;">
+    <div class="row" style="margin-bottom: 5px;">
+      <b>30. Produção Florestal do último ano agrícola.</b>
+    </div>
+    <div class="row">
+      <table class="table table-bordered">
+        <thead>
+        <tr>
+          <th scope="col" style="text-align: center;">Especificação</th>
+          <th scope="col" style="text-align: center;">Quantidade produzida/ano</th>
+          <th scope="col" style="text-align: center;">Área plantada (ha)</th>
+          <th scope="col" style="text-align: center;">R$/unidade colhida</th>
+          <th scope="col" style="text-align: center;">Formas/Canais de Comercialização</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for producao_florestal in object.producoesFlorestais.all %}
+          <tr>
+            {% if producao_florestal.especificacao == producao_florestal.ESPECIFICACAO_OUTROS %}
+              <td scope="col">{{ producao_florestal.get_especificacao_display }}: {{ producao_florestal.outros }}</td>
+            {% else %}
+              <td scope="col">{{ producao_florestal.get_especificacao_display }}</td>
+            {% endif %}
+            <td scope="col" style="text-align: center;">{{ producao_florestal.quantidade_produzida_ano }}</td>
+            <td scope="col" style="text-align: center;">{{ producao_florestal.area_plantada }}</td>
+            <td scope="col" style="text-align: center;">{{ producao_florestal.valor }}</td>
+            <td scope="col">{{ producao_florestal.get_canal_comercializacao_display|default:"-" }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="container" style="margin-top: 10px; text-align: center;">
+    <h3>PRODUÇÃO ANIMAL</h3>
+  </div>
+
+  {% for producao_animal in object.producoesAnimais.all %}
+    {% if producao_animal.classificacao == producao_animal.CLASSIFICACAO_BOVINOCULTURA %}
+      <div class="container" style="margin-top: 10px;">
+        <div class="row" style="margin-bottom: 5px;">
+          <b>31. Sobre o Efetivo Animal do último ano agrícola.</b>
+        </div>
+        <div class="row">
+          <table class="table table-bordered">
+            <thead>
+            <tr>
+              <th scope="col" style="text-align: center;">Especificação</th>
+              <th scope="col" style="text-align: center;">Gado Leiteiro - Nº de Cabeças</th>
+              <th scope="col" style="text-align: center;">R$/Cabeça</th>
+              <th scope="col" style="text-align: center;">Gado de Corte - Nº de Cabeças</th>
+              <th scope="col" style="text-align: center;">R$/Cabeça</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td scope="col">{{ producao_animal.get_especificacao_display }}</td>
+              {% if producao_animal.tipo_criacao == producao_animal.TIPO_CRIACAO_GADO_LEITEIRO %}
+                <td scope="col" style="text-align: center;">{{ producao_animal.quantidade_cabecas }}</td>
+                <td scope="col" style="text-align: center;">{{ producao_animal.valor_cabeca }}</td>
+                <td scope="col" style="text-align: center;">-</td>
+                <td scope="col" style="text-align: center;">-</td>
+              {% elif producao_animal.tipo_criacao == producao_animal.TIPO_CRIACAO_GADO_DE_CORTE %}
+                <td scope="col" style="text-align: center;">-</td>
+                <td scope="col" style="text-align: center;">-</td>
+                <td scope="col" style="text-align: center;">{{ producao_animal.quantidade_cabecas }}</td>
+                <td scope="col" style="text-align: center;">{{ producao_animal.valor_cabeca }}</td>
+              {% endif %}
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    {% elif producao_animal.classificacao == producao_animal.CLASSIFICACAO_OUTRA_CRIACAO %}
+      <div class="container">
+        <div class="row" style="margin-bottom: 5px;">
+          <b>Outras Criações Animais - Efetivo Anual</b>
+        </div>
+        <div class="row">
+          <table class="table table-bordered">
+            <thead>
+            <tr>
+              <th scope="col" style="text-align: center;">Especificação</th>
+              <th scope="col" style="text-align: center;">Nº de Cabeças</th>
+              <th scope="col" style="text-align: center;">R$/Cabeça</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td scope="col">{{ producao_animal.get_especificacao_display }}</td>
+              <td scope="col" style="text-align: center;">{{ producao_animal.quantidade_cabecas }}</td>
+              <td scope="col" style="text-align: center;">{{ producao_animal.valor_cabeca }}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    {% endif %}
+  {% endfor %}
+
+  {% for descarte_animal in object.descartesAnimais.all %}
+    {% if descarte_animal.tipo_criacao == descarte_animal.TIPO_CRIACAO_GADO_LEITEIRO %}
+      <div class="container" style="margin-top: 10px;">
+        <div class="row" style="margin-bottom: 5px;">
+          <b>DESCARTE ANIMAL no último ano agrícola, atividade BOVINOCULTURA LEITEIRA</b>
+        </div>
+        <div class="row">
+          <table class="table table-bordered">
+            <thead>
+            <tr>
+              <th scope="col" style="text-align: center;">Especificação</th>
+              <th scope="col" style="text-align: center;">Nº de Cabeças - Consumo</th>
+              <th scope="col" style="text-align: center;">Nº de Cabeças - Comércio</th>
+              <th scope="col" style="text-align: center;">R$/Cabeça</th>
+              <th scope="col" style="text-align: center;">Formas/Canais de Comercialização</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td scope="col">{{ descarte_animal.get_especificacao_display }}</td>
+              <td scope="col" style="text-align: center;">{{ descarte_animal.quantidade_cabecas_consumo }}</td>
+              <td scope="col" style="text-align: center;">{{ descarte_animal.quantidade_cabecas_comercio }}</td>
+              <td scope="col" style="text-align: center;">{{ descarte_animal.valor_cabeca }}</td>
+              <td scope="col">{{ descarte_animal.get_canal_comercializacao_display|default:"-" }}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    {% elif descarte_animal.classificacao == producao_animal.TIPO_CRIACAO_GADO_DE_CORTE %}
+      <div class="container" style="margin-top: 10px;">
+        <div class="row" style="margin-bottom: 5px;">
+          <b>DESCARTE ANIMAL no último ano agrícola, atividade BOVINOCULTURA DE CORTE</b>
+        </div>
+        <div class="row">
+          <table class="table table-bordered">
+            <thead>
+            <tr>
+              <th scope="col" style="text-align: center;">Especificação</th>
+              <th scope="col" style="text-align: center;">Nº de Cabeças - Consumo</th>
+              <th scope="col" style="text-align: center;">Nº de Cabeças - Comércio</th>
+              <th scope="col" style="text-align: center;">R$/Cabeça</th>
+              <th scope="col" style="text-align: center;">Formas/Canais de Comercialização</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td scope="col">{{ descarte_animal.get_especificacao_display }}</td>
+              <td scope="col" style="text-align: center;">{{ descarte_animal.quantidade_cabecas_consumo }}</td>
+              <td scope="col" style="text-align: center;">{{ descarte_animal.quantidade_cabecas_comercio }}</td>
+              <td scope="col" style="text-align: center;">{{ descarte_animal.valor_cabeca }}</td>
+              <td scope="col">{{ descarte_animal.get_canal_comercializacao_display|default:"-" }}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    {% endif %}
+  {% endfor %}
+
+  {% for produto_origem_animal in object.produtosOrigemAnimal.all %}
+    {% if produto_origem_animal.classificacao == produto_origem_animal.CLASSIFICACAO_ORIGEM_ANIMAL %}
+      <div class="container" style="margin-top: 10px;">
+        <div class="row" style="margin-bottom: 5px;">
+          <b>32. Sobre os produtos de origem animal produzidos no último ano agrícola.</b>
+        </div>
+        <div class="row">
+          <table class="table table-bordered">
+            <thead>
+            <tr>
+              <th scope="col" style="text-align: center;">Especificação</th>
+              <th scope="col" style="text-align: center;">Produção - Consumo</th>
+              <th scope="col" style="text-align: center;">Produção - Comércio</th>
+              <th scope="col" style="text-align: center;">Valor R$</th>
+              <th scope="col" style="text-align: center;">Formas/Canais de Comercialização</th>
+              <th scope="col" style="text-align: center;">Mercado Institucional</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              {% if produto_origem_animal.especificacao == produto_origem_animal.ESPECIFICACAO_OUTROS %}
+                <td scope="col">{{ produto_origem_animal.get_especificacao_display }}: {{ produto_origem_animal.outros }}</td>
+              {% else %}
+                <td scope="col">{{ produto_origem_animal.get_especificacao_display }}</td>
+              {% endif %}
+              <td scope="col" style="text-align: center;">{{ produto_origem_animal.producao_consumo }}</td>
+              <td scope="col" style="text-align: center;">{{ produto_origem_animal.producao_comercio }}</td>
+              <td scope="col" style="text-align: center;">{{ produto_origem_animal.valor }}</td>
+              <td scope="col">{{ produto_origem_animal.get_canal_comercializacao_display|default:"-" }}</td>
+              <td scope="col">{{ produto_origem_animal.get_mercado_institucional_display|default:"-" }}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    {% endif %}
+  {% endfor %}
+
+  <div class="container" style="margin-top: 10px; text-align: center;">
+    <h3>SOBRE O NÍVEL TECNOLÓGICO DA PRODUÇÃO ANIMAL</h3>
+  </div>
+
+  <div class="row" style="margin-top: 10px;">
+    <div class="col">
+      <div class="container" style="margin-top: 10px;">
+        <div class="row">
+          <div style="margin-right: 5px;">
+            <b>33. Possui Capineira?</b>
+          </div>
+          <div>
+            {{ object.get_possui_capineira_display }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      {% if object.possui_capineira == object.CHOICE_SIM %}
+        <div class="container" style="margin-top: 10px;">
+          <div style="margin-right: 5px; margin-bottom: 5px;">
+            <b>Tipos de Capineira</b>
+          </div>
+          <div class="row">
+            <table class="table table-bordered">
+              <thead>
+              <tr>
+                <th scope="col" style="text-align: center;">Tipo</th>
+                <th scope="col" style="text-align: center;">Área (ha)</th>
+              </tr>
+              </thead>
+              <tbody>
+              {% for capineira in object.niveisTecnologicosProducaoAnimal.all %}
+                <tr>
+                  <td scope="col">{{ capineira.get_tipo_capineira_display }}</td>
+                  <td scope="col" style="text-align: center;">{{ capineira.area_capineira }}</td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="row" style="margin-top: 20px;">
+    <div class="col">
+      <div class="container">
+        <div class="row">
+          <div style="margin-right: 5px;">
+            <b>34. Possui Pastagem em Pastejo Rotacionado?</b>
+          </div>
+          <div>
+            {{ object.get_possui_pastagem_em_pastejo_rotacionado_display }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      {% if object.possui_pastagem_em_pastejo_rotacionado == object.CHOICE_SIM %}
+        <div class="container">
+          <div class="row">
+            <div style="margin-right: 5px;">
+              <b>Tamanho da área em sistema de Pastejo Rotacionado</b>
+            </div>
+            <div>
+              {{ object.area_pastejo_rotacionado }}ha
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="container" style="margin-top: 20px;">
+    <div class="row">
+      <div style="margin-right: 5px;">
+        <b>35. Pratica inseminação artificial no rebanho leiteiro?</b>
+      </div>
+      <div>
+        {{ object.get_pratica_inseminacao_artificial_no_rebanho_leiteiro_display }}
+      </div>
+    </div>
+  </div>
+
+  {% for produto_processado in object.produtosOrigemAnimal.all %}
+    {% if produto_processado.classificacao == produto_processado.CLASSIFICACAO_PROCESSADO_BENEFICIADO %}
+      <div class="container" style="margin-top: 20px;">
+        <div class="row" style="margin-bottom: 5px;">
+          <b>36. Sobre os produtos processados ou beneficiados no estabelecimento, no último ano agrícola (agroindústria)</b>
+        </div>
+        <div class="row">
+          <table class="table table-bordered">
+            <thead>
+            <tr>
+              <th scope="col" style="text-align: center;">Especificação</th>
+              <th scope="col" style="text-align: center;">Produção(Kg) - Consumo</th>
+              <th scope="col" style="text-align: center;">Produção(Kg) - Comércio</th>
+              <th scope="col" style="text-align: center;">Valor R$</th>
+              <th scope="col" style="text-align: center;">Formas/Canais de Comercialização</th>
+              <th scope="col" style="text-align: center;">Mercado Institucional</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              {% if produto_processado.especificacao == produto_processado.ESPECIFICACAO_OUTROS %}
+                <td scope="col">{{ produto_processado.get_especificacao_display }}: {{ produto_processado.outros }}</td>
+              {% else %}
+                <td scope="col">{{ produto_processado.get_especificacao_display }}</td>
+              {% endif %}
+              <td scope="col" style="text-align: center;">{{ produto_processado.producao_consumo }}</td>
+              <td scope="col" style="text-align: center;">{{ produto_processado.producao_comercio }}</td>
+              <td scope="col" style="text-align: center;">{{ produto_processado.valor }}</td>
+              <td scope="col">{{ produto_processado.get_canal_comercializacao_display|default:"-" }}</td>
+              <td scope="col">{{ produto_processado.get_mercado_institucional_display|default:"-" }}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    {% endif %}
+  {% endfor %}
+
+  {% for familia in object.familias.all %}
+    {% for membro in familia.membros.all %}
+      {% if membro.renda_trabalho_fora_lote %}
+        <div class="container" style="margin-top: 20px;">
+          <div class="row" style="margin-bottom: 5px;">
+            <b>37. Sobre a renda de trabalho fora do lote</b>
+          </div>
+          <div class="row">
+            <table class="table table-bordered">
+              <thead>
+              <tr>
+                <th scope="col" style="text-align: center;">Pessoa que trabalha fora do lote (extraído de dados pessoais)</th>
+                <th scope="col" style="text-align: center;">Quantos diass/ano trabalha fora do lote</th>
+                <th scope="col" style="text-align: center;">Valor da Diária (R$/Dia)</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                <td scope="col">{{ membro.id }} - {{ membro.nome }}</td>
+                <td scope="col" style="text-align: center;">{{ membro.renda_trabalho_fora_lote.quantidade_dias_ano }}</td>
+                <td scope="col" style="text-align: center;">{{ membro.renda_trabalho_fora_lote.valor }}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
+
+  <div class="container" style="margin-top: 10px; text-align: center;">
+    <h3>MEIO AMBIENTE</h3>
+  </div>
+
+  <div class="row" style="margin-top: 20px;">
+    <div class="col">
+      <div class="container" style="margin-top: 20px;">
+        <div class="row">
+          <div style="margin-right: 5px;">
+            <b>38. Existe Área de Preservação Permanente (APP) dentro do seu lote/parcela?</b>
+          </div>
+          <div>
+            {{ object.get_area_preservacao_permanente_display }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="container" style="margin-top: 20px;">
+        <div class="row">
+          <div style="margin-right: 5px;">
+            <b>39. A Área de Preservação Permanente está cercada ou isolada?</b>
+          </div>
+          <div>
+            {{ object.get_area_preservacao_permanente_cercada_display }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" style="margin-top: 20px;">
+    <div class="col">
+      <div class="container" style="margin-top: 10px;">
+        <div class="row" style="margin-bottom: 5px;">
+          <b>40. Quais são os problemas ambientais existentes no lote?</b>
+        </div>
+        <div class="row">
+          <table class="table table-bordered">
+            <tbody>
+            {% for problema_ambiental in object.problemasAmbientais.all %}
+              <tr>
+                {% if problema_ambiental.tipo_problema == problema_ambiental.TIPO_PROBLEMA_OUTROS %}
+                  <td scope="col">{{ problema_ambiental.get_tipo_problema_display }}: {{ problema_ambiental.outros }}</td>
+                {% else %}
+                  <td scope="col">{{ problema_ambiental.get_tipo_problema_display }}</td>
+                {% endif %}
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="container" style="margin-top: 10px;">
+        <div class="row" style="margin-bottom: 5px;">
+          <b>41. Quais são práticas conservacionistas praticadas na propriedade?</b>
+        </div>
+        <div class="row">
+          <table class="table table-bordered">
+            <tbody>
+            {% for pratica_conservacionista in object.praticasConservacionistas.all %}
+              <tr>
+                <td scope="col">{{ pratica_conservacionista.get_tipo_pratica_display }}</td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" style="margin-top: 20px;">
+    <div class="col">
+      <div class="container" style="margin-top: 10px;">
+        <div class="row" style="margin-bottom: 5px;">
+          <b>42. Qual o destino do lixo doméstico não orgânico?</b>
+        </div>
+        <div class="row">
+          <table class="table table-bordered">
+            <tbody>
+            <tr>
+              <td scope="col">Espalhado no lote</td>
+              {% if object.destinosLixoDomestico.destino == object.destinosLixoDomestico.DESTINO_ESPALHADO_NO_LOTE %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td scope="col">Queima</td>
+              {% if object.destinosLixoDomestico.destino == object.destinosLixoDomestico.DESTINO_QUEIMA %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td scope="col">Enterra</td>
+              {% if object.destinosLixoDomestico.destino == object.destinosLixoDomestico.DESTINO_ENTERRA %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td scope="col">Joga nos cursos d'água</td>
+              {% if object.destinosLixoDomestico.destino == object.destinosLixoDomestico.DESTINO_JOGA_NOS_CURSOS_DAGUA %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td scope="col">Recicla/reaproveita lixo inorgânico</td>
+              {% if object.destinosLixoDomestico.destino == object.destinosLixoDomestico.DESTINO_RECICLA_REAPROVEITA_LIXO_INORGANICO %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td scope="col">Deposita a céu aberto no lote</td>
+              {% if object.destinosLixoDomestico.destino == object.destinosLixoDomestico.DESTINO_DEPOSITA_A_CEU_ABERTO_NO_LOTE %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="container" style="margin-top: 10px;">
+        <div class="row" style="margin-bottom: 5px;">
+          <b>43. Qual o destino do material orgânico?</b>
+        </div>
+        <div class="row">
+          <table class="table table-bordered">
+            <tbody>
+            <tr>
+              <td scope="col">Uso para alimentação de animais</td>
+              {% if object.destinosMaterialOrganico.destino == object.destinosMaterialOrganico.DESTINO_USO_PARA_ALIMENTACAO_DE_ANIMAIS %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td scope="col">Faz compostagem</td>
+              {% if object.destinosMaterialOrganico.destino == object.destinosMaterialOrganico.DESTINO_FAZ_COMPOSTAGEM %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td scope="col">Enterra junto com inorgânico</td>
+              {% if object.destinosMaterialOrganico.destino == object.destinosMaterialOrganico.DESTINO_ENTERRA_JUNTO_COM_INORGANICO %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td scope="col">Deposita a céu aberto no lote</td>
+              {% if object.destinosMaterialOrganico.destino == object.destinosMaterialOrganico.DESTINO_DEPOSITA_A_CEU_ABERTO_NO_LOTE %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" style="margin-top: 10px;">
+    <div class="col">
+      <div class="container" style="margin-top: 10px;">
+        <div class="row">
+          <div style="margin-right: 5px;">
+            <b>44. Necessita de licenciamento ambiental de atividade?</b>
+          </div>
+          <div>
+            {{ object.get_necessita_licenciamento_ambiental_display }}
+          </div>
+        </div>
+      </div>
+      <div class="container" style="margin-top: 20px;">
+        <div class="row">
+          <div style="margin-right: 5px;">
+            <b>45. Necessita de autorização de exploração florestal e/ou queima controlada?</b>
+          </div>
+          <div>
+            {{ object.get_necessita_autoriacao_exploracao_florestal_queima_controlada_display }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      {% if object.necessita_licenciamento_ambiental == object.CHOICE_SIM %}
+        <div class="container" style="margin-top: 10px;">
+          <div class="row">
+            <div style="margin-right: 5px; margin-bottom: 5px;">
+              <b>Atividades que necessitam de Licenciamento Ambiental</b>
+            </div>
+            <table class="table table-bordered">
+              <tbody>
+              {% for licenciamento_ambiental in object.licenciamentosAmbientais.all %}
+                <tr>
+                  {% if licenciamento_ambiental.tipo_atividade == licenciamento_ambiental.TIPO_ATIVIDADE_OUTROS %}
+                    <td scope="col">{{ licenciamento_ambiental.get_tipo_atividade_display }}: {{ licenciamento_ambiental.outros }}</td>
+                  {% else %}
+                    <td scope="col">{{ licenciamento_ambiental.get_tipo_atividade_display }}</td>
+                  {% endif %}
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="container" style="margin-top: 10px; text-align: center;">
+    <h3>SAÚDE E LAZER</h3>
+  </div>
+
+  <div class="row" style="margin-top: 20px;">
+    <div class="col">
+      <div class="container">
+        <div class="row" style="margin-bottom: 5px;">
+          <b>46. Onde é feito o atendimento à saúde para as famílias do assentamento?</b>
+        </div>
+        <div class="row">
+          <table class="table table-bordered">
+            <tbody>
+            {% if object.atendimentosSaude %}
+              <tr>
+                <td scope="col">Hospital</td>
+                {% if object.atendimentosSaude.hospital == object.atendimentosSaude.LOCAL_PA %}
+                  <td scope="col" style="text-align: center;">P.A.</td>
+                {% elif object.atendimentosSaude.hospital == object.atendimentosSaude.LOCAL_CIDADE %}
+                  <td scope="col" style="text-align: center;">Cidade</td>
+                {% else %}
+                  <td scope="col" style="text-align: center;">-</td>
+                {% endif %}
+              </tr>
+              <tr>
+                <td scope="col">Posto de Saúde</td>
+                {% if object.atendimentosSaude.posto_saude == object.atendimentosSaude.LOCAL_PA %}
+                  <td scope="col" style="text-align: center;">P.A.</td>
+                {% elif object.atendimentosSaude.posto_saude == object.atendimentosSaude.LOCAL_CIDADE %}
+                  <td scope="col" style="text-align: center;">Cidade</td>
+                {% else %}
+                  <td scope="col" style="text-align: center;">-</td>
+                {% endif %}
+              </tr>
+              <tr>
+                <td scope="col">Farmácia</td>
+                {% if object.atendimentosSaude.farmacia == object.atendimentosSaude.LOCAL_PA %}
+                  <td scope="col" style="text-align: center;">P.A.</td>
+                {% elif object.atendimentosSaude.farmacia == object.atendimentosSaude.LOCAL_CIDADE %}
+                  <td scope="col" style="text-align: center;">Cidade</td>
+                {% else %}
+                  <td scope="col" style="text-align: center;">-</td>
+                {% endif %}
+              </tr>
+              <tr>
+                <td scope="col">Outros: {{ object.atendimentosSaude.outros_especificacao|default:"" }}</td>
+                {% if object.atendimentosSaude.outros == object.atendimentosSaude.LOCAL_PA %}
+                  <td scope="col" style="text-align: center;">P.A.</td>
+                {% elif object.atendimentosSaude.outros == object.atendimentosSaude.LOCAL_CIDADE %}
+                  <td scope="col" style="text-align: center;">Cidade</td>
+                {% else %}
+                  <td scope="col" style="text-align: center;">-</td>
+                {% endif %}
+              </tr>
+            {% else %}
+              <tr>
+                <td scope="col">Hospital</td>
+                <td scope="col" style="text-align: center;">-</td>
+              </tr>
+              <tr>
+                <td scope="col">Posto de Saúde</td>
+                <td scope="col" style="text-align: center;">-</td>
+              </tr>
+              <tr>
+                <td scope="col">Farmácia</td>
+                <td scope="col" style="text-align: center;">-</td>
+              </tr>
+              <tr>
+                <td scope="col">Outros:</td>
+                <td scope="col" style="text-align: center;">-</td>
+              </tr>
+            {% endif %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="container" style="margin-top: 10px;">
+        <div class="row" style="margin-bottom: 5px;">
+          <b>47. Quais os programas ou tipos de atendimento à saúde são disponibilizados no P.A?</b>
+        </div>
+        <div class="row">
+          <table class="table table-bordered">
+            <tbody>
+            {% for programa in object.programasSaude.all %}
+              <tr>
+                <td scope="col">{{ programa.get_programa_saude_display }}</td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" style="margin-top: 20px;">
+    <div class="col">
+      <div class="container" style="margin-top: 10px;">
+        <div class="row" style="margin-bottom: 5px;">
+          <b>48. Como os moradores consideram o serviço de saúde no assentamento?</b>
+        </div>
+        <div class="row">
+          {{ object.get_qualidade_servico_saude_display }}
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="container" style="margin-top: 20px;">
+        <div class="row" style="margin-bottom: 5px;">
+          <b>49. No lote há alguma pessoa que faz uso frequente de?</b>
+        </div>
+        <div class="row">
+          <table class="table table-bordered">
+            <thead>
+            <tr>
+              <th scope="col" style="text-align: center;">Bebidas alcoólicas</th>
+              <th scope="col" style="text-align: center;">Cigarros</th>
+              <th scope="col" style="text-align: center;">Remédios de lto custo</th>
+              <th scope="col" style="text-align: center;">Outros</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for familia in object.familias.all %}
+              {% for membro in familia.membros.all %}
+                {% for uso_frequente in membro.usos_frequentes.all %}
+                  <tr>
+                    {% if uso_frequente.uso_frequente == uso_frequente.USO_FREQUENTE_BEBIDAS_ALCOOLICAS %}
+                      <td scope="col" style="text-align: center;">{{ membro.id }}</td>
+                    {% else %}
+                      <td scope="col"></td>
+                    {% endif %}
+                    {% if uso_frequente.uso_frequente == uso_frequente.USO_FREQUENTE_CIGARROS %}
+                      <td scope="col" style="text-align: center;">{{ membro.id }}</td>
+                    {% else %}
+                      <td scope="col"></td>
+                    {% endif %}
+                    {% if uso_frequente.uso_frequente == uso_frequente.USO_FREQUENTE_REMEDIOS_DE_ALTO_CUSTO %}
+                      <td scope="col" style="text-align: center;">{{ membro.id }}</td>
+                    {% else %}
+                      <td scope="col"></td>
+                    {% endif %}
+                    {% if uso_frequente.uso_frequente == uso_frequente.USO_FREQUENTE_OUTROS %}
+                      <td scope="col" style="text-align: center;">{{ uso_frequente.outros }}: {{ membro.id }}</td>
+                    {% else %}
+                      <td scope="col"></td>
+                    {% endif %}
+                  </tr>
+                {% endfor %}
+              {% endfor %}
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" style="margin-top: 10px;">
+    <div class="col">
+      <div class="container" style="margin-top: 10px;">
+        <div class="row" style="margin-bottom: 5px;">
+          <b>50. Quais são os esportes/atividades físicas praticados pelos familiares com maior frequência?</b>
+        </div>
+        <div class="row">
+          <table class="table table-bordered">
+            <tbody>
+            {% for esporte in object.atividadesFisicas.all %}
+              <tr>
+                {% if esporte.atividade_fisica == esporte.ATIVIDADE_FISICA_OUTROS %}
+                  <td scope="col">{{ esporte.get_atividade_fisica_display }}: {{ esporte.outros }}</td>
+                {% else %}
+                  <td scope="col">{{ esporte.get_atividade_fisica_display }}</td>
+                {% endif %}
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="container" style="margin-top: 10px;">
+        <div class="row" style="margin-bottom: 5px;">
+          <b>52. No assentamento quais são os espaços disponíveis para a prática de esporte ou para a recreação?</b>
+        </div>
+        <div class="row">
+          <table class="table table-bordered">
+            <tbody>
+            {% if object.espacosDisponiveis.all.count > 0 %}
+              {% for espaco in object.espacosDisponiveis.all %}
+                <tr>
+                  <td scope="col">{{ espaco.get_espaco_disponivel_display }}</td>
+                </tr>
+              {% endfor %}
+            {% else %}
+              <tr>
+                <td scope="col">Não possui</td>
+              </tr>
+            {% endif %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="container" style="margin-top: 10px;">
+        <div class="row" style="margin-bottom: 5px;">
+          <b>51. Com que frequência praticam atividades físicas ou esporte?</b>
+        </div>
+        <div class="row">
+          <table class="table table-bordered">
+            <tbody>
+            <tr>
+              <td scope="col">Diariamente</td>
+              {% if object.frequencia_atividade_fisica == object.FREQUENCIA_ATIVIDADE_FISICA_DIARIAMENTE %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td scope="col">Duas vezes por semana</td>
+              {% if object.frequencia_atividade_fisica == object.FREQUENCIA_ATIVIDADE_FISICA_DUAS_VEZES_POR_SEMANA %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td scope="col">Mais de duas vezes por semana</td>
+              {% if object.frequencia_atividade_fisica == object.FREQUENCIA_ATIVIDADE_FISICA_MAIS_DE_DUAS_VEZES_POR_SEMANA %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            <tr>
+              <td scope="col">Não pratica</td>
+              {% if object.frequencia_atividade_fisica == object.FREQUENCIA_ATIVIDADE_FISICA_NAO_PRATICA %}
+                <td scope="col" style="text-align: center;">Sim</td>
+              {% else %}
+                <td scope="col" style="text-align: center;">Não</td>
+              {% endif %}
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" style="margin-top: 10px; text-align: center;">
+    <h3>EDUCAÇÃO E CIDADANIA</h3>
+  </div>
+
+  <div class="row" style="margin-top: 20px;">
+    <div class="col">
+      <div class="container" style="margin-top: 10px;">
+        <div class="row" style="margin-bottom: 5px;">
+          <b>53. Que tipo de estabelecimento de ensino está disponível no assentamento?</b>
+        </div>
+        <div class="row">
+          <table class="table table-bordered">
+            <tbody>
+            {% if object.estabelecimentosEnsino.all.count > 0 %}
+              {% for estabelecimento in object.estabelecimentosEnsino.all %}
+                <tr>
+                  <td scope="col">{{ estabelecimento.get_estabelecimento_ensino_display }}</td>
+                </tr>
+              {% endfor %}
+            {% else %}
+              <tr>
+                <td scope="col">Não há estabelecimento de ensino no PA</td>
+              </tr>
+            {% endif %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="container" style="margin-top: 10px;">
+        <div class="row" style="margin-bottom: 5px;">
+          <b>54. Para a escola do assentamento há oferta de transporte público?</b>
+        </div>
+        <div class="row">
+          {{ object.get_oferta_transporte_interno_display }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% for familia in object.familias.all %}
+    {% for membro in familia.membros.all %}
+      {% if membro.opcao_ensino_utilizada %}
+        <div class="container" style="margin-top: 20px;">
+          <div class="row" style="margin-bottom: 5px;">
+            <b>55. No caso de <u>não haver</u> oferta de estabelecimento de ensino apropriado no assentamento, qual a opção utilizada pelos familiares?</b>
+          </div>
+          <div class="row">
+            <table class="table table-bordered">
+              <thead>
+              <tr>
+                <th scope="col" style="text-align: center;">Opção de ensino utilizada</th>
+                <th scope="col" style="text-align: center;">Código da Pessoa</th>
+                <th scope="col" style="text-align: center;">Distância até a escola (Km)</th>
+                <th scope="col" style="text-align: center;">Há oferta de transporte para a escola?</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                {% if membro.opcao_ensino_utilizada.opcao_ensino == membro.opcao_ensino_utilizada.OPCAO_ENSINO_OUTROS %}
+                  <td scope="col">{{ membro.opcao_ensino_utilizada }}: {{ membro.opcao_ensino_utilizada.outros }}</td>
+                {% else %}
+                  <td scope="col">{{ membro.opcao_ensino_utilizada }}</td>
+                {% endif %}
+                <td scope="col" style="text-align: center;">{{ membro.id }}</td>
+                <td scope="col" style="text-align: center;">{{ membro.opcao_ensino_utilizada.distancia_percorrida }}</td>
+                <td scope="col" style="text-align: center;">{{ membro.opcao_ensino_utilizada.get_oferta_de_transporte_display }}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
+
+  <div class="container" style="margin-top: 20px;">
+    <div class="row" style="margin-bottom: 5px; width: 50%;">
+      <b>56. Com relação à documentação, <u>quantas pessoas NÃO POSSUEM</u> os documentos relacionados abaixo?</b>
+    </div>
+    <div class="row" style="width: 50%;">
+      <table class="table table-bordered">
+        <tbody>
+        <tr>
+          <td scope="col">Certidão de Nascimento</td>
+          <td scope="col" style="width: 20%; text-align: center;">{{ object.nao_possui_documento.certidao_nascimento|default_if_none:"" }}</td>
+        </tr>
+        <tr>
+          <td scope="col">Identidade (RG) - a partir de 12 anos</td>
+          <td scope="col" style="text-align: center;">{{ object.nao_possui_documento.identidade|default_if_none:"" }}</td>
+        </tr>
+        <tr>
+          <td scope="col">Cadastro de Pessoa Física (CPF)</td>
+          <td scope="col" style="text-align: center;">{{ object.nao_possui_documento.cpf|default_if_none:"" }}</td>
+        </tr>
+        <tr>
+          <td scope="col">Carteira de Trabalho (CTPS) - a partir de 14 anos</td>
+          <td scope="col" style="text-align: center;">{{ object.nao_possui_documento.carteira_de_trabalho|default_if_none:"" }}</td>
+        </tr>
+        <tr>
+          <td scope="col">Certidão de Casamento ou União Estável</td>
+          <td scope="col" style="text-align: center;">{{ object.nao_possui_documento.certidao_de_casamento_ou_uniao_estavel|default_if_none:"" }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock content %}
