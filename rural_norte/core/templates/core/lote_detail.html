@@ -660,7 +660,7 @@
             <tr>
               <td scope="col">Mais de uma. Quantas?</td>
               {% if object.quantas_familias_utilizam_mesma_fonte_agua == object.QUANTAS_FAMILIAS_UTILIZAM_MESMA_FONTE_DE_AGUA_MAIS_DE_UMA %}
-                <td scope="col">{{ object.quantidade_familias_utilizacao_mesma_fonte_agua }}</td>
+                <td scope="col" style="text-align: center;">{{ object.quantidade_familias_utilizacao_mesma_fonte_agua }}</td>
               {% else %}
                 <td scope="col" style="text-align: center;">0</td>
               {% endif %}
@@ -1089,9 +1089,9 @@
                 <td scope="col">{{ producao_vegetal.get_tipo_producao_display }}</td>
               {% endif %}
               <td scope="col" style="text-align: center;">{{ producao_vegetal.area_plantada }} ({{ producao_vegetal.get_medida_area_plantada_display }})</td>
-              <td scope="col" style="text-align: center;">{{ producao_vegetal.producao_consumo }} ({{ producao_vegetal.get_producao_unidade_medida_display }})</td>
-              <td scope="col" style="text-align: center;">{{ producao_vegetal.producao_comercio }} ({{ producao_vegetal.get_producao_unidade_medida_display }})</td>
-              <td scope="col" style="text-align: center;">{{ producao_vegetal.valor }} ({{ producao_vegetal.get_producao_unidade_medida_display }})</td>
+              <td scope="col" style="text-align: center;">{{ producao_vegetal.producao_consumo|default_if_none:"" }} ({{ producao_vegetal.get_producao_unidade_medida_display|default_if_none:"" }})</td>
+              <td scope="col" style="text-align: center;">{{ producao_vegetal.producao_comercio|default_if_none:"" }} ({{ producao_vegetal.get_producao_unidade_medida_display|default_if_none:"" }})</td>
+              <td scope="col" style="text-align: center;">{{ producao_vegetal.valor|default_if_none:"" }} ({{ producao_vegetal.get_producao_unidade_medida_display|default_if_none:"" }})</td>
               <td scope="col">{{ producao_vegetal.get_canal_comercializacao_display|default:"-" }}</td>
               <td scope="col">{{ producao_vegetal.get_mercado_institucional_display|default:"-" }}</td>
             </tr>
@@ -1125,9 +1125,9 @@
                 <td scope="col">{{ producao_vegetal.get_tipo_producao_display }}</td>
               {% endif %}
               <td scope="col" style="text-align: center;">{{ producao_vegetal.area_plantada }} ({{ producao_vegetal.get_medida_area_plantada_display }})</td>
-              <td scope="col" style="text-align: center;">{{ producao_vegetal.producao_consumo }} ({{ producao_vegetal.get_producao_unidade_medida_display }})</td>
-              <td scope="col" style="text-align: center;">{{ producao_vegetal.producao_comercio }} ({{ producao_vegetal.get_producao_unidade_medida_display }})</td>
-              <td scope="col" style="text-align: center;">{{ producao_vegetal.valor }} ({{ producao_vegetal.get_producao_unidade_medida_display }})</td>
+              <td scope="col" style="text-align: center;">{{ producao_vegetal.producao_consumo|default_if_none:"" }} ({{ producao_vegetal.get_producao_unidade_medida_display|default_if_none:"" }})</td>
+              <td scope="col" style="text-align: center;">{{ producao_vegetal.producao_comercio|default_if_none:"" }} ({{ producao_vegetal.get_producao_unidade_medida_display|default_if_none:"" }})</td>
+              <td scope="col" style="text-align: center;">{{ producao_vegetal.valor|default_if_none:"" }} ({{ producao_vegetal.get_producao_unidade_medida_display|default_if_none:"" }})</td>
               <td scope="col">{{ producao_vegetal.get_canal_comercializacao_display|default:"-" }}</td>
               <td scope="col">{{ producao_vegetal.get_mercado_institucional_display|default:"-" }}</td>
             </tr>
@@ -1161,9 +1161,9 @@
                 <td scope="col">{{ producao_vegetal.get_tipo_producao_display }}</td>
               {% endif %}
               <td scope="col" style="text-align: center;">{{ producao_vegetal.area_plantada }} ({{ producao_vegetal.get_medida_area_plantada_display }})</td>
-              <td scope="col" style="text-align: center;">{{ producao_vegetal.producao_consumo }} ({{ producao_vegetal.get_producao_unidade_medida_display }})</td>
-              <td scope="col" style="text-align: center;">{{ producao_vegetal.producao_comercio }} ({{ producao_vegetal.get_producao_unidade_medida_display }})</td>
-              <td scope="col" style="text-align: center;">{{ producao_vegetal.valor }} ({{ producao_vegetal.get_producao_unidade_medida_display }})</td>
+              <td scope="col" style="text-align: center;">{{ producao_vegetal.producao_consumo|default_if_none:"" }} ({{ producao_vegetal.get_producao_unidade_medida_display|default_if_none:"" }})</td>
+              <td scope="col" style="text-align: center;">{{ producao_vegetal.producao_comercio|default_if_none:"" }} ({{ producao_vegetal.get_producao_unidade_medida_display|default_if_none:"" }})</td>
+              <td scope="col" style="text-align: center;">{{ producao_vegetal.valor|default_if_none:"" }} ({{ producao_vegetal.get_producao_unidade_medida_display|default_if_none:"" }})</td>
               <td scope="col">{{ producao_vegetal.get_canal_comercializacao_display|default:"-" }}</td>
               <td scope="col">{{ producao_vegetal.get_mercado_institucional_display|default:"-" }}</td>
             </tr>
