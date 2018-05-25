@@ -1062,117 +1062,127 @@
     <h3>PRODUÇÃO VEGETAL</h3>
   </div>
 
-  {% for producao_vegetal in object.producoesVegetais.all %}
-    {% if producao_vegetal.classificacao == producao_vegetal.CLASSIFICACAO_CULTURA %}
-      <div class="container" style="margin-top: 10px;">
-        <div class="row" style="margin-bottom: 5px;">
-          <b>25. Agora falaremos sobre a produção/culturas, plantadas na sua lavoura/roça no último ano agrícola.</b>
-        </div>
-        <div class="row">
-          <table class="table table-bordered">
-            <thead>
-            <tr>
-              <th scope="col" style="text-align: center;">Culturas plantadas no último ano agrícola</th>
-              <th scope="col" style="text-align: center;">Área plantada</th>
-              <th scope="col" style="text-align: center;">Produção Colhida - Consumo</th>
-              <th scope="col" style="text-align: center;">Produção Colhida - Comércio</th>
-              <th scope="col" style="text-align: center;">Valor-R$</th>
-              <th scope="col" style="text-align: center;">Formas/Canais de Comercialização</th>
-              <th scope="col" style="text-align: center;">Mercado Institucional</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-              {% if producao_vegetal.tipo_producao == producao_vegetal.TIPO_PRODUCAO_OUTROS %}
-                <td scope="col">{{ producao_vegetal.get_tipo_producao_display }}: {{ producao_vegetal.tipo_producao_outros }}</td>
-              {% else %}
-                <td scope="col">{{ producao_vegetal.get_tipo_producao_display }}</td>
-              {% endif %}
-              <td scope="col" style="text-align: center;">{{ producao_vegetal.area_plantada }} ({{ producao_vegetal.get_medida_area_plantada_display }})</td>
-              <td scope="col" style="text-align: center;">{{ producao_vegetal.producao_consumo|default_if_none:"" }} ({{ producao_vegetal.get_producao_unidade_medida_display|default_if_none:"" }})</td>
-              <td scope="col" style="text-align: center;">{{ producao_vegetal.producao_comercio|default_if_none:"" }} ({{ producao_vegetal.get_producao_unidade_medida_display|default_if_none:"" }})</td>
-              <td scope="col" style="text-align: center;">{{ producao_vegetal.valor|default_if_none:"" }} ({{ producao_vegetal.get_producao_unidade_medida_display|default_if_none:"" }})</td>
-              <td scope="col">{{ producao_vegetal.get_canal_comercializacao_display|default:"-" }}</td>
-              <td scope="col">{{ producao_vegetal.get_mercado_institucional_display|default:"-" }}</td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
+  {% if object.producoesVegetais.all.count > 0 %}
+    <div class="container" style="margin-top: 10px;">
+      <div class="row" style="margin-bottom: 5px;">
+        <b>25. Agora falaremos sobre a produção/culturas, plantadas na sua lavoura/roça no último ano agrícola.</b>
       </div>
-    {% elif producao_vegetal.classificacao == producao_vegetal.CLASSIFICACAO_OLERICULTURA %}
-      <div class="container" style="margin-top: 10px;">
-        <div class="row" style="margin-bottom: 5px;">
-          <b>26. Olericultura - Legumes e Verduras no <u>último ano agrícola</u>.</b>
-        </div>
-        <div class="row">
-          <table class="table table-bordered">
-            <thead>
-            <tr>
-              <th scope="col" style="text-align: center;">Culturas plantadas no último ano agrícola</th>
-              <th scope="col" style="text-align: center;">Área plantada</th>
-              <th scope="col" style="text-align: center;">Produção Colhida - Consumo</th>
-              <th scope="col" style="text-align: center;">Produção Colhida - Comércio</th>
-              <th scope="col" style="text-align: center;">Valor-R$</th>
-              <th scope="col" style="text-align: center;">Formas/Canais de Comercialização</th>
-              <th scope="col" style="text-align: center;">Mercado Institucional</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-              {% if producao_vegetal.tipo_producao == producao_vegetal.TIPO_PRODUCAO_OUTROS %}
-                <td scope="col">{{ producao_vegetal.get_tipo_producao_display }}: {{ producao_vegetal.tipo_producao_outros }}</td>
-              {% else %}
-                <td scope="col">{{ producao_vegetal.get_tipo_producao_display }}</td>
-              {% endif %}
-              <td scope="col" style="text-align: center;">{{ producao_vegetal.area_plantada }} ({{ producao_vegetal.get_medida_area_plantada_display }})</td>
-              <td scope="col" style="text-align: center;">{{ producao_vegetal.producao_consumo|default_if_none:"" }} ({{ producao_vegetal.get_producao_unidade_medida_display|default_if_none:"" }})</td>
-              <td scope="col" style="text-align: center;">{{ producao_vegetal.producao_comercio|default_if_none:"" }} ({{ producao_vegetal.get_producao_unidade_medida_display|default_if_none:"" }})</td>
-              <td scope="col" style="text-align: center;">{{ producao_vegetal.valor|default_if_none:"" }} ({{ producao_vegetal.get_producao_unidade_medida_display|default_if_none:"" }})</td>
-              <td scope="col">{{ producao_vegetal.get_canal_comercializacao_display|default:"-" }}</td>
-              <td scope="col">{{ producao_vegetal.get_mercado_institucional_display|default:"-" }}</td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
+      <div class="row">
+        <table class="table table-bordered">
+          <thead>
+          <tr>
+            <th scope="col" style="text-align: center;">Culturas plantadas no último ano agrícola</th>
+            <th scope="col" style="text-align: center;">Área plantada</th>
+            <th scope="col" style="text-align: center;">Produção Colhida - Consumo</th>
+            <th scope="col" style="text-align: center;">Produção Colhida - Comércio</th>
+            <th scope="col" style="text-align: center;">Valor-R$</th>
+            <th scope="col" style="text-align: center;">Formas/Canais de Comercialização</th>
+            <th scope="col" style="text-align: center;">Mercado Institucional</th>
+          </tr>
+          </thead>
+          <tbody>
+          {% for producao_vegetal in object.producoesVegetais.all %}
+            {% if producao_vegetal.classificacao == producao_vegetal.CLASSIFICACAO_CULTURA %}
+              <tr>
+                {% if producao_vegetal.tipo_producao == producao_vegetal.TIPO_PRODUCAO_OUTROS %}
+                  <td scope="col">{{ producao_vegetal.get_tipo_producao_display }}: {{ producao_vegetal.tipo_producao_outros }}</td>
+                {% else %}
+                  <td scope="col">{{ producao_vegetal.get_tipo_producao_display }}</td>
+                {% endif %}
+                <td scope="col" style="text-align: center;">{{ producao_vegetal.area_plantada }} {{ producao_vegetal.get_medida_area_plantada_display }}</td>
+                <td scope="col" style="text-align: center;">{{ producao_vegetal.producao_consumo|default_if_none:"" }} {{ producao_vegetal.get_producao_unidade_medida_display|default_if_none:"" }}</td>
+                <td scope="col" style="text-align: center;">{{ producao_vegetal.producao_comercio|default_if_none:"" }} {{ producao_vegetal.get_producao_unidade_medida_display|default_if_none:"" }}</td>
+                <td scope="col" style="text-align: center;">{{ producao_vegetal.valor|default_if_none:"" }} {{ producao_vegetal.get_producao_unidade_medida_display|default_if_none:"" }}</td>
+                <td scope="col">{{ producao_vegetal.get_canal_comercializacao_display|default:"-" }}</td>
+                <td scope="col">{{ producao_vegetal.get_mercado_institucional_display|default:"-" }}</td>
+              </tr>
+            {% endif %}
+          {% endfor %}
+          </tbody>
+        </table>
       </div>
-    {% elif producao_vegetal.classificacao == producao_vegetal.CLASSIFICACAO_FRUTICULTURA %}
-      <div class="container" style="margin-top: 10px;">
-        <div class="row" style="margin-bottom: 5px;">
-          <b>27. Fruticultura referente ao <u>último ano agrícola</u>.</b>
-        </div>
-        <div class="row">
-          <table class="table table-bordered">
-            <thead>
-            <tr>
-              <th scope="col" style="text-align: center;">Culturas plantadas no último ano agrícola</th>
-              <th scope="col" style="text-align: center;">Área plantada</th>
-              <th scope="col" style="text-align: center;">Produção Colhida - Consumo</th>
-              <th scope="col" style="text-align: center;">Produção Colhida - Comércio</th>
-              <th scope="col" style="text-align: center;">Valor-R$</th>
-              <th scope="col" style="text-align: center;">Formas/Canais de Comercialização</th>
-              <th scope="col" style="text-align: center;">Mercado Institucional</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-              {% if producao_vegetal.tipo_producao == producao_vegetal.TIPO_PRODUCAO_OUTROS %}
-                <td scope="col">{{ producao_vegetal.get_tipo_producao_display }}: {{ producao_vegetal.tipo_producao_outros }}</td>
-              {% else %}
-                <td scope="col">{{ producao_vegetal.get_tipo_producao_display }}</td>
-              {% endif %}
-              <td scope="col" style="text-align: center;">{{ producao_vegetal.area_plantada }} ({{ producao_vegetal.get_medida_area_plantada_display }})</td>
-              <td scope="col" style="text-align: center;">{{ producao_vegetal.producao_consumo|default_if_none:"" }} ({{ producao_vegetal.get_producao_unidade_medida_display|default_if_none:"" }})</td>
-              <td scope="col" style="text-align: center;">{{ producao_vegetal.producao_comercio|default_if_none:"" }} ({{ producao_vegetal.get_producao_unidade_medida_display|default_if_none:"" }})</td>
-              <td scope="col" style="text-align: center;">{{ producao_vegetal.valor|default_if_none:"" }} ({{ producao_vegetal.get_producao_unidade_medida_display|default_if_none:"" }})</td>
-              <td scope="col">{{ producao_vegetal.get_canal_comercializacao_display|default:"-" }}</td>
-              <td scope="col">{{ producao_vegetal.get_mercado_institucional_display|default:"-" }}</td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
+    </div>
+
+    <div class="container" style="margin-top: 10px;">
+      <div class="row" style="margin-bottom: 5px;">
+        <b>26. Olericultura - Legumes e Verduras no <u>último ano agrícola</u>.</b>
       </div>
-    {% endif %}
-  {% endfor %}
+      <div class="row">
+        <table class="table table-bordered">
+          <thead>
+          <tr>
+            <th scope="col" style="text-align: center;">Culturas plantadas no último ano agrícola</th>
+            <th scope="col" style="text-align: center;">Área plantada</th>
+            <th scope="col" style="text-align: center;">Produção Colhida - Consumo</th>
+            <th scope="col" style="text-align: center;">Produção Colhida - Comércio</th>
+            <th scope="col" style="text-align: center;">Valor-R$</th>
+            <th scope="col" style="text-align: center;">Formas/Canais de Comercialização</th>
+            <th scope="col" style="text-align: center;">Mercado Institucional</th>
+          </tr>
+          </thead>
+          <tbody>
+          {% for producao_vegetal in object.producoesVegetais.all %}
+            {% if producao_vegetal.classificacao == producao_vegetal.CLASSIFICACAO_OLERICULTURA %}
+              <tr>
+                {% if producao_vegetal.tipo_producao == producao_vegetal.TIPO_PRODUCAO_OUTROS %}
+                  <td scope="col">{{ producao_vegetal.get_tipo_producao_display }}: {{ producao_vegetal.tipo_producao_outros }}</td>
+                {% else %}
+                  <td scope="col">{{ producao_vegetal.get_tipo_producao_display }}</td>
+                {% endif %}
+                <td scope="col" style="text-align: center;">{{ producao_vegetal.area_plantada }} {{ producao_vegetal.get_medida_area_plantada_display }}</td>
+                <td scope="col" style="text-align: center;">{{ producao_vegetal.producao_consumo|default_if_none:"" }} {{ producao_vegetal.get_producao_unidade_medida_display|default_if_none:"" }}</td>
+                <td scope="col" style="text-align: center;">{{ producao_vegetal.producao_comercio|default_if_none:"" }} {{ producao_vegetal.get_producao_unidade_medida_display|default_if_none:"" }}</td>
+                <td scope="col" style="text-align: center;">{{ producao_vegetal.valor|default_if_none:"" }} {{ producao_vegetal.get_producao_unidade_medida_display|default_if_none:"" }}</td>
+                <td scope="col">{{ producao_vegetal.get_canal_comercializacao_display|default:"-" }}</td>
+                <td scope="col">{{ producao_vegetal.get_mercado_institucional_display|default:"-" }}</td>
+              </tr>
+            {% endif %}
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="container" style="margin-top: 10px;">
+      <div class="row" style="margin-bottom: 5px;">
+        <b>27. Fruticultura referente ao <u>último ano agrícola</u>.</b>
+      </div>
+      <div class="row">
+        <table class="table table-bordered">
+          <thead>
+          <tr>
+            <th scope="col" style="text-align: center;">Culturas plantadas no último ano agrícola</th>
+            <th scope="col" style="text-align: center;">Área plantada</th>
+            <th scope="col" style="text-align: center;">Produção Colhida - Consumo</th>
+            <th scope="col" style="text-align: center;">Produção Colhida - Comércio</th>
+            <th scope="col" style="text-align: center;">Valor-R$</th>
+            <th scope="col" style="text-align: center;">Formas/Canais de Comercialização</th>
+            <th scope="col" style="text-align: center;">Mercado Institucional</th>
+          </tr>
+          </thead>
+          <tbody>
+          {% for producao_vegetal in object.producoesVegetais.all %}
+            {% if producao_vegetal.classificacao == producao_vegetal.CLASSIFICACAO_FRUTICULTURA %}
+              <tr>
+                {% if producao_vegetal.tipo_producao == producao_vegetal.TIPO_PRODUCAO_OUTROS %}
+                  <td scope="col">{{ producao_vegetal.get_tipo_producao_display }}: {{ producao_vegetal.tipo_producao_outros }}</td>
+                {% else %}
+                  <td scope="col">{{ producao_vegetal.get_tipo_producao_display }}</td>
+                {% endif %}
+                <td scope="col" style="text-align: center;">{{ producao_vegetal.area_plantada }} {{ producao_vegetal.get_medida_area_plantada_display }}</td>
+                <td scope="col" style="text-align: center;">{{ producao_vegetal.producao_consumo|default_if_none:"" }} {{ producao_vegetal.get_producao_unidade_medida_display|default_if_none:"" }}</td>
+                <td scope="col" style="text-align: center;">{{ producao_vegetal.producao_comercio|default_if_none:"" }} {{ producao_vegetal.get_producao_unidade_medida_display|default_if_none:"" }}</td>
+                <td scope="col" style="text-align: center;">{{ producao_vegetal.valor|default_if_none:"" }} {{ producao_vegetal.get_producao_unidade_medida_display|default_if_none:"" }}</td>
+                <td scope="col">{{ producao_vegetal.get_canal_comercializacao_display|default:"-" }}</td>
+                <td scope="col">{{ producao_vegetal.get_mercado_institucional_display|default:"-" }}</td>
+              </tr>
+            {% endif %}
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  {% endif %}
 
   {% for producao_vegetal in object.producoesVegetais.all %}
     {% if producao_vegetal.irrigacao == producao_vegetal.IRRIGACAO_SIM %}
@@ -1192,7 +1202,7 @@
             <tbody>
             <tr>
               <td scope="col">{{ producao_vegetal.get_tipo_producao_display }}</td>
-              <td scope="col" style="text-align: center;">{{ producao_vegetal.area_irrigada }} ({{ producao_vegetal.get_medida_area_irrigada_display }})</td>
+              <td scope="col" style="text-align: center;">{{ producao_vegetal.area_irrigada }} {{ producao_vegetal.get_medida_area_irrigada_display }}</td>
               <td scope="col" style="text-align: center;">{{ producao_vegetal.get_tipo_irrigacao_display }}</td>
             </tr>
             </tbody>
