@@ -73,7 +73,19 @@ class ProcessadoBeneficiadoFormAdmin(forms.ModelForm):
 
 
 class ProjetoAssentamentoAdmin(admin.ModelAdmin):
-    list_display = ('codigo', 'nome', 'municipio', 'contrato', 'data_criacao')
+
+    def get_data_criacao(self, obj):
+        return date(obj.data_criacao, 'd/m/Y')
+
+    get_data_criacao.admin_order_field = 'data_criacao'
+    get_data_criacao.short_description = 'Data de Criação'
+
+    def get_total_beneficiarios(self, obj):
+        return obj.lotes.count()
+
+    get_total_beneficiarios.short_description = 'Total de Beneficiários'
+
+    list_display = ('codigo', 'nome', 'municipio', 'contrato', 'get_data_criacao', 'get_total_beneficiarios', 'capacidade_projeto')
     search_fields = ['codigo', 'nome', 'municipio']
     list_filter = ['contrato', 'municipio', 'cadastrado_em', 'modificado_em']
     exclude = ['desativado_por', 'desativado_em']

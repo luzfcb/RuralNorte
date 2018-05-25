@@ -1,3 +1,12 @@
-from django.shortcuts import render
+from django.utils import timezone
+from django.views.generic import ListView, DetailView
 
-# Create your views here.
+from .models import Lote
+
+class LoteListView(ListView):
+
+    model = Lote
+
+class LoteDetailView(DetailView):
+
+    model = Lote
