@@ -124,73 +124,84 @@ class FamiliaInlineAdmin(nested_admin.NestedStackedInline):
     extra = 1
     delete = False
     inlines = [MembroInlineAdmin]
-    insert_after = 'outra_familia_no_lote'
+    insert_after = 'coordenada_y'
 
 
 class ContatoInlineAdmin(admin.StackedInline):
     model = models.Contato
     exclude = ['desativado_por', 'desativado_em']
     extra = 1
+    insert_after = 'outra_familia_no_lote'
 
 
 class DocumentoLoteInlineAdmin(admin.StackedInline):
     model = models.DocumentoLote
     exclude = ['desativado_por', 'desativado_em']
     extra = 1
+    insert_after = 'ocupante_irregular_tempo'
 
 
 class BeneficioSocialInlineAdmin(admin.StackedInline):
     model = models.BeneficioSocial
     exclude = ['desativado_por', 'desativado_em']
     extra = 1
+    insert_after = 'recebe_beneficio_social'
 
 
 class EstruturaOrganizativaInlineAdmin(admin.StackedInline):
     model = models.EstruturaOrganizativa
     exclude = ['desativado_por', 'desativado_em']
     extra = 1
+    insert_after = 'recebe_beneficio_social'
 
 
 class AutoDeclaracaoEtniaInlineAdmin(admin.StackedInline):
     model = models.AutoDeclaracaoEtnia
     exclude = ['desativado_por', 'desativado_em']
     extra = 1
+    insert_after = 'recebe_beneficio_social'
 
 
 class FonteAguaInlineAdmin(admin.StackedInline):
     model = models.FonteAgua
     exclude = ['desativado_por', 'desativado_em']
     extra = 1
+    insert_after = 'tipo_instalacao_sanitaria'
 
 
 class TratamentoAguaInlineAdmin(admin.StackedInline):
     model = models.TratamentoAgua
     exclude = ['desativado_por', 'desativado_em']
     extra = 1
+    insert_after = 'tipo_instalacao_sanitaria'
 
 
 class ConstrucaoLoteInlineAdmin(admin.StackedInline):
     model = models.ConstrucaoLote
     exclude = ['desativado_por', 'desativado_em']
     extra = 1
+    insert_after = 'situacao_cercado_lote'
 
 
 class BemProdutivoInlineAdmin(admin.StackedInline):
     model = models.BemProdutivo
     exclude = ['desativado_por', 'desativado_em']
     extra = 1
+    insert_after = 'situacao_cercado_lote'
 
 
 class AplicacaoCreditoInlineAdmin(admin.StackedInline):
     model = models.AplicacaoCredito
     exclude = ['desativado_por', 'desativado_em']
     extra = 1
+    insert_after = 'situacao_cercado_lote'
 
 
 class CreditoBancarioInlineAdmin(admin.StackedInline):
     model = models.CreditoBancario
     exclude = ['desativado_por', 'desativado_em']
     extra = 1
+    insert_after = 'situacao_cercado_lote'
 
 
 class CulturaInlineAdmin(admin.StackedInline):
@@ -198,6 +209,7 @@ class CulturaInlineAdmin(admin.StackedInline):
     exclude = ['classificacao', 'desativado_por', 'desativado_em']
     extra = 1
     form = CulturaFormAdmin
+    insert_after = 'situacao_cercado_lote'
 
 
 class OlericulturaInlineAdmin(admin.StackedInline):
@@ -205,6 +217,7 @@ class OlericulturaInlineAdmin(admin.StackedInline):
     exclude = ['classificacao', 'desativado_por', 'desativado_em']
     extra = 1
     form = OlericulturaFormAdmin
+    insert_after = 'situacao_cercado_lote'
 
 
 class FruticulturaInlineAdmin(admin.StackedInline):
@@ -212,18 +225,21 @@ class FruticulturaInlineAdmin(admin.StackedInline):
     exclude = ['classificacao', 'desativado_por', 'desativado_em']
     extra = 1
     form = FruticulturaFormAdmin
+    insert_after = 'situacao_cercado_lote'
 
 
 class AtividadeExtrativistaInlineAdmin(admin.StackedInline):
     model = models.AtividadeExtrativista
     exclude = ['desativado_por', 'desativado_em']
     extra = 1
+    insert_after = 'situacao_cercado_lote'
 
 
 class ProducaoFlorestalInlineAdmin(admin.StackedInline):
     model = models.ProducaoFlorestal
     exclude = ['desativado_por', 'desativado_em']
     extra = 1
+    insert_after = 'situacao_cercado_lote'
 
 
 class BovinoculturaInlineAdmin(admin.StackedInline):
@@ -231,6 +247,7 @@ class BovinoculturaInlineAdmin(admin.StackedInline):
     exclude = ['classificacao', 'desativado_por', 'desativado_em']
     extra = 1
     form = BovinoculturaFormAdmin
+    insert_after = 'situacao_cercado_lote'
 
 
 class OutraCriacaoInlineAdmin(admin.StackedInline):
@@ -238,81 +255,88 @@ class OutraCriacaoInlineAdmin(admin.StackedInline):
     exclude = ['classificacao', 'tipo_criacao', 'desativado_por', 'desativado_em']
     extra = 1
     form = OutraCriacaoFormAdmin
-
-
-class NivelTecnologicoProducaoAnimalInlineAdmin(admin.StackedInline):
-    model = models.NivelTecnologicoProducaoAnimal
-    extra = 1
-    exclude = ['desativado_por', 'desativado_em']
+    insert_after = 'situacao_cercado_lote'
 
 
 class ProblemaAmbientalInlineAdmin(admin.StackedInline):
     model = models.ProblemaAmbiental
     exclude = ['desativado_por', 'desativado_em']
     extra = 1
+    insert_after = 'area_preservacao_permanente_cercada'
 
 
 class PraticaConservacionistaInlineAdmin(admin.StackedInline):
     model = models.PraticaConservacionista
     exclude = ['desativado_por', 'desativado_em']
     extra = 1
+    insert_after = 'area_preservacao_permanente_cercada'
 
 
 class DestinoLixoDomesticoInlineAdmin(admin.StackedInline):
     model = models.DestinoLixoDomestico
     exclude = ['desativado_por', 'desativado_em']
+    insert_after = 'area_preservacao_permanente_cercada'
 
 
 class DestinoMaterialOrganicoInlineAdmin(admin.StackedInline):
     model = models.DestinoMaterialOrganico
     exclude = ['desativado_por', 'desativado_em']
+    insert_after = 'area_preservacao_permanente_cercada'
 
 
 class LicenciamentoAmbientalInlineAdmin(admin.StackedInline):
     model = models.LicenciamentoAmbiental
     exclude = ['desativado_por', 'desativado_em']
     extra = 1
+    insert_after = 'area_preservacao_permanente_cercada'
 
 
 class AtendimentoSaudeInlineAdmin(admin.StackedInline):
     model = models.AtendimentoSaude
     exclude = ['desativado_por', 'desativado_em']
+    insert_after = 'necessita_autoriacao_exploracao_florestal_queima_controlada'
 
 
 class ProgramaSaudeInlineAdmin(admin.StackedInline):
     model = models.ProgramaSaude
     exclude = ['desativado_por', 'desativado_em']
     extra = 1
+    insert_after = 'necessita_autoriacao_exploracao_florestal_queima_controlada'
 
 
 class AtividadeFisicaInlineAdmin(admin.StackedInline):
     model = models.AtividadeFisica
     exclude = ['desativado_por', 'desativado_em']
     extra = 1
+    insert_after = 'qualidade_servico_saude'
 
 
 class EspacoDisponivelInlineAdmin(admin.StackedInline):
     model = models.EspacoDisponivel
     exclude = ['desativado_por', 'desativado_em']
     extra = 1
+    insert_after = 'frequencia_atividade_fisica'
 
 
 class EstabelecimentoEnsinoInlineAdmin(admin.StackedInline):
     model = models.EstabelecimentoEnsino
     exclude = ['desativado_por', 'desativado_em']
     extra = 1
+    insert_after = 'frequencia_atividade_fisica'
 
 
 class BovinoculturaLeiteiraInlineAdmin(admin.StackedInline):
     model = models.BovinoculturaLeiteira
     exclude = ['tipo_criacao', 'desativado_por', 'desativado_em']
     extra = 1
+    insert_after = 'situacao_cercado_lote'
 
 
 class BovinoculturaCorteInlineAdmin(admin.StackedInline):
     model = models.BovinoculturaCorte
     exclude = ['tipo_criacao', 'desativado_por', 'desativado_em']
     extra = 1
+    insert_after = 'situacao_cercado_lote'
 
 
 class OrigemAnimalInlineAdmin(admin.StackedInline):
@@ -320,6 +344,14 @@ class OrigemAnimalInlineAdmin(admin.StackedInline):
     exclude = ['classificacao', 'desativado_por', 'desativado_em']
     extra = 1
     form = OrigemAnimalFormAdmin
+    insert_after = 'situacao_cercado_lote'
+
+
+class NivelTecnologicoProducaoAnimalInlineAdmin(admin.StackedInline):
+    model = models.NivelTecnologicoProducaoAnimal
+    extra = 1
+    exclude = ['desativado_por', 'desativado_em']
+    insert_after = 'situacao_cercado_lote'
 
 
 class ProcessadoBeneficiadoInlineAdmin(admin.StackedInline):
@@ -327,6 +359,7 @@ class ProcessadoBeneficiadoInlineAdmin(admin.StackedInline):
     exclude = ['classificacao', 'desativado_por', 'desativado_em']
     extra = 1
     form = ProcessadoBeneficiadoFormAdmin
+    insert_after = 'pratica_inseminacao_artificial_no_rebanho_leiteiro'
 
 
 class NaoPossuiDocumentoInlineAdmin(admin.StackedInline):

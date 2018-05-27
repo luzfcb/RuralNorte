@@ -296,6 +296,12 @@ class Lote(AuditoriaAbstractModel):
         '20. Como está cercado o lote?',
         choices=situacao_cercado_lote_choices
     )
+    possui_pastagem_em_pastejo_rotacionado = models.IntegerField(
+        '34. Possui Pastagem em Pastejo Rotacionado?', choices=sim_nao_choices
+    )
+    pratica_inseminacao_artificial_no_rebanho_leiteiro = models.IntegerField(
+        '35. Pratica inseminação aritificial no rebanho leiteiro?', choices=sim_nao_choices
+    )
     area_preservacao_permanente = models.IntegerField(
         '38. Existe Área de Preservação Permanente (APP) dentro do seu lote/parcela?', choices=sim_nao_choices
     )
@@ -305,14 +311,8 @@ class Lote(AuditoriaAbstractModel):
     possui_capineira = models.IntegerField(
         'Possui Capineira?', choices=sim_nao_choices, default=CHOICE_NAO
     )
-    possui_pastagem_em_pastejo_rotacionado = models.IntegerField(
-        '34. Possui Pastagem em Pastejo Rotacionado?', choices=sim_nao_choices
-    )
     area_pastejo_rotacionado = models.DecimalField(
         'Tamanho da área em sistema de Pastejo Rotacionado (ha)', max_digits=10, decimal_places=4, blank=True, null=True
-    )
-    pratica_inseminacao_artificial_no_rebanho_leiteiro = models.IntegerField(
-        '35. Pratica inseminação aritificial no rebanho leiteiro?', choices=sim_nao_choices
     )
     necessita_licenciamento_ambiental = models.IntegerField(
         'Necessita de licenciamento ambiental de atividade?', choices=sim_nao_choices, default=CHOICE_NAO
