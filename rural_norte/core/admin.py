@@ -124,6 +124,7 @@ class FamiliaInlineAdmin(nested_admin.NestedStackedInline):
     extra = 1
     delete = False
     inlines = [MembroInlineAdmin]
+    insert_after = 'outra_familia_no_lote'
 
 
 class ContatoInlineAdmin(admin.StackedInline):
@@ -440,6 +441,14 @@ class LoteAdmin(nested_admin.NestedModelAdmin):
         EstabelecimentoEnsinoInlineAdmin, NaoPossuiDocumentoInlineAdmin
     ]
     exclude = ['possui_capineira', 'necessita_licenciamento_ambiental', 'desativado_por', 'desativado_em']
+    change_form_template = 'admin/custom/change_form.html'
+
+    class Media:
+        css = {
+            'all': (
+                'css/admin.css',
+            )
+        }
 
 
 admin.site.register(models.ProjetoAssentamento, ProjetoAssentamentoAdmin)
