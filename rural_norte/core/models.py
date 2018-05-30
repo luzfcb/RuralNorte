@@ -54,22 +54,26 @@ class AuditoriaAbstractModel(models.Model):
     ativo = property(_ativo)
 
 
-class ProjetoAssentamento(AuditoriaAbstractModel):
-    CONTRATO_10 = 10
-    CONTRATO_11 = 11
-    CONTRATO_18 = 18
+class Contrato(AuditoriaAbstractModel):
+    numero = models.PositiveIntegerField('Número do Contrato')
+    ano = models.PositiveIntegerField('Ano do Contrato')
 
-    contrato_choices = Choices(
-        (CONTRATO_10, '10.000/2015'),
-        (CONTRATO_11, '11.000/2015'),
-        (CONTRATO_18, '18.000/2015')
-    )
-    contrato = models.IntegerField('Contrato', choices=contrato_choices)
+    def __str__(self):
+        return f'{self.numero}/{self.ano}'
+        # return '{}/{}-{nome}'.format(self.numero, self.ano, nome='Teste')
+
+    class Meta:
+        unique_together = (('numero', 'ano'),)
+
+
+class ProjetoAssentamento(AuditoriaAbstractModel):
+    contrato = models.ForeignKey(Contrato, verbose_name='Contrato', related_name='projetos_assentamento',
+                                 on_delete=models.CASCADE, null=True)
     codigo = models.CharField('Código do PA', max_length=15)
     nome = models.CharField('Nome do PA', max_length=50)
     municipio = models.CharField('Município', max_length=100)
     data_criacao = models.DateField('Data de Criação')
-    capacidade_projeto = models.IntegerField('Capacidade do Projeto')
+    capacidade_projeto = models.PositiveIntegerField('Capacidade do Projeto')
 
     def __str__(self):
         return '%s | %s' % (self.codigo, self.nome)

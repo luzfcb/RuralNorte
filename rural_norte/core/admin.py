@@ -72,6 +72,13 @@ class ProcessadoBeneficiadoFormAdmin(forms.ModelForm):
         fields = '__all__'
 
 
+class ContratoAdmin(admin.ModelAdmin):
+    list_display = ('numero', 'ano', 'cadastrado_em')
+    search_fields = ['numero', 'ano']
+    list_filter = ['ano', 'cadastrado_em']
+    exclude = ['desativado_por', 'desativado_em']
+
+
 class ProjetoAssentamentoAdmin(admin.ModelAdmin):
 
     def get_data_criacao(self, obj):
@@ -367,30 +374,30 @@ class NaoPossuiDocumentoInlineAdmin(admin.StackedInline):
     exclude = ['desativado_por', 'desativado_em']
 
 
-class ContratoListFilter(admin.SimpleListFilter):
-    title = 'Contrato'
-    parameter_name = 'contrato'
-
-    def lookups(self, request, model_admin):
-        return models.ProjetoAssentamento.contrato_choices
-
-    def queryset(self, request, queryset):
-        value = self.value()
-        if value:
-            value = int(value)
-            if value == models.ProjetoAssentamento.CONTRATO_10:
-                queryset = queryset.filter(
-                    Q(projeto_assentamento__contrato=models.ProjetoAssentamento.CONTRATO_10)
-                )
-            if value == models.ProjetoAssentamento.CONTRATO_11:
-                queryset = queryset.filter(
-                    Q(projeto_assentamento__contrato=models.ProjetoAssentamento.CONTRATO_11)
-                )
-            if value == models.ProjetoAssentamento.CONTRATO_18:
-                queryset = queryset.filter(
-                    Q(projeto_assentamento__contrato=models.ProjetoAssentamento.CONTRATO_18)
-                )
-        return queryset
+# class ContratoListFilter(admin.SimpleListFilter):
+#     title = 'Contrato'
+#     parameter_name = 'contrato'
+#
+#     def lookups(self, request, model_admin):
+#         return models.ProjetoAssentamento.contrato_choices
+#
+#     def queryset(self, request, queryset):
+#         value = self.value()
+#         if value:
+#             value = int(value)
+#             if value == models.ProjetoAssentamento.CONTRATO_10:
+#                 queryset = queryset.filter(
+#                     Q(projeto_assentamento__contrato=models.ProjetoAssentamento.CONTRATO_10)
+#                 )
+#             if value == models.ProjetoAssentamento.CONTRATO_11:
+#                 queryset = queryset.filter(
+#                     Q(projeto_assentamento__contrato=models.ProjetoAssentamento.CONTRATO_11)
+#                 )
+#             if value == models.ProjetoAssentamento.CONTRATO_18:
+#                 queryset = queryset.filter(
+#                     Q(projeto_assentamento__contrato=models.ProjetoAssentamento.CONTRATO_18)
+#                 )
+#         return queryset
 
 
 class LoteAdmin(nested_admin.NestedModelAdmin):
@@ -431,7 +438,7 @@ class LoteAdmin(nested_admin.NestedModelAdmin):
     beneficiarios.allow_tags = True
 
     def get_contrato(self, obj):
-        return obj.projeto_assentamento.contrato_choices[obj.projeto_assentamento.contrato]
+        return obj.projeto_assentamento.contrato
 
     get_contrato.short_description = 'Contrato'
     get_contrato.admin_order_field = 'projeto_assentamento__contrato'
@@ -448,7 +455,7 @@ class LoteAdmin(nested_admin.NestedModelAdmin):
 
     search_fields = ['codigo_sipra', 'numero']
     list_filter = [
-        ContratoListFilter,
+        # ContratoListFilter,
         'projeto_assentamento', 'entrevistador', 'outra_familia_no_lote', 'cad_unico', 'ocupante_irregular',
         'recebe_beneficio_social', 'moradia_assentamento', 'tipo_parede_externa', 'tipo_instalacao_eletrica',
         'tipo_instalacao_sanitaria', 'localizacao_fonte_agua', 'abastecimento_agua_suficiente',
@@ -474,7 +481,7 @@ class LoteAdmin(nested_admin.NestedModelAdmin):
         EstabelecimentoEnsinoInlineAdmin, NaoPossuiDocumentoInlineAdmin
     ]
     exclude = ['possui_capineira', 'necessita_licenciamento_ambiental', 'desativado_por', 'desativado_em']
-    change_form_template = 'admin/custom/change_form.html'
+    # change_form_template = 'admin/custom/change_form.html'
 
     class Media:
         css = {
@@ -484,6 +491,7 @@ class LoteAdmin(nested_admin.NestedModelAdmin):
         }
 
 
+admin.site.register(models.Contrato, ContratoAdmin)
 admin.site.register(models.ProjetoAssentamento, ProjetoAssentamentoAdmin)
 admin.site.register(models.Lote, LoteAdmin)
 admin.site.disable_action('delete_selected')
