@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}Contratos{% endblock %}
+
+{% block content %}
+  <div class="container">
+    {% for contrato in contratos %}
+      <h1>{{ contrato }}</h1>
+    {% endfor %}
+  </div>
+{% endblock content %}

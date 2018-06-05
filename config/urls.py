@@ -20,7 +20,7 @@ urlpatterns = [
         include("rural_norte.users.urls", namespace="users"),
     ),
     path(
-        "core/",
+        "",
         include("rural_norte.core.urls", namespace="core"),
     ),
     path("accounts/", include("allauth.urls")),
