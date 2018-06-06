@@ -17,6 +17,7 @@ django-redis==4.9.0  # https://github.com/niwinz/django-redis
 django-cuser==2017.3.16  # https://github.com/Alir3z4/django-cuser
 django-grappelli==2.11.1  # https://github.com/sehmaschine/django-grappelli
 django-nested-admin==3.0.21  # https://github.com/theatlantic/django-nested-admin
+django-tables2==1.21.2  # https://github.com/jieter/django-tables2
 
 # Django REST Framework
 djangorestframework==3.8.2  # https://github.com/encode/django-rest-framework

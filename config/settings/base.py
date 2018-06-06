@@ -71,6 +71,7 @@ THIRD_PARTY_APPS = [
     'rest_framework',
     'nested_admin',
     'cuser',
+    'django_tables2',
 ]
 LOCAL_APPS = [
     'rural_norte.users.apps.UsersConfig',
