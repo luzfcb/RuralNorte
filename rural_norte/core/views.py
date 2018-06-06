@@ -1,18 +1,20 @@
 from django.shortcuts import render
 from django.utils import timezone
+from django.views import generic
 from django.views.generic import ListView, DetailView
 from django_tables2 import RequestConfig
 
 from . import models
 from . import tables
 
-class LoteListView(ListView):
 
+class LoteListView(ListView):
     model = models.Lote
+
 
 class LoteDetailView(DetailView):
-
     model = models.Lote
+
 
 def listar_contratos(request):
     contratos = models.Contrato.objects.all()
@@ -33,3 +35,7 @@ def table_view(request):
         'lote_table': lote_table
     }
     return render(request=request, template_name=template_name, context=context)
+
+
+class Teste(generic.TemplateView):
+    template_name = 'core/datatable_exemplo.html'

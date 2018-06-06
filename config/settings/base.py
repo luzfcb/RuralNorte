@@ -69,9 +69,12 @@ THIRD_PARTY_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'rest_framework',
+    'rest_framework_swagger',
+    'rest_framework_datatables',
     'nested_admin',
     'cuser',
     'django_tables2',
+    'django_filters',
 ]
 LOCAL_APPS = [
     'rural_norte.users.apps.UsersConfig',
@@ -204,7 +207,31 @@ TEMPLATES = [
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
 
 # http://django-crispy-forms.readthedocs.io/en/latest/install.html#template-packs
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
+
+# DJANGO REST FRAMEWORK
+# ------------------------------------------------------------------------------
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+        'rest_framework_datatables.renderers.DatatablesRenderer',
+    ),
+    'DEFAULT_FILTER_BACKENDS': (
+        'rest_framework_datatables.filters.DatatablesFilterBackend',
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework_datatables.pagination.DatatablesPageNumberPagination',
+    'PAGE_SIZE': 50,
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser',
+    ),
+
+}
+
 
 # FIXTURES
 # ------------------------------------------------------------------------------

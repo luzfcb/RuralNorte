@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.urls import include, path
+from django.urls import include, path, re_path
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.views.generic import TemplateView
@@ -26,6 +26,7 @@ urlpatterns = [
     path("accounts/", include("allauth.urls")),
     path('_nested_admin/', include('nested_admin.urls')),
     path('grappelli/', include('grappelli.urls')),
+    re_path('', include('rural_norte.api.urls')),
     # Your stuff: custom urls includes go here
 ] + static(
     settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
