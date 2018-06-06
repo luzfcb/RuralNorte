@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load render_table from django_tables2 %}
+{% load static i18n %}
+{% block title %}Contratos{% endblock %}
+
+
+{% block css %}
+  {{ block.super }}
+
+{% endblock %}
+
+{% block content %}
+    {% render_table lote_table %}
+
+{% endblock %}
