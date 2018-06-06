@@ -19,3 +19,7 @@ def listar_contratos(request):
         'contratos': contratos
     }
     return render(request, template_name, context)
+
+def table_view(request):
+    template_name = 'core/table_view.html'
+    return render(request, template_name)
