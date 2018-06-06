@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.utils import timezone
+from datetime import datetime
 from django.views import generic
 from django.views.generic import ListView, DetailView
 from django_tables2 import RequestConfig
@@ -17,10 +18,23 @@ class LoteDetailView(DetailView):
 
 
 def listar_contratos(request):
+    atualizado_em = datetime.now()
     contratos = models.Contrato.objects.all()
     template_name = 'core/listar_contratos.html'
     context = {
-        'contratos': contratos
+        'contratos': contratos,
+        'atualizado_em': atualizado_em
+    }
+    return render(request, template_name, context)
+
+
+def listar_projetos_assentamento_por_contrato(request, pk):
+    atualizado_em = datetime.now()
+    projetos_assentamento = models.ProjetoAssentamento.objects.filter(contrato=pk)
+    template_name = 'core/listar_projetos_assentamento_por_contrato.html'
+    context = {
+        'contratos': projetos_assentamento,
+        'atualizado_em': atualizado_em
     }
     return render(request, template_name, context)
 
