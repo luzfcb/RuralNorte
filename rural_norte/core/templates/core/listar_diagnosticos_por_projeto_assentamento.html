@@ -3,10 +3,17 @@
 {% block breadcrumb %}
   {{ block.super }}
   <li class="breadcrumb-item">
-    <a href="{% url 'core:listar_projetos_por_contrato' contrato.id %}">{{ contrato }}</a>
+    <a href="{% url 'core:listar_projetos_por_contrato' projeto_assentamento.contrato.id %}">{{ projeto_assentamento.contrato }}</a>
   </li>
   <li class="breadcrumb-item">
-    <a href="{% url 'core:listar_projetos_por_contrato' contrato.id %}">Projetos de Assentamento</a>
+    <a href="{% url 'core:listar_projetos_por_contrato' projeto_assentamento.contrato.id %}">Projetos de Assentamento</a>
+  </li>
+
+  <li class="breadcrumb-item">
+    <a href="{% url 'core:listar_diagnosticos_por_projeto_assentamento' projeto_assentamento.contrato.id projeto_assentamento.contrato.id %}">{{ projeto_assentamento }}</a>
+  </li>
+  <li class="breadcrumb-item">
+    <a href="{% url 'core:listar_diagnosticos_por_projeto_assentamento' projeto_assentamento.contrato.id projeto_assentamento.contrato.id %}">Diagnósticos</a>
   </li>
 {% endblock %}
 
@@ -15,7 +22,7 @@
     <div class="card-header" style="height: 65px;">
       <div class="form-row" style="height: 40px;">
         <div class="form-group col-md-11" style="padding-top: 6px;">
-          <i class="fa fa-table fa-lg"></i> <b>Projetos de Assentamento registrados</b>
+          <i class="fa fa-table fa-lg"></i> <b>Diagnósticos registrados</b>
         </div>
         {#        <div class="form-group col-md-1" style="padding-left: 30px;">#}
         {#          <a class="btn btn-success" href="{% url 'produto:nova_categoria' %}" title="Nova categoria">#}
@@ -29,12 +36,13 @@
         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
           <thead>
           <tr>
-            <th style="text-align: center;">Código</th>
+            <th style="text-align: center;">Código SIPRA</th>
             <th>Nome</th>
-            <th>Município</th>
-            <th style="text-align: center;">Capacidade</th>
-            <th style="text-align: center;">Beneficiários</th>
-            <th style="text-align: center;">Data de Registro</th>
+            <th style="text-align: center;">Data de Homologação</th>
+            <th style="text-align: center;">Lote Nº</th>
+            <th style="text-align: center;">Área (ha)</th>
+            <th style="text-align: center;">CAD - Único</th>
+            <th style="text-align: center;">Situação</th>
             <th style="text-align: center; width: 13%;">Ações</th>
           </tr>
           </thead>
@@ -47,19 +55,26 @@
             </tr>
           </tfoot> -->
           <tbody>
-          {% for projeto_assentamento in projetos_assentamento %}
+          {% for diagnostico in diagnosticos %}
             <tr>
-              <td style="text-align: center;">{{ projeto_assentamento.codigo }}</td>
-              <td>{{ projeto_assentamento.nome }}</td>
-              <td>{{ projeto_assentamento.municipio }}</td>
-              <td style="text-align: center;">{{ projeto_assentamento.capacidade_projeto }}</td>
-              <td style="text-align: center;">{{ projeto_assentamento.lotes.count }}</td>
-              <td style="text-align: center;">{{ projeto_assentamento.cadastrado_em|date:'d/m/Y' }}</td>
+              <td style="text-align: center;">{{ diagnostico.codigo_sipra }}</td>
+              <td>
+                {% for familia in diagnostico.familias.all %}
+                  {% for membro in familia.membros.all %}
+                    ({{ membro.get_parentesco_display }}) {{ membro.nome }}
+                  {% endfor %}
+                {% endfor %}
+              </td>
+              <td style="text-align: center;">{{ diagnostico.data_homologacao|date:'d/m/Y' }}</td>
+              <td style="text-align: center;">{{ diagnostico.numero }}</td>
+              <td style="text-align: center;">{{ diagnostico.area }}</td>
+              <td style="text-align: center;">{{ diagnostico.get_cad_unico_display }}</td>
+              <td style="text-align: center;">{{ diagnostico.get_ocupante_irregular_display }}</td>
               <td style="text-align: center;">
                 <div class="container">
                   <div class="row" style="margin-left: 25%;">
                     <div>
-                      <a href="{% url 'core:listar_diagnosticos_por_projeto_assentamento' contrato.id projeto_assentamento.id %}"
+                      <a href="#"
                          title="Diagnósticos" style="margin: 5px;">
                         <i class="fa fa-eye fa-lg text-primary"></i>
                       </a>
