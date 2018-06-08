@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.utils import timezone
 from datetime import datetime
 from django.views import generic
@@ -7,6 +7,7 @@ from django_tables2 import RequestConfig
 
 from . import models
 from . import tables
+from . import forms
 
 
 class LoteListView(ListView):
@@ -80,3 +81,33 @@ def table_view(request):
 
 class Teste(generic.TemplateView):
     template_name = 'core/datatable_exemplo.html'
+
+
+def novo_diagnostico(request):
+    form = forms.DiagnosticoForm()
+    documentos_lote_forms = forms.DocumentoLoteInlineFormSet(
+        queryset=models.DocumentoLote.objects.none()
+    )
+
+    if request.method == "POST":
+        form = forms.DiagnosticoForm(request.POST)
+        documentos_lote_forms = forms.DocumentoLoteInlineFormSet(
+            request.POST,
+            queryset=models.DocumentoLote.objects.none()
+        )
+
+        if form.is_valid() and documentos_lote_forms.is_valid():
+            lote = form.save(commit=False)
+            lote.save()
+            documentos_lote = documentos_lote_forms.save(commit=False)
+            for documento in documentos_lote:
+                documento.lote = lote
+                documento.save()
+            return redirect('core:listar_contratos')
+    template_name = 'core/editar_diagnostico.html'
+    context = {
+        'form': form,
+        'formset': documentos_lote_forms,
+        'title': 'Registrar Diagnóstico'
+    }
+    return render(request, template_name, context)

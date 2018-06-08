@@ -88,13 +88,15 @@ class Lote(AuditoriaAbstractModel):
     projeto_assentamento = models.ForeignKey(
         ProjetoAssentamento, verbose_name='PA', related_name='lotes', on_delete=models.CASCADE
     )
-    data_homologacao = models.DateField('Data Homologação', blank=True, null=True)
+    data_homologacao = models.DateField('Data da Homologação', blank=True, null=True)
+    data_visita = models.DateField('Data da Visita', blank=True, null=True)
     codigo_sipra = models.CharField('Código SIPRA', max_length=15, blank=True, null=True)
     area = models.DecimalField('Área (ha)', max_digits=10, decimal_places=4)
     numero = models.IntegerField('Lote N.º')
     entrevistador = models.CharField('Nome do Entrevistador', max_length=50)
     coordenada_x = models.CharField('Coordenada "X"', max_length=30)
     coordenada_y = models.CharField('Coordenada "Y"', max_length=30)
+    banda_coordenada = models.CharField('Banda', max_length=30, blank=True, null=True)
 
     CHOICE_SIM = 1
     CHOICE_NAO = 0
@@ -108,7 +110,17 @@ class Lote(AuditoriaAbstractModel):
         choices=sim_nao_choices
     )
     cad_unico = models.IntegerField('CAD - Único', choices=sim_nao_choices)
-    ocupante_irregular = models.IntegerField('Ocupante irregular?', choices=sim_nao_choices)
+
+    STATUS_REGULAR = 10
+    STATUS_IRREGULAR = 20
+    STATUS_BLOQUEADO = 30
+
+    status_choices = Choices(
+        (STATUS_REGULAR, 'Regular'),
+        (STATUS_IRREGULAR, 'Irregular'),
+        (STATUS_BLOQUEADO, 'Bloqueado')
+    )
+    ocupante_irregular = models.IntegerField('Status do Ocupante', choices=status_choices)
     ocupante_irregular_tempo = models.CharField(
         'Em caso afirmativo, há quanto tempo?', max_length=30, blank=True, null=True
     )

@@ -452,7 +452,7 @@ body.sidenav-toggled .navbar-sidenav-tooltip.show {
 }
 
 .card-register {
-  max-width: 40rem;
+  /*max-width: 40rem;*/
 }
 
 footer.sticky-footer {

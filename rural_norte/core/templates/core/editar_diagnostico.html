@@ -1,0 +1,264 @@
+{% extends "base.html" %}
+
+{% load widget_tweaks %}
+
+{#{% block breadcrumb %}#}
+{#  {{ block.super }}#}
+{#  <li class="breadcrumb-item">#}
+{#    {% if notaEntrada.id != null %}#}
+{#      {{ notaEntrada }}#}
+{#    {% else %}#}
+{#      Nova Nota (Entrada)#}
+{#    {% endif %}#}
+{#  </li>#}
+{#{% endblock %}#}
+
+{% block content %}
+  <div class="card card-register mx-auto" style="max-width: 100%;">
+    <div class="card-header"><b>{{ title }}</b></div>
+    <div class="card-body">
+      <form method="POST">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div class="form-row">
+          <div class="form-group col-md-2">
+            {{ form.projeto_assentamento.label_tag }}
+            {{ form.projeto_assentamento }}
+            {{ form.projeto_assentamento.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.codigo_sipra.label_tag }}
+            {{ form.codigo_sipra }}
+            {{ form.codigo_sipra.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.data_homologacao.label_tag }}
+            {{ form.data_homologacao }}
+            {{ form.data_homologacao.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.data_visita.label_tag }}
+            {{ form.data_visita }}
+            {{ form.data_visita.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.area.label_tag }}
+            {{ form.area }}
+            {{ form.area.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.numero.label_tag }}
+            {{ form.numero }}
+            {{ form.numero.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.ocupante_irregular.label_tag }}
+            {{ form.ocupante_irregular }}
+            {{ form.ocupante_irregular.errors }}
+          </div>
+          <div class="form-group col-md-6">
+            {{ form.entrevistador.label_tag }}
+            {{ form.entrevistador }}
+            {{ form.entrevistador.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.coordenada_x.label_tag }}
+            {{ form.coordenada_x }}
+            {{ form.coordenada_x.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.coordenada_y.label_tag }}
+            {{ form.coordenada_y }}
+            {{ form.coordenada_y.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.banda_coordenada.label_tag }}
+            {{ form.banda_coordenada }}
+            {{ form.banda_coordenada.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.outra_familia_no_lote.label_tag }}
+            {{ form.outra_familia_no_lote }}
+            {{ form.outra_familia_no_lote.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.cad_unico.label_tag }}
+            {{ form.cad_unico }}
+            {{ form.cad_unico.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.recebe_beneficio_social.label_tag }}
+            {{ form.recebe_beneficio_social }}
+            {{ form.recebe_beneficio_social.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.moradia_assentamento.label_tag }}
+            {{ form.moradia_assentamento }}
+            {{ form.moradia_assentamento.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.tipo_parede_externa.label_tag }}
+            {{ form.tipo_parede_externa }}
+            {{ form.tipo_parede_externa.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.tipo_instalacao_eletrica.label_tag }}
+            {{ form.tipo_instalacao_eletrica }}
+            {{ form.tipo_instalacao_eletrica.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.tipo_instalacao_sanitaria.label_tag }}
+            {{ form.tipo_instalacao_sanitaria }}
+            {{ form.tipo_instalacao_sanitaria.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.localizacao_fonte_agua.label_tag }}
+            {{ form.localizacao_fonte_agua }}
+            {{ form.localizacao_fonte_agua.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.abastecimento_agua_suficiente.label_tag }}
+            {{ form.abastecimento_agua_suficiente }}
+            {{ form.abastecimento_agua_suficiente.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.quantas_familias_utilizam_mesma_fonte_agua.label_tag }}
+            {{ form.quantas_familias_utilizam_mesma_fonte_agua }}
+            {{ form.quantas_familias_utilizam_mesma_fonte_agua.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.quantidade_familias_utilizacao_mesma_fonte_agua.label_tag }}
+            {{ form.quantidade_familias_utilizacao_mesma_fonte_agua }}
+            {{ form.quantidade_familias_utilizacao_mesma_fonte_agua.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.agua_para_animais_plantio.label_tag }}
+            {{ form.agua_para_animais_plantio }}
+            {{ form.agua_para_animais_plantio.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.agua_para_animais_plantio_outros.label_tag }}
+            {{ form.agua_para_animais_plantio_outros }}
+            {{ form.agua_para_animais_plantio_outros.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.regularidade_abastecimento_agua.label_tag }}
+            {{ form.regularidade_abastecimento_agua }}
+            {{ form.regularidade_abastecimento_agua.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.tipo_estrada_acesso.label_tag }}
+            {{ form.tipo_estrada_acesso }}
+            {{ form.tipo_estrada_acesso.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.situacao_estrada_acesso.label_tag }}
+            {{ form.situacao_estrada_acesso }}
+            {{ form.situacao_estrada_acesso.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.situacao_cercado_lote.label_tag }}
+            {{ form.situacao_cercado_lote }}
+            {{ form.situacao_cercado_lote.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.possui_pastagem_em_pastejo_rotacionado.label_tag }}
+            {{ form.possui_pastagem_em_pastejo_rotacionado }}
+            {{ form.possui_pastagem_em_pastejo_rotacionado.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.pratica_inseminacao_artificial_no_rebanho_leiteiro.label_tag }}
+            {{ form.pratica_inseminacao_artificial_no_rebanho_leiteiro }}
+            {{ form.pratica_inseminacao_artificial_no_rebanho_leiteiro.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.area_preservacao_permanente.label_tag }}
+            {{ form.area_preservacao_permanente }}
+            {{ form.area_preservacao_permanente.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.area_preservacao_permanente_cercada.label_tag }}
+            {{ form.area_preservacao_permanente_cercada }}
+            {{ form.area_preservacao_permanente_cercada.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.possui_capineira.label_tag }}
+            {{ form.possui_capineira }}
+            {{ form.possui_capineira.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.area_pastejo_rotacionado.label_tag }}
+            {{ form.area_pastejo_rotacionado }}
+            {{ form.area_pastejo_rotacionado.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.necessita_licenciamento_ambiental.label_tag }}
+            {{ form.necessita_licenciamento_ambiental }}
+            {{ form.necessita_licenciamento_ambiental.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.necessita_autoriacao_exploracao_florestal_queima_controlada.label_tag }}
+            {{ form.necessita_autoriacao_exploracao_florestal_queima_controlada }}
+            {{ form.necessita_autoriacao_exploracao_florestal_queima_controlada.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.qualidade_servico_saude.label_tag }}
+            {{ form.qualidade_servico_saude }}
+            {{ form.qualidade_servico_saude.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.frequencia_atividade_fisica.label_tag }}
+            {{ form.frequencia_atividade_fisica }}
+            {{ form.frequencia_atividade_fisica.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.oferta_transporte_interno.label_tag }}
+            {{ form.oferta_transporte_interno }}
+            {{ form.oferta_transporte_interno.errors }}
+          </div>
+
+          <div class="card card-register mx-auto" style="width: 99%; margin-left: 0%; margin-right: 0%; margin-bottom: 2rem;">
+            <div class="card-header" style="text-align: center;">
+              <b>
+                DADOS PESSOAIS
+                <p>Informações Sobre Familiares Residentes no Lote</p>
+              </b>
+            </div>
+            <div class="card-body">
+
+            </div>
+          </div>
+        </div>
+
+        {{ formset.management_form }}
+
+        <div class="card card-register mx-auto" style="max-width: 100%; margin-bottom: 1em; margin-top: -1rem;">
+          <div class="card-header"><b>1. Qual documento o lote possui?</b></div>
+          <div class="card-body">
+            <div class="form-row">
+              {% for form in formset %}
+                {{ form.id }}
+                <div class="form-group" style="width: 90%; margin-right: 10px;">
+                  {{ form.tipo_documento.label_tag }}
+                  {{ form.tipo_documento }}
+                  {{ form.tipo_documento.errors }}
+                </div>
+                <div class="form-group" style="margin-top: 3%;">
+                  {{ form.DELETE.label }}
+                  {{ form.DELETE }}
+                  <!-- <a style="border: none; margin-top: 2em;" class="form-control" href="#"
+                    title="Excluir">
+                    <i class="fa fa-trash-o fa-lg"></i>
+                  </a> -->
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-success">Salvar</button>
+        <a class="btn btn-secondary" href="#" style="pointer-events: all;">Voltar</a>
+      </form>
+    </div>
+  </div>
+{% endblock %}

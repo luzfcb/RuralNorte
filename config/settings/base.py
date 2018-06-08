@@ -75,6 +75,7 @@ THIRD_PARTY_APPS = [
     'cuser',
     'django_tables2',
     'django_filters',
+    'widget_tweaks',
 ]
 LOCAL_APPS = [
     'rural_norte.users.apps.UsersConfig',
