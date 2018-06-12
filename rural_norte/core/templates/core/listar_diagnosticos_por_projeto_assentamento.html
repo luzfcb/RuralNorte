@@ -79,12 +79,18 @@
                         <i class="fa fa-eye fa-lg text-primary"></i>
                       </a>
                     </div>
-                    {#                    <div>#}
-                    {#                      <a href="{% url 'produto:excluir_categoria' categoria.id %}"#}
-                    {#                         title="Excluir" style="margin: 5px;">#}
-                    {#                        <i class="fa fa-trash-o fa-lg text-danger"></i>#}
-                    {#                      </a>#}
-                    {#                    </div>#}
+                    <div>
+                      <a href="{% url 'core:editar_diagnostico' projeto_assentamento.pk diagnostico.id %}"
+                         title="Editar" style="margin: 2px;">
+                        <i class="fa fa-pencil fa-lg text-primary"></i>
+                      </a>
+                    </div>
+{#                    <div>#}
+{#                      <a href="{% url 'core:excluir_diagnostico' projeto_assentamento.pk diagnostico.id %}"#}
+{#                         title="Excluir" style="margin: 5px;">#}
+{#                        <i class="fa fa-trash-o fa-lg text-danger"></i>#}
+{#                      </a>#}
+{#                    </div>#}
                   </div>
                 </div>
               </td>
