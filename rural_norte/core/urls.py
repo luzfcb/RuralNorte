@@ -11,5 +11,5 @@ urlpatterns = [
     path("tabela/", views.table_view, name="table_view"),
     path("tabela2/", views.Teste.as_view(), name="teste_view"),
     path("diagnostico/<int:pk>/", views.LoteDetailView.as_view(), name='lote-detail'),
-    path("diagnostico/novo/$", views.novo_diagnostico, name='novo_diagnostico'),
+    path("diagnostico/novo/<int:pk>/", views.novo_diagnostico, name='novo_diagnostico'),
 ]

@@ -20,12 +20,11 @@
       <form method="POST">
         {% csrf_token %}
         {{ form.non_field_errors }}
+
+        {{ form.projeto_assentamento }}
+        {{ form.projeto_assentamento.errors }}
+
         <div class="form-row">
-          <div class="form-group col-md-2">
-            {{ form.projeto_assentamento.label_tag }}
-            {{ form.projeto_assentamento }}
-            {{ form.projeto_assentamento.errors }}
-          </div>
           <div class="form-group col-md-2">
             {{ form.codigo_sipra.label_tag }}
             {{ form.codigo_sipra }}
@@ -230,18 +229,49 @@
           </div>
         </div>
 
-        {{ formset.management_form }}
+        {{ DocumentoLoteInlineFormSet.management_form }}
 
         <div class="card card-register mx-auto" style="max-width: 100%; margin-bottom: 1em; margin-top: -1rem;">
           <div class="card-header"><b>1. Qual documento o lote possui?</b></div>
           <div class="card-body">
             <div class="form-row">
-              {% for form in formset %}
+              {% for form in DocumentoLoteInlineFormSet %}
                 {{ form.id }}
                 <div class="form-group" style="width: 90%; margin-right: 10px;">
                   {{ form.tipo_documento.label_tag }}
                   {{ form.tipo_documento }}
                   {{ form.tipo_documento.errors }}
+                </div>
+                <div class="form-group" style="margin-top: 3%;">
+                  {{ form.DELETE.label }}
+                  {{ form.DELETE }}
+                  <!-- <a style="border: none; margin-top: 2em;" class="form-control" href="#"
+                    title="Excluir">
+                    <i class="fa fa-trash-o fa-lg"></i>
+                  </a> -->
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+        {{ BeneficioSocialInlineFormSet.management_form }}
+
+        <div class="card card-register mx-auto" style="max-width: 100%; margin-bottom: 1em; margin-top: -1rem;">
+          <div class="card-header"><b>1. Qual documento o lote possui?</b></div>
+          <div class="card-body">
+            <div class="form-row">
+              {% for form in BeneficioSocialInlineFormSet %}
+                {{ form.id }}
+                <div class="form-group" style="width: 45%; margin-right: 10px;">
+                  {{ form.tipo_beneficio.label_tag }}
+                  {{ form.tipo_beneficio }}
+                  {{ form.tipo_beneficio.errors }}
+                </div>
+                <div class="form-group" style="width: 45%; margin-right: 10px;">
+                  {{ form.outros.label_tag }}
+                  {{ form.outros }}
+                  {{ form.outros.errors }}
                 </div>
                 <div class="form-group" style="margin-top: 3%;">
                   {{ form.DELETE.label }}

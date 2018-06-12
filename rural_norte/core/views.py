@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from django.utils import timezone
 from datetime import datetime
 from django.views import generic
@@ -83,31 +83,57 @@ class Teste(generic.TemplateView):
     template_name = 'core/datatable_exemplo.html'
 
 
-def novo_diagnostico(request):
-    form = forms.DiagnosticoForm()
+def novo_diagnostico(request, pk):
+    projeto_assentamento = models.ProjetoAssentamento.objects.only('id', 'contrato_id',).get(pk=pk)
+
+    form = forms.DiagnosticoForm(
+        initial={
+            'projeto_assentamento': projeto_assentamento.pk
+        }
+    )
+
     documentos_lote_forms = forms.DocumentoLoteInlineFormSet(
+        prefix='documentos_lote',
         queryset=models.DocumentoLote.objects.none()
+    )
+    beneficios_forms = forms.BeneficioSocialInlineFormSet(
+        prefix='beneficios_lote',
+        queryset=models.BeneficioSocial.objects.none()
     )
 
     if request.method == "POST":
         form = forms.DiagnosticoForm(request.POST)
         documentos_lote_forms = forms.DocumentoLoteInlineFormSet(
             request.POST,
+            prefix = 'documentos_lote',
             queryset=models.DocumentoLote.objects.none()
         )
+        beneficios_forms = forms.BeneficioSocialInlineFormSet(
+            request.POST,
+            prefix='beneficios_lote',
+            queryset=models.BeneficioSocial.objects.none()
+        )
 
-        if form.is_valid() and documentos_lote_forms.is_valid():
+        if form.is_valid() and documentos_lote_forms.is_valid() and beneficios_forms.is_valid():
             lote = form.save(commit=False)
             lote.save()
             documentos_lote = documentos_lote_forms.save(commit=False)
             for documento in documentos_lote:
                 documento.lote = lote
                 documento.save()
-            return redirect('core:listar_contratos')
+
+            beneficios = beneficios_forms.save(commit=False)
+            for beneficio in beneficios:
+                beneficio.lote = lote
+                beneficio.save()
+
+            template = reverse('core:listar_diagnosticos_por_projeto_assentamento', kwargs={'contrato_id': projeto_assentamento.contrato_id, 'pa_id': projeto_assentamento.pk})
+            return redirect(template)
     template_name = 'core/editar_diagnostico.html'
     context = {
         'form': form,
-        'formset': documentos_lote_forms,
+        'DocumentoLoteInlineFormSet': documentos_lote_forms,
+        'BeneficioSocialInlineFormSet': beneficios_forms,
         'title': 'Registrar Diagnóstico'
     }
     return render(request, template_name, context)

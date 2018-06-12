@@ -9,7 +9,7 @@ class DocumentoLoteForm(forms.ModelForm):
 DocumentoLoteFormSet = forms.modelformset_factory(
     models.DocumentoLote,
     form=DocumentoLoteForm,
-    extra=2
+    extra=1
 )
 
 DocumentoLoteInlineFormSet = forms.inlineformset_factory(
@@ -25,7 +25,41 @@ DocumentoLoteInlineFormSet = forms.inlineformset_factory(
                 'class': 'form-control',
                 'style': 'margin-bottom: 1em'
             }
+        )
+    }
+)
+
+class BeneficioSocialForm(forms.ModelForm):
+    class Meta:
+        model = models.BeneficioSocial
+        fields = '__all__'
+
+BeneficioSocialFormSet = forms.modelformset_factory(
+    models.BeneficioSocial,
+    form=BeneficioSocialForm,
+    extra=1
+)
+
+BeneficioSocialInlineFormSet = forms.inlineformset_factory(
+    models.Lote,
+    models.BeneficioSocial,
+    extra=1,
+    fields=('tipo_beneficio', 'outros'),
+    formset=BeneficioSocialFormSet,
+    can_delete=True,
+    widgets={
+        'tipo_beneficio': forms.Select(
+            attrs={
+                'class': 'form-control',
+                'style': 'margin-bottom: 1em'
+            }
         ),
+        'outros': forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'Informe o benefício'
+            }
+        )
     }
 )
 
@@ -49,12 +83,7 @@ class DiagnosticoForm(forms.ModelForm):
         ]
 
         widgets = {
-            'projeto_assentamento': forms.Select(
-                attrs={
-                    'class': 'form-control',
-                    'placeholder': 'Selecione a opção'
-                }
-            ),
+            'projeto_assentamento': forms.HiddenInput(),
             'codigo_sipra': forms.TextInput(
                 attrs={
                     'class': 'form-control',
@@ -282,5 +311,5 @@ class DiagnosticoForm(forms.ModelForm):
                     'class': 'form-control',
                     'placeholder': 'Selecione a opção'
                 }
-            ),
+            )
         }
