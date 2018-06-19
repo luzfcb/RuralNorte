@@ -140,6 +140,7 @@
 
 <!-- Bootstrap core JavaScript-->
 <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'vendor/jquery/jquery.mask.min.js' %}"></script>
 <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 <!-- Core plugin JavaScript-->
 <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
@@ -152,10 +153,14 @@
 <!-- Custom scripts for this page-->
 <script src="{% static 'js/sb-admin-datatables.min.js' %}"></script>
 <script src="{% static 'js/sb-admin-charts.min.js' %}"></script>
-<script type="text/javascript">
-  $("#success-alert").fadeTo(1000, 500).slideUp(500, function(){
-    $("#success-alert").alert('close');
-  });
-</script>
+
+{% block js %}
+  <script type="text/javascript">
+    $("#success-alert").fadeTo(1000, 500).slideUp(500, function(){
+      $("#success-alert").alert('close');
+    });
+  </script>
+{% endblock %}
+
 </body>
 </html>

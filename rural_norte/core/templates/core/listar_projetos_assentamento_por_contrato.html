@@ -34,7 +34,7 @@
             <th>Município</th>
             <th style="text-align: center;">Capacidade</th>
             <th style="text-align: center;">Beneficiários</th>
-            <th style="text-align: center;">Data de Registro</th>
+            <th style="text-align: center;">Data de Criação</th>
             <th style="text-align: center; width: 13%;">Ações</th>
           </tr>
           </thead>
@@ -54,7 +54,7 @@
               <td>{{ projeto_assentamento.municipio }}</td>
               <td style="text-align: center;">{{ projeto_assentamento.capacidade_projeto }}</td>
               <td style="text-align: center;">{{ projeto_assentamento.lotes.count }}</td>
-              <td style="text-align: center;">{{ projeto_assentamento.cadastrado_em|date:'d/m/Y' }}</td>
+              <td style="text-align: center;">{{ projeto_assentamento.data_criacao|date:'d/m/Y' }}</td>
               <td style="text-align: center;">
                 <div class="container">
                   <div class="row" style="margin-left: 25%;">

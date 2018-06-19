@@ -18,6 +18,31 @@
 {% endblock %}
 
 {% block content %}
+  <div class="form-group col-md-11" style="padding-top: 6px;">
+    {% comment %}<i class="fa fa-table fa-lg"></i>{% endcomment %} <b>Projeto de Assentamento</b>
+  </div>
+  <table class="table table-bordered" width="100%" cellspacing="0">
+    <thead>
+    <tr>
+      <th style="text-align: center;">Código</th>
+      <th>Nome</th>
+      <th>Município</th>
+      <th style="text-align: center;">Capacidade</th>
+      <th style="text-align: center;">Beneficiários</th>
+      <th style="text-align: center;">Data de Criação</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="text-align: center;">{{ projeto_assentamento.codigo }}</td>
+      <td>{{ projeto_assentamento.nome }}</td>
+      <td>{{ projeto_assentamento.municipio }}</td>
+      <td style="text-align: center;">{{ projeto_assentamento.capacidade_projeto }}</td>
+      <td style="text-align: center;">{{ projeto_assentamento.lotes.count }}</td>
+      <td style="text-align: center;">{{ projeto_assentamento.data_criacao|date:'d/m/Y' }}</td>
+    </tr>
+    </tbody>
+  </table>
   <div class="card mb-3">
     <div class="card-header" style="height: 65px;">
       <div class="form-row" style="height: 40px;">
@@ -37,8 +62,11 @@
           <thead>
           <tr>
             <th style="text-align: center;">Código SIPRA</th>
+            <th>Entrevistador</th>
             <th>Nome</th>
+            <th>Contato(s)</th>
             <th style="text-align: center;">Data de Homologação</th>
+            <th style="text-align: center;">Data da Visita</th>
             <th style="text-align: center;">Lote Nº</th>
             <th style="text-align: center;">Área (ha)</th>
             <th style="text-align: center;">CAD - Único</th>
@@ -58,6 +86,7 @@
           {% for diagnostico in diagnosticos %}
             <tr>
               <td style="text-align: center;">{{ diagnostico.codigo_sipra }}</td>
+              <td style="text-align: center;">{{ diagnostico.entrevistador }}</td>
               <td>
                 {% for familia in diagnostico.familias.all %}
                   {% for membro in familia.membros.all %}
@@ -65,7 +94,13 @@
                   {% endfor %}
                 {% endfor %}
               </td>
+              <td>
+                {% for contato in diagnostico.contatos.all %}
+                  {{ contato }}
+                {% endfor %}
+              </td>
               <td style="text-align: center;">{{ diagnostico.data_homologacao|date:'d/m/Y' }}</td>
+              <td style="text-align: center;">{{ diagnostico.data_visita|date:'d/m/Y' }}</td>
               <td style="text-align: center;">{{ diagnostico.numero }}</td>
               <td style="text-align: center;">{{ diagnostico.area }}</td>
               <td style="text-align: center;">{{ diagnostico.get_cad_unico_display }}</td>
@@ -85,12 +120,12 @@
                         <i class="fa fa-pencil fa-lg text-primary"></i>
                       </a>
                     </div>
-{#                    <div>#}
-{#                      <a href="{% url 'core:excluir_diagnostico' projeto_assentamento.pk diagnostico.id %}"#}
-{#                         title="Excluir" style="margin: 5px;">#}
-{#                        <i class="fa fa-trash-o fa-lg text-danger"></i>#}
-{#                      </a>#}
-{#                    </div>#}
+                    {#                    <div>#}
+                    {#                      <a href="{% url 'core:excluir_diagnostico' projeto_assentamento.pk diagnostico.id %}"#}
+                    {#                         title="Excluir" style="margin: 5px;">#}
+                    {#                        <i class="fa fa-trash-o fa-lg text-danger"></i>#}
+                    {#                      </a>#}
+                    {#                    </div>#}
                   </div>
                 </div>
               </td>

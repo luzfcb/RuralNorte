@@ -903,7 +903,7 @@ class ProducaoVegetal(AuditoriaAbstractModel):
         (UNIDADE_MEDIDA_UN, 'un')
     )
     producao_unidade_medida = models.IntegerField(
-        'Unidade de medida da produção', choices=unidade_medida_choices, blank=True, null=True
+        'Unidade de medida', choices=unidade_medida_choices, blank=True, null=True
     )
     valor = models.DecimalField('Valor (R$)', max_digits=10, decimal_places=4, blank=True, null=True)
 
@@ -1472,9 +1472,6 @@ class OrigemAnimal(Produto):
 class NivelTecnologicoProducaoAnimal(AuditoriaAbstractModel):
     lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='niveisTecnologicosProducaoAnimal', on_delete=models.CASCADE)
 
-    CHOICE_SIM = 1
-    CHOICE_NAO = 0
-
     TIPO_CAPINEIRA_CANA = 10
     TIPO_CAPINEIRA_NAPIER = 20
     TIPO_CAPINEIRA_NAO_SE_APLICA = 99
@@ -1492,12 +1489,6 @@ class NivelTecnologicoProducaoAnimal(AuditoriaAbstractModel):
     def __str__(self):
         return '{}: {}ha'.format(self.tipo_capineira_choices[self.tipo_capineira], self.area_capineira)
         return str(self.tipo_capineira)
-
-    def save(self, *args, **kwargs):
-        lote = self.lote
-        lote.possui_capineira = self.CHOICE_SIM
-        lote.save()
-        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = ''
@@ -2035,7 +2026,7 @@ class Contato(AuditoriaAbstractModel):
     telefone = models.CharField('Telefone', max_length=12)
 
     def __str__(self):
-        return self.telefone
+        return "({}) {}-{}".format(self.telefone[:2], self.telefone[2:-4], self.telefone[-4:])
 
     class Meta:
         verbose_name = 'Contato'
