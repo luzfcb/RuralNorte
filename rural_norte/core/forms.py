@@ -1255,13 +1255,13 @@ class DiagnosticoForm(forms.ModelForm):
             'data_homologacao': forms.DateInput(
                 attrs={
                     'class': 'form-control',
-                    'type': 'date'
+                    # 'type': 'date'
                 }
             ),
             'data_visita': forms.DateInput(
                 attrs={
-                    'class': 'form-control',
-                    'type': 'date'
+                    'class': 'form-control'
+                    # 'type': 'date'
                 }
             ),
             'area': forms.NumberInput(
