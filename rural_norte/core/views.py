@@ -84,7 +84,7 @@ class Teste(generic.TemplateView):
 
 
 def novo_diagnostico(request, pa_id):
-    projeto_assentamento = models.ProjetoAssentamento.objects.only('id', 'contrato_id',).get(id=pa_id)
+    projeto_assentamento = models.ProjetoAssentamento.objects.only('id', 'contrato_id', ).get(id=pa_id)
 
     form = forms.DiagnosticoForm(
         initial={
@@ -200,7 +200,7 @@ def novo_diagnostico(request, pa_id):
         )
         documentos_lote_forms = forms.DocumentoLoteInlineFormSet(
             request.POST,
-            prefix = 'documentos_lote',
+            prefix='documentos_lote',
             queryset=models.DocumentoLote.objects.none()
         )
         beneficios_forms = forms.BeneficioSocialInlineFormSet(
@@ -318,11 +318,12 @@ def novo_diagnostico(request, pa_id):
         #     and outras_criacoes_forms.is_valid() and bovinoculturas_leiteira_forms.is_valid() \
         #     and bovinoculturas_corte_forms.is_valid() and origens_animais_forms.is_valid() \
         #     and niveis_tecnologicos_producao_animal_forms.is_valid() and processados_beneficiados_forms.is_valid():
-        if form.is_valid() and contatos_forms.is_valid() and documentos_lote_forms.is_valid() and beneficios_forms.is_valid() \
-            and auto_declaracoes_forms.is_valid() and estruturas_organizativas_forms.is_valid() \
-            and fontes_agua_forms.is_valid() and tratamentos_agua_forms.is_valid() and construcoes_lote_forms.is_valid() \
-            and bens_produtivos_forms.is_valid() and aplicacoes_creditos_forms.is_valid() \
-            and creditos_bancarios_forms.is_valid() and culturas_forms.is_valid():
+        if (
+            form.is_valid() and contatos_forms.is_valid() and documentos_lote_forms.is_valid() and beneficios_forms.is_valid()
+            and auto_declaracoes_forms.is_valid() and estruturas_organizativas_forms.is_valid()
+            and fontes_agua_forms.is_valid() and tratamentos_agua_forms.is_valid() and construcoes_lote_forms.is_valid()
+            and bens_produtivos_forms.is_valid() and aplicacoes_creditos_forms.is_valid()
+            and creditos_bancarios_forms.is_valid() and culturas_forms.is_valid()):
             lote = form.save(commit=False)
             lote.save()
 
@@ -445,7 +446,9 @@ def novo_diagnostico(request, pa_id):
             #     processado_beneficiado.lote = lote
             #     processado_beneficiado.save()
 
-            template = reverse('core:listar_diagnosticos_por_projeto_assentamento', kwargs={'contrato_id': projeto_assentamento.contrato_id, 'pa_id': projeto_assentamento.pk})
+            template = reverse('core:listar_diagnosticos_por_projeto_assentamento',
+                               kwargs={'contrato_id': projeto_assentamento.contrato_id,
+                                       'pa_id': projeto_assentamento.pk})
             return redirect(template)
     template_name = 'core/editar_diagnostico.html'
     context = {
@@ -478,9 +481,10 @@ def novo_diagnostico(request, pa_id):
     }
     return render(request, template_name, context)
 
+
 def editar_diagnostico(request, pa_id, diagnostico_id):
     diagnostico = get_object_or_404(models.Lote, id=diagnostico_id)
-    projeto_assentamento = models.ProjetoAssentamento.objects.only('id', 'contrato_id',).get(id=pa_id)
+    projeto_assentamento = models.ProjetoAssentamento.objects.only('id', 'contrato_id', ).get(id=pa_id)
 
     form = forms.DiagnosticoForm(
         instance=diagnostico,
@@ -563,7 +567,8 @@ def editar_diagnostico(request, pa_id, diagnostico_id):
     )
     bovinoculturas_leiteira_forms = forms.BovinoculturaLeiteiraInlineFormSet(
         prefix='bovinoculturas_leiteira',
-        queryset=form.instance.descartesAnimais.filter(tipo_criacao=models.BovinoculturaLeiteira.TIPO_CRIACAO_GADO_LEITEIRO)
+        queryset=form.instance.descartesAnimais.filter(
+            tipo_criacao=models.BovinoculturaLeiteira.TIPO_CRIACAO_GADO_LEITEIRO)
     )
     bovinoculturas_corte_forms = forms.BovinoculturaCorteInlineFormSet(
         prefix='bovinoculturas_corte',
@@ -914,7 +919,9 @@ def editar_diagnostico(request, pa_id, diagnostico_id):
             for processado_beneficiado in processados_beneficiados_forms.deleted_objects:
                 processado_beneficiado.delete()
 
-            template = reverse('core:listar_diagnosticos_por_projeto_assentamento', kwargs={'contrato_id': projeto_assentamento.contrato_id, 'pa_id': projeto_assentamento.pk})
+            template = reverse('core:listar_diagnosticos_por_projeto_assentamento',
+                               kwargs={'contrato_id': projeto_assentamento.contrato_id,
+                                       'pa_id': projeto_assentamento.pk})
             return redirect(template)
     template_name = 'core/editar_diagnostico.html'
     context = {
