@@ -719,6 +719,116 @@
             </div>
           </div>
 
+          <div class="form-group col-md-12">
+
+            {{ OlericulturaInlineFormSet.management_form }}
+
+            <div class="card card-register">
+              <div class="card-header"><b>26. Olericulturas - Legumes e Verduras no último ano agrícola</b></div>
+              <div class="card-body">
+                <div class="form-row">
+                  {% for form in OlericulturaInlineFormSet %}
+                    {{ form.id }}
+                    <fieldset class="border p-2" style="width: 100%;">
+                      {% if forloop.last %}
+                        <legend><b style="font-size: 1rem;">Olericultura #</b></legend>
+                      {% else %}
+                        <legend><b style="font-size: 1rem;">Olericultura #{{ forloop.counter }}</b></legend>
+                      {% endif %}
+                      <div class="row">
+                        <div class="col-md-3">
+                          {{ form.tipo_producao.label_tag }}
+                          {{ form.tipo_producao }}
+                          {{ form.tipo_producao.errors }}
+                        </div>
+                        <div class="col-md-3">
+                          {{ form.tipo_producao_outros.label_tag }}
+                          {{ form.tipo_producao_outros }}
+                          {{ form.tipo_producao_outros.errors }}
+                        </div>
+                        <div class="col-md-3">
+                          {{ form.area_plantada.label_tag }}
+                          {{ form.area_plantada }}
+                          {{ form.area_plantada.errors }}
+                        </div>
+                        <div class="col-md-3">
+                          {{ form.medida_area_plantada.label_tag }}
+                          {{ form.medida_area_plantada }}
+                          {{ form.medida_area_plantada.errors }}
+                        </div>
+                        <div class="col-md-3">
+                          {{ form.producao_consumo.label_tag }}
+                          {{ form.producao_consumo }}
+                          {{ form.producao_consumo.errors }}
+                        </div>
+                        <div class="col-md-3">
+                          {{ form.producao_comercio.label_tag }}
+                          {{ form.producao_comercio }}
+                          {{ form.producao_comercio.errors }}
+                        </div>
+                        <div class="col-md-3">
+                          {{ form.producao_unidade_medida.label_tag }}
+                          {{ form.producao_unidade_medida }}
+                          {{ form.producao_unidade_medida.errors }}
+                        </div>
+                        <div class="col-md-3">
+                          {{ form.valor.label_tag }}
+                          {{ form.valor }}
+                          {{ form.valor.errors }}
+                        </div>
+                        <div class="col-md-3">
+                          {{ form.canal_comercializacao.label_tag }}
+                          {{ form.canal_comercializacao }}
+                          {{ form.canal_comercializacao.errors }}
+                        </div>
+                        <div class="col-md-3">
+                          {{ form.mercado_institucional.label_tag }}
+                          {{ form.mercado_institucional }}
+                          {{ form.mercado_institucional.errors }}
+                        </div>
+                        <div class="col-md-12">
+                          <fieldset class="border p-2" style="width: 100%;">
+                            <legend><b style="font-size: 1rem;">28. Sobre o Nível Tecnológico de Produção, existe(m) alguma(s) cultura(s) irrigada(s)?</b></legend>
+                            <div class="form-row">
+                              <div class="col-md-3">
+                                {{ form.irrigacao.label_tag }}
+                                {{ form.irrigacao }}
+                                {{ form.irrigacao.errors }}
+                              </div>
+                              <div class="col-md-3">
+                                {{ form.area_irrigada.label_tag }}
+                                {{ form.area_irrigada }}
+                                {{ form.area_irrigada.errors }}
+                              </div>
+                              <div class="col-md-3">
+                                {{ form.medida_area_irrigada.label_tag }}
+                                {{ form.medida_area_irrigada }}
+                                {{ form.medida_area_irrigada.errors }}
+                              </div>
+                              <div class="col-md-3">
+                                {{ form.tipo_irrigacao.label_tag }}
+                                {{ form.tipo_irrigacao }}
+                                {{ form.tipo_irrigacao.errors }}
+                              </div>
+                            </div>
+                          </fieldset>
+                        </div>
+                        <div class="col-md-12" style="margin-top: 1%;">
+                          {{ form.DELETE.label }}
+                          {{ form.DELETE }}
+                          <!-- <a style="border: none; margin-top: 2em;" class="form-control" href="#"
+                            title="Excluir">
+                            <i class="fa fa-trash-o fa-lg"></i>
+                          </a> -->
+                        </div>
+                      </div>
+                    </fieldset>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div class="form-group col-md-6">
             <div class="form-group col-md-12">
               {{ form.possui_pastagem_em_pastejo_rotacionado.label_tag }}
@@ -784,21 +894,24 @@
 {#      var contatos = document.getElementsByClassName('form-control contatos'),#}
 {#        valores = document.getElementsByClassName('form-control valor');#}
 {##}
-{#      [].forEach.call(contatos, function (contato) {#}
-{#        $(contato).mask('(00) 00000-0000');#}
+{#      $('.contato').each(function (i, e) {#}
+{#        $(e).mask('(00) 00000-0000');#}
 {#      });#}
 {##}
-{#      [].forEach.call(valores, function (valor) {#}
-{#        $(valor).mask('000.000.000.000.000,00', {reverse: true});#}
+{#      $('.valor').each(function (i, e) {#}
+{#        $(e).mask('000.000.000.000.000,00', {reverse: true});#}
 {#      });#}
 {##}
-{#      $('#my_form').submit(function () {#}
+{#      $('#my_form').submit(function (e) {#}
+{#        e.preventDefault();#}
 {#        [].forEach.call(contatos, function (contato) {#}
 {#          $(contato).unmask();#}
 {#        });#}
 {##}
-{#        [].forEach.call(valores, function (valor) {#}
-{#          $(valor).unmask();#}
+{#        $('.valor').each(function (i, e) {#}
+{#          console.log(e.value);#}
+{#          $(e).unmask();#}
+{#          console.log(e.value);#}
 {#        });#}
 {#      });#}
 {#    });#}

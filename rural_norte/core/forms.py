@@ -394,12 +394,100 @@ CreditoBancarioInlineFormSet = forms.inlineformset_factory(
 )
 
 class CulturaForm(forms.ModelForm):
+    tipo_producao = forms.ChoiceField(
+        choices=(('', '---------'),) + models.Cultura.CULTURA + ((999, 'Outros'),), widget=forms.Select(
+            attrs={
+                'class': 'form-control',
+                'style': 'margin-bottom: 1rem;'
+            }
+        ))
+
     class Meta:
         model = models.Cultura
         fields = '__all__'
+        widgets = {
+            'tipo_producao_outros': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Especifique'
+                }
+            ),
+            'area_plantada': forms.NumberInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Informe a área'
+                }
+            ),
+            'medida_area_plantada': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'style': 'margin-bottom: 1rem;'
+                }
+            ),
+            'producao_consumo': forms.NumberInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Informe a quantidade',
+                }
+            ),
+            'producao_comercio': forms.NumberInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Informe a quantidade'
+                }
+            ),
+            'producao_unidade_medida': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'style': 'margin-bottom: 1rem;'
+                }
+            ),
+            'valor': forms.TextInput(
+                attrs={
+                    'class': 'form-control valor',
+                    'placeholder': 'Informe o valor'
+                }
+            ),
+            'irrigacao': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'style': 'margin-bottom: 1rem;'
+                }
+            ),
+            'area_irrigada': forms.NumberInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Informe a área'
+                }
+            ),
+            'medida_area_irrigada': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'style': 'margin-bottom: 1rem;'
+                }
+            ),
+            'tipo_irrigacao': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'style': 'margin-bottom: 1rem;'
+                }
+            ),
+            'canal_comercializacao': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'style': 'margin-bottom: 1rem;'
+                }
+            ),
+            'mercado_institucional': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'style': 'margin-bottom: 1rem;'
+                }
+            )
+        }
 
 CulturaFormSet = forms.modelformset_factory(
-    models.Cultura,
+    models.Olericultura,
     form=CulturaForm,
     extra=0
 )
@@ -413,100 +501,103 @@ CulturaInlineFormSet = forms.inlineformset_factory(
         'producao_comercio', 'producao_unidade_medida', 'valor', 'irrigacao', 'area_irrigada', 'medida_area_irrigada',
         'tipo_irrigacao', 'canal_comercializacao', 'mercado_institucional'
     ),
+    form=CulturaForm,
     formset=CulturaFormSet,
-    can_delete=True,
-    widgets={
-        'tipo_producao': forms.Select(
-            attrs={
-                'class': 'form-control',
-                'style': 'margin-bottom: 1rem;'
-            }
-        ),
-        'tipo_producao_outros': forms.TextInput(
-            attrs={
-                'class': 'form-control',
-                'placeholder': 'Especifique'
-            }
-        ),
-        'area_plantada': forms.NumberInput(
-            attrs={
-                'class': 'form-control',
-                'placeholder': 'Informe a área'
-            }
-        ),
-        'medida_area_plantada': forms.Select(
-            attrs={
-                'class': 'form-control',
-                'style': 'margin-bottom: 1rem;'
-            }
-        ),
-        'producao_consumo': forms.NumberInput(
-            attrs={
-                'class': 'form-control',
-                'placeholder': 'Informe a quantidade',
-            }
-        ),
-        'producao_comercio': forms.NumberInput(
-            attrs={
-                'class': 'form-control',
-                'placeholder': 'Informe a quantidade'
-            }
-        ),
-        'producao_unidade_medida': forms.Select(
-            attrs={
-                'class': 'form-control',
-                'style': 'margin-bottom: 1rem;'
-            }
-        ),
-        'valor': forms.TextInput(
-            attrs={
-                'class': 'form-control valor',
-                'placeholder': 'Informe o valor'
-            }
-        ),
-        'irrigacao': forms.Select(
-            attrs={
-                'class': 'form-control',
-                'style': 'margin-bottom: 1rem;'
-            }
-        ),
-        'area_irrigada': forms.NumberInput(
-            attrs={
-                'class': 'form-control',
-                'placeholder': 'Informe a área'
-            }
-        ),
-        'medida_area_irrigada': forms.Select(
-            attrs={
-                'class': 'form-control',
-                'style': 'margin-bottom: 1rem;'
-            }
-        ),
-        'tipo_irrigacao': forms.Select(
-            attrs={
-                'class': 'form-control',
-                'style': 'margin-bottom: 1rem;'
-            }
-        ),
-        'canal_comercializacao': forms.Select(
-            attrs={
-                'class': 'form-control',
-                'style': 'margin-bottom: 1rem;'
-            }
-        ),
-        'mercado_institucional': forms.Select(
-            attrs={
-                'class': 'form-control',
-                'style': 'margin-bottom: 1rem;'
-            }
-        )
-    }
+    can_delete=True
 )
 
 class OlericulturaForm(forms.ModelForm):
+    tipo_producao = forms.ChoiceField(
+        choices=(('', '---------'),) + models.Olericultura.OLERICULTURA + ((999, 'Outros'),), widget=forms.Select(
+            attrs={
+                'class': 'form-control',
+                'style': 'margin-bottom: 1rem;'
+            }
+        ))
+
     class Meta:
         model = models.Olericultura
         fields = '__all__'
+        widgets = {
+            'tipo_producao_outros': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Especifique'
+                }
+            ),
+            'area_plantada': forms.NumberInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Informe a área'
+                }
+            ),
+            'medida_area_plantada': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'style': 'margin-bottom: 1rem;'
+                }
+            ),
+            'producao_consumo': forms.NumberInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Informe a quantidade',
+                }
+            ),
+            'producao_comercio': forms.NumberInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Informe a quantidade'
+                }
+            ),
+            'producao_unidade_medida': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'style': 'margin-bottom: 1rem;'
+                }
+            ),
+            'valor': forms.TextInput(
+                attrs={
+                    'class': 'form-control valor',
+                    'placeholder': 'Informe o valor'
+                }
+            ),
+            'irrigacao': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'style': 'margin-bottom: 1rem;'
+                }
+            ),
+            'area_irrigada': forms.NumberInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Informe a área'
+                }
+            ),
+            'medida_area_irrigada': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'style': 'margin-bottom: 1rem;'
+                }
+            ),
+            'tipo_irrigacao': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'style': 'margin-bottom: 1rem;'
+                }
+            ),
+            'canal_comercializacao': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'style': 'margin-bottom: 1rem;'
+                }
+            ),
+            'mercado_institucional': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'style': 'margin-bottom: 1rem;'
+                }
+            )
+        }
 
 OlericulturaFormSet = forms.modelformset_factory(
     models.Olericultura,
@@ -523,100 +614,103 @@ OlericulturaInlineFormSet = forms.inlineformset_factory(
         'producao_comercio', 'producao_unidade_medida', 'valor', 'irrigacao', 'area_irrigada', 'medida_area_irrigada',
         'tipo_irrigacao', 'canal_comercializacao', 'mercado_institucional'
     ),
+    form=OlericulturaForm,
     formset=OlericulturaFormSet,
-    can_delete=True,
-    widgets={
-        'tipo_producao': forms.Select(
-            attrs={
-                'class': 'form-control',
-                'style': 'margin-bottom: 1rem;'
-            }
-        ),
-        'tipo_producao_outros': forms.TextInput(
-            attrs={
-                'class': 'form-control',
-                'placeholder': 'Especifique'
-            }
-        ),
-        'area_plantada': forms.NumberInput(
-            attrs={
-                'class': 'form-control',
-                'placeholder': 'Informe a área'
-            }
-        ),
-        'medida_area_plantada': forms.Select(
-            attrs={
-                'class': 'form-control',
-                'style': 'margin-bottom: 1rem;'
-            }
-        ),
-        'producao_consumo': forms.NumberInput(
-            attrs={
-                'class': 'form-control',
-                'placeholder': 'Informe a quantidade',
-            }
-        ),
-        'producao_comercio': forms.NumberInput(
-            attrs={
-                'class': 'form-control',
-                'placeholder': 'Informe a quantidade'
-            }
-        ),
-        'producao_unidade_medida': forms.Select(
-            attrs={
-                'class': 'form-control',
-                'style': 'margin-bottom: 1rem;'
-            }
-        ),
-        'valor': forms.TextInput(
-            attrs={
-                'class': 'form-control valor',
-                'placeholder': 'Informe o valor'
-            }
-        ),
-        'irrigacao': forms.Select(
-            attrs={
-                'class': 'form-control',
-                'style': 'margin-bottom: 1rem;'
-            }
-        ),
-        'area_irrigada': forms.NumberInput(
-            attrs={
-                'class': 'form-control',
-                'placeholder': 'Informe a área'
-            }
-        ),
-        'medida_area_irrigada': forms.Select(
-            attrs={
-                'class': 'form-control',
-                'style': 'margin-bottom: 1rem;'
-            }
-        ),
-        'tipo_irrigacao': forms.Select(
-            attrs={
-                'class': 'form-control',
-                'style': 'margin-bottom: 1rem;'
-            }
-        ),
-        'canal_comercializacao': forms.Select(
-            attrs={
-                'class': 'form-control',
-                'style': 'margin-bottom: 1rem;'
-            }
-        ),
-        'mercado_institucional': forms.Select(
-            attrs={
-                'class': 'form-control',
-                'style': 'margin-bottom: 1rem;'
-            }
-        )
-    }
+    can_delete=True
 )
 
 class FruticulturaForm(forms.ModelForm):
+    tipo_producao = forms.ChoiceField(
+        choices=(('', '---------'),) + models.Fruticultura.FRUTICULTURA + ((999, 'Outros'),), widget=forms.Select(
+            attrs={
+                'class': 'form-control',
+                'style': 'margin-bottom: 1rem;'
+            }
+        ))
+
     class Meta:
         model = models.Fruticultura
         fields = '__all__'
+        widgets = {
+            'tipo_producao_outros': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Especifique'
+                }
+            ),
+            'area_plantada': forms.NumberInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Informe a área'
+                }
+            ),
+            'medida_area_plantada': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'style': 'margin-bottom: 1rem;'
+                }
+            ),
+            'producao_consumo': forms.NumberInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Informe a quantidade',
+                }
+            ),
+            'producao_comercio': forms.NumberInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Informe a quantidade'
+                }
+            ),
+            'producao_unidade_medida': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'style': 'margin-bottom: 1rem;'
+                }
+            ),
+            'valor': forms.TextInput(
+                attrs={
+                    'class': 'form-control valor',
+                    'placeholder': 'Informe o valor'
+                }
+            ),
+            'irrigacao': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'style': 'margin-bottom: 1rem;'
+                }
+            ),
+            'area_irrigada': forms.NumberInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Informe a área'
+                }
+            ),
+            'medida_area_irrigada': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'style': 'margin-bottom: 1rem;'
+                }
+            ),
+            'tipo_irrigacao': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'style': 'margin-bottom: 1rem;'
+                }
+            ),
+            'canal_comercializacao': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'style': 'margin-bottom: 1rem;'
+                }
+            ),
+            'mercado_institucional': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'style': 'margin-bottom: 1rem;'
+                }
+            )
+        }
 
 FruticulturaFormSet = forms.modelformset_factory(
     models.Fruticultura,
@@ -633,94 +727,9 @@ FruticulturaInlineFormSet = forms.inlineformset_factory(
         'producao_comercio', 'producao_unidade_medida', 'valor', 'irrigacao', 'area_irrigada', 'medida_area_irrigada',
         'tipo_irrigacao', 'canal_comercializacao', 'mercado_institucional'
     ),
+    form=FruticulturaForm,
     formset=FruticulturaFormSet,
-    can_delete=True,
-    widgets={
-        'tipo_producao': forms.Select(
-            attrs={
-                'class': 'form-control',
-                'style': 'margin-bottom: 1rem;'
-            }
-        ),
-        'tipo_producao_outros': forms.TextInput(
-            attrs={
-                'class': 'form-control',
-                'placeholder': 'Especifique'
-            }
-        ),
-        'area_plantada': forms.NumberInput(
-            attrs={
-                'class': 'form-control',
-                'placeholder': 'Informe a área'
-            }
-        ),
-        'medida_area_plantada': forms.Select(
-            attrs={
-                'class': 'form-control',
-                'style': 'margin-bottom: 1rem;'
-            }
-        ),
-        'producao_consumo': forms.NumberInput(
-            attrs={
-                'class': 'form-control',
-                'placeholder': 'Informe a quantidade',
-            }
-        ),
-        'producao_comercio': forms.NumberInput(
-            attrs={
-                'class': 'form-control',
-                'placeholder': 'Informe a quantidade'
-            }
-        ),
-        'producao_unidade_medida': forms.Select(
-            attrs={
-                'class': 'form-control',
-                'style': 'margin-bottom: 1rem;'
-            }
-        ),
-        'valor': forms.TextInput(
-            attrs={
-                'class': 'form-control valor',
-                'placeholder': 'Informe o valor'
-            }
-        ),
-        'irrigacao': forms.Select(
-            attrs={
-                'class': 'form-control',
-                'style': 'margin-bottom: 1rem;'
-            }
-        ),
-        'area_irrigada': forms.NumberInput(
-            attrs={
-                'class': 'form-control',
-                'placeholder': 'Informe a área'
-            }
-        ),
-        'medida_area_irrigada': forms.Select(
-            attrs={
-                'class': 'form-control',
-                'style': 'margin-bottom: 1rem;'
-            }
-        ),
-        'tipo_irrigacao': forms.Select(
-            attrs={
-                'class': 'form-control',
-                'style': 'margin-bottom: 1rem;'
-            }
-        ),
-        'canal_comercializacao': forms.Select(
-            attrs={
-                'class': 'form-control',
-                'style': 'margin-bottom: 1rem;'
-            }
-        ),
-        'mercado_institucional': forms.Select(
-            attrs={
-                'class': 'form-control',
-                'style': 'margin-bottom: 1rem;'
-            }
-        )
-    }
+    can_delete=True
 )
 
 class AtividadeExtrativistaForm(forms.ModelForm):

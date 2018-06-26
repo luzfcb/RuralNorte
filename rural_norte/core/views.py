@@ -650,14 +650,17 @@ def editar_diagnostico(request, pa_id, diagnostico_id):
             queryset=form.instance.creditosBancarios.all()
         )
         culturas_forms = forms.CulturaInlineFormSet(
+            request.POST,
             prefix='culturas',
             queryset=form.instance.producoesVegetais.filter(classificacao=models.Cultura.CLASSIFICACAO_CULTURA)
         )
         olericulturas_forms = forms.OlericulturaInlineFormSet(
+            request.POST,
             prefix='olericulturas',
             queryset=form.instance.producoesVegetais.filter(classificacao=models.Cultura.CLASSIFICACAO_OLERICULTURA)
         )
         fruticulturas_forms = forms.FruticulturaInlineFormSet(
+            request.POST,
             prefix='fruticulturas',
             queryset=form.instance.producoesVegetais.filter(classificacao=models.Cultura.CLASSIFICACAO_FRUTICULTURA)
         )
@@ -672,11 +675,13 @@ def editar_diagnostico(request, pa_id, diagnostico_id):
             queryset=form.instance.producoesFlorestais.all()
         )
         bovinoculturas_forms = forms.BovinoculturaInlineFormSet(
+            request.POST,
             prefix='bovinoculturas',
             queryset=form.instance.producoesAnimais.filter(
                 classificacao=models.Bovinocultura.CLASSIFICACAO_BOVINOCULTURA)
         )
         outras_criacoes_forms = forms.OutraCriacaoInlineFormSet(
+            request.POST,
             prefix='outras_criacoes',
             queryset=form.instance.producoesAnimais.filter(
                 classificacao=models.Bovinocultura.CLASSIFICACAO_OUTRA_CRIACAO)
@@ -725,7 +730,7 @@ def editar_diagnostico(request, pa_id, diagnostico_id):
             and auto_declaracoes_forms.is_valid() and estruturas_organizativas_forms.is_valid() \
             and fontes_agua_forms.is_valid() and tratamentos_agua_forms.is_valid() and construcoes_lote_forms.is_valid() \
             and bens_produtivos_forms.is_valid() and aplicacoes_creditos_forms.is_valid() \
-            and creditos_bancarios_forms.is_valid() and culturas_forms.is_valid():
+            and creditos_bancarios_forms.is_valid() and culturas_forms.is_valid() and olericulturas_forms.is_valid():
             lote = form.save(commit=False)
             lote.save()
 
@@ -826,11 +831,14 @@ def editar_diagnostico(request, pa_id, diagnostico_id):
             for cultura in culturas_forms.deleted_objects:
                 cultura.delete()
 
-            # olericulturas = olericulturas_forms.save(commit=False)
-            # for olericultura in olericulturas:
-            #     olericultura.lote = lote
-            #     olericultura.save()
-            #
+            olericulturas = olericulturas_forms.save(commit=False)
+            for olericultura in olericulturas:
+                olericultura.lote = lote
+                olericultura.save()
+
+            for olericultura in olericulturas_forms.deleted_objects:
+                olericultura.delete()
+
             # fruticulturas = fruticulturas_forms.save(commit=False)
             # for fruticultura in fruticulturas:
             #     fruticultura.lote = lote
