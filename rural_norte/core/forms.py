@@ -418,12 +418,6 @@ class CulturaForm(forms.ModelForm):
                     'placeholder': 'Informe a área'
                 }
             ),
-            'medida_area_plantada': forms.Select(
-                attrs={
-                    'class': 'form-control',
-                    'style': 'margin-bottom: 1rem;'
-                }
-            ),
             'producao_consumo': forms.NumberInput(
                 attrs={
                     'class': 'form-control',
@@ -434,12 +428,6 @@ class CulturaForm(forms.ModelForm):
                 attrs={
                     'class': 'form-control',
                     'placeholder': 'Informe a quantidade'
-                }
-            ),
-            'producao_unidade_medida': forms.Select(
-                attrs={
-                    'class': 'form-control',
-                    'style': 'margin-bottom: 1rem;'
                 }
             ),
             'valor': forms.TextInput(
@@ -497,9 +485,8 @@ CulturaInlineFormSet = forms.inlineformset_factory(
     models.Cultura,
     extra=1,
     fields=(
-        'tipo_producao', 'tipo_producao_outros', 'area_plantada', 'medida_area_plantada', 'producao_consumo',
-        'producao_comercio', 'producao_unidade_medida', 'valor', 'irrigacao', 'area_irrigada', 'medida_area_irrigada',
-        'tipo_irrigacao', 'canal_comercializacao', 'mercado_institucional'
+        'tipo_producao', 'tipo_producao_outros', 'area_plantada', 'producao_consumo', 'producao_comercio', 'valor',
+        'irrigacao', 'area_irrigada', 'medida_area_irrigada', 'tipo_irrigacao', 'canal_comercializacao', 'mercado_institucional'
     ),
     form=CulturaForm,
     formset=CulturaFormSet,
@@ -529,12 +516,6 @@ class OlericulturaForm(forms.ModelForm):
                 attrs={
                     'class': 'form-control',
                     'placeholder': 'Informe a área'
-                }
-            ),
-            'medida_area_plantada': forms.Select(
-                attrs={
-                    'class': 'form-control',
-                    'style': 'margin-bottom: 1rem;'
                 }
             ),
             'producao_consumo': forms.NumberInput(
@@ -610,9 +591,9 @@ OlericulturaInlineFormSet = forms.inlineformset_factory(
     models.Olericultura,
     extra=1,
     fields=(
-        'tipo_producao', 'tipo_producao_outros', 'area_plantada', 'medida_area_plantada', 'producao_consumo',
-        'producao_comercio', 'producao_unidade_medida', 'valor', 'irrigacao', 'area_irrigada', 'medida_area_irrigada',
-        'tipo_irrigacao', 'canal_comercializacao', 'mercado_institucional'
+        'tipo_producao', 'tipo_producao_outros', 'area_plantada', 'producao_consumo', 'producao_comercio',
+        'producao_unidade_medida', 'valor', 'irrigacao', 'area_irrigada', 'medida_area_irrigada', 'tipo_irrigacao',
+        'canal_comercializacao', 'mercado_institucional'
     ),
     form=OlericulturaForm,
     formset=OlericulturaFormSet,
@@ -644,12 +625,6 @@ class FruticulturaForm(forms.ModelForm):
                     'placeholder': 'Informe a área'
                 }
             ),
-            'medida_area_plantada': forms.Select(
-                attrs={
-                    'class': 'form-control',
-                    'style': 'margin-bottom: 1rem;'
-                }
-            ),
             'producao_consumo': forms.NumberInput(
                 attrs={
                     'class': 'form-control',
@@ -660,12 +635,6 @@ class FruticulturaForm(forms.ModelForm):
                 attrs={
                     'class': 'form-control',
                     'placeholder': 'Informe a quantidade'
-                }
-            ),
-            'producao_unidade_medida': forms.Select(
-                attrs={
-                    'class': 'form-control',
-                    'style': 'margin-bottom: 1rem;'
                 }
             ),
             'valor': forms.TextInput(
@@ -723,9 +692,8 @@ FruticulturaInlineFormSet = forms.inlineformset_factory(
     models.Fruticultura,
     extra=1,
     fields=(
-        'tipo_producao', 'tipo_producao_outros', 'area_plantada', 'medida_area_plantada', 'producao_consumo',
-        'producao_comercio', 'producao_unidade_medida', 'valor', 'irrigacao', 'area_irrigada', 'medida_area_irrigada',
-        'tipo_irrigacao', 'canal_comercializacao', 'mercado_institucional'
+        'tipo_producao', 'tipo_producao_outros', 'area_plantada', 'producao_consumo', 'producao_comercio', 'valor',
+        'irrigacao', 'area_irrigada', 'medida_area_irrigada', 'tipo_irrigacao', 'canal_comercializacao', 'mercado_institucional'
     ),
     form=FruticulturaForm,
     formset=FruticulturaFormSet,
@@ -1068,9 +1036,55 @@ BovinoculturaCorteInlineFormSet = forms.inlineformset_factory(
 )
 
 class OrigemAnimalForm(forms.ModelForm):
+    especificacao = forms.ChoiceField(
+        choices=(('', '---------'),) + models.OrigemAnimal.ORIGEM_ANIMAL + ((999, 'Outros'),), widget=forms.Select(
+            attrs={
+                'class': 'form-control',
+                'style': 'margin-bottom: 1rem;'
+            }
+        ))
+
     class Meta:
         model = models.OrigemAnimal
         fields = '__all__'
+        widgets = {
+            'outros': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Especifique'
+                }
+            ),
+            'producao_consumo': forms.NumberInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Informe a quantidade'
+                }
+            ),
+            'producao_comercio': forms.NumberInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Informe a quantidade'
+                }
+            ),
+            'valor': forms.TextInput(
+                attrs={
+                    'class': 'form-control valor',
+                    'placeholder': 'Informe o valor'
+                }
+            ),
+            'canal_comercializacao': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'style': 'margin-bottom: 1rem;'
+                }
+            ),
+            'mercado_institucional': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'style': 'margin-bottom: 1rem;'
+                }
+            )
+        }
 
 OrigemAnimalFormSet = forms.modelformset_factory(
     models.OrigemAnimal,
@@ -1086,58 +1100,61 @@ OrigemAnimalInlineFormSet = forms.inlineformset_factory(
         'especificacao', 'outros', 'producao_consumo', 'producao_comercio', 'valor', 'canal_comercializacao',
         'mercado_institucional'
     ),
+    form=OrigemAnimalForm,
     formset=OrigemAnimalFormSet,
-    can_delete=True,
-    widgets={
-        'especificacao': forms.Select(
-            attrs={
-                'class': 'form-control',
-                'style': 'margin-bottom: 1rem;'
-            }
-        ),
-        'outros': forms.TextInput(
-            attrs={
-                'class': 'form-control',
-                'placeholder': 'Especifique'
-            }
-        ),
-        'producao_consumo': forms.NumberInput(
-            attrs={
-                'class': 'form-control',
-                'placeholder': 'Informe a quantidade'
-            }
-        ),
-        'producao_comercio': forms.NumberInput(
-            attrs={
-                'class': 'form-control',
-                'placeholder': 'Informe a quantidade'
-            }
-        ),
-        'valor': forms.TextInput(
-            attrs={
-                'class': 'form-control valor',
-                'placeholder': 'Informe o valor'
-            }
-        ),
-        'canal_comercializacao': forms.Select(
-            attrs={
-                'class': 'form-control',
-                'style': 'margin-bottom: 1rem;'
-            }
-        ),
-        'mercado_institucional': forms.Select(
-            attrs={
-                'class': 'form-control',
-                'style': 'margin-bottom: 1rem;'
-            }
-        )
-    }
+    can_delete=True
 )
 
 class ProcessadoBeneficiadoForm(forms.ModelForm):
+    especificacao = forms.ChoiceField(
+        choices=(('', '---------'),) + models.ProcessadoBeneficiado.PROCESSADO_BENEFICIADO + ((999, 'Outros'),), widget=forms.Select(
+            attrs={
+                'class': 'form-control',
+                'style': 'margin-bottom: 1rem;'
+            }
+        ))
+
     class Meta:
         model = models.ProcessadoBeneficiado
         fields = '__all__'
+        widgets = {
+            'outros': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Especifique'
+                }
+            ),
+            'producao_consumo': forms.NumberInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Informe a quantidade'
+                }
+            ),
+            'producao_comercio': forms.NumberInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Informe a quantidade'
+                }
+            ),
+            'valor': forms.TextInput(
+                attrs={
+                    'class': 'form-control valor',
+                    'placeholder': 'Informe o valor'
+                }
+            ),
+            'canal_comercializacao': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'style': 'margin-bottom: 1rem;'
+                }
+            ),
+            'mercado_institucional': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'style': 'margin-bottom: 1rem;'
+                }
+            )
+        }
 
 ProcessadoBeneficiadoFormSet = forms.modelformset_factory(
     models.ProcessadoBeneficiado,
@@ -1153,52 +1170,9 @@ ProcessadoBeneficiadoInlineFormSet = forms.inlineformset_factory(
         'especificacao', 'outros', 'producao_consumo', 'producao_comercio', 'valor', 'canal_comercializacao',
         'mercado_institucional'
     ),
+    form=ProcessadoBeneficiadoForm,
     formset=ProcessadoBeneficiadoFormSet,
-    can_delete=True,
-    widgets={
-        'especificacao': forms.Select(
-            attrs={
-                'class': 'form-control',
-                'style': 'margin-bottom: 1rem;'
-            }
-        ),
-        'outros': forms.TextInput(
-            attrs={
-                'class': 'form-control',
-                'placeholder': 'Especifique'
-            }
-        ),
-        'producao_consumo': forms.NumberInput(
-            attrs={
-                'class': 'form-control',
-                'placeholder': 'Informe a quantidade'
-            }
-        ),
-        'producao_comercio': forms.NumberInput(
-            attrs={
-                'class': 'form-control',
-                'placeholder': 'Informe a quantidade'
-            }
-        ),
-        'valor': forms.TextInput(
-            attrs={
-                'class': 'form-control valor',
-                'placeholder': 'Informe o valor'
-            }
-        ),
-        'canal_comercializacao': forms.Select(
-            attrs={
-                'class': 'form-control',
-                'style': 'margin-bottom: 1rem;'
-            }
-        ),
-        'mercado_institucional': forms.Select(
-            attrs={
-                'class': 'form-control',
-                'style': 'margin-bottom: 1rem;'
-            }
-        )
-    }
+    can_delete=True
 )
 
 class NivelTecnologicoProducaoAnimalForm(forms.ModelForm):

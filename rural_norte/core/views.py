@@ -716,21 +716,16 @@ def editar_diagnostico(request, pa_id, diagnostico_id):
                 classificacao=models.ProcessadoBeneficiado.CLASSIFICACAO_PROCESSADO_BENEFICIADO)
         )
 
-        # if form.is_valid() and documentos_lote_forms.is_valid() and beneficios_forms.is_valid() \
-        #     and auto_declaracoes_forms.is_valid() and estruturas_organizativas_forms.is_valid() \
-        #     and fontes_agua_forms.is_valid() and tratamentos_agua_forms.is_valid() and construcoes_lote_forms.is_valid() \
-        #     and bens_produtivos_forms.is_valid() and aplicacoes_creditos_forms.is_valid() \
-        #     and creditos_bancarios_forms.is_valid() and culturas_forms.is_valid() and olericulturas_forms.is_valid() \
-        #     and fruticulturas_forms.is_valid() and atividades_extrativistas_forms.is_valid() \
-        #     and producoes_florestais_forms.is_valid() and bovinoculturas_forms.is_valid() \
-        #     and outras_criacoes_forms.is_valid() and bovinoculturas_leiteira_forms.is_valid() \
-        #     and bovinoculturas_corte_forms.is_valid() and origens_animais_forms.is_valid() \
-        #     and niveis_tecnologicos_producao_animal_forms.is_valid() and processados_beneficiados_forms.is_valid():
         if form.is_valid() and contatos_forms.is_valid() and documentos_lote_forms.is_valid() and beneficios_forms.is_valid() \
             and auto_declaracoes_forms.is_valid() and estruturas_organizativas_forms.is_valid() \
             and fontes_agua_forms.is_valid() and tratamentos_agua_forms.is_valid() and construcoes_lote_forms.is_valid() \
             and bens_produtivos_forms.is_valid() and aplicacoes_creditos_forms.is_valid() \
-            and creditos_bancarios_forms.is_valid() and culturas_forms.is_valid() and olericulturas_forms.is_valid():
+            and creditos_bancarios_forms.is_valid() and culturas_forms.is_valid() and olericulturas_forms.is_valid() \
+            and fruticulturas_forms.is_valid() and atividades_extrativistas_forms.is_valid() \
+            and producoes_florestais_forms.is_valid() and bovinoculturas_forms.is_valid() and outras_criacoes_forms.is_valid() \
+            and bovinoculturas_leiteira_forms.is_valid() and bovinoculturas_corte_forms.is_valid() \
+            and origens_animais_forms.is_valid() and niveis_tecnologicos_producao_animal_forms.is_valid() \
+            and processados_beneficiados_forms.is_valid():
             lote = form.save(commit=False)
             lote.save()
 
@@ -839,55 +834,85 @@ def editar_diagnostico(request, pa_id, diagnostico_id):
             for olericultura in olericulturas_forms.deleted_objects:
                 olericultura.delete()
 
-            # fruticulturas = fruticulturas_forms.save(commit=False)
-            # for fruticultura in fruticulturas:
-            #     fruticultura.lote = lote
-            #     fruticultura.save()
-            #
-            # atividades_extrativistas = atividades_extrativistas_forms.save(commit=False)
-            # for atividade_extrativista in atividades_extrativistas:
-            #     atividade_extrativista.lote = lote
-            #     atividade_extrativista.save()
-            #
-            # producoes_florestais = producoes_florestais_forms.save(commit=False)
-            # for producao_florestal in producoes_florestais:
-            #     producao_florestal.lote = lote
-            #     producao_florestal.save()
-            #
-            # bovinoculturas = bovinoculturas_forms.save(commit=False)
-            # for bovinocultura in bovinoculturas:
-            #     bovinocultura.lote = lote
-            #     bovinocultura.save()
-            #
-            # outras_criacoes = outras_criacoes_forms.save(commit=False)
-            # for outra_criacao in outras_criacoes:
-            #     outra_criacao.lote = lote
-            #     outra_criacao.save()
-            #
-            # bovinoculturas_leiteira = bovinoculturas_leiteira_forms.save(commit=False)
-            # for bovinocultura_leiteira in bovinoculturas_leiteira:
-            #     bovinocultura_leiteira.lote = lote
-            #     bovinocultura_leiteira.save()
-            #
-            # bovinoculturas_corte = bovinoculturas_corte_forms.save(commit=False)
-            # for bovinocultura_corte in bovinoculturas_corte:
-            #     bovinocultura_corte.lote = lote
-            #     bovinocultura_corte.save()
-            #
-            # origens_animais = origens_animais_forms.save(commit=False)
-            # for origem_animal in origens_animais:
-            #     origem_animal.lote = lote
-            #     origem_animal.save()
-            #
-            # niveis_tecnologicos_producao_animal = niveis_tecnologicos_producao_animal_forms.save(commit=False)
-            # for nivel_tecnologico_producao_animal in niveis_tecnologicos_producao_animal:
-            #     nivel_tecnologico_producao_animal.lote = lote
-            #     nivel_tecnologico_producao_animal.save()
-            #
-            # processados_beneficiados = processados_beneficiados_forms.save(commit=False)
-            # for processado_beneficiado in processados_beneficiados:
-            #     processado_beneficiado.lote = lote
-            #     processado_beneficiado.save()
+            fruticulturas = fruticulturas_forms.save(commit=False)
+            for fruticultura in fruticulturas:
+                fruticultura.lote = lote
+                fruticultura.save()
+
+            for fruticultura in fruticulturas_forms.deleted_objects:
+                fruticultura.delete()
+
+            atividades_extrativistas = atividades_extrativistas_forms.save(commit=False)
+            for atividade_extrativista in atividades_extrativistas:
+                atividade_extrativista.lote = lote
+                atividade_extrativista.save()
+
+            for atividade_extrativista in atividades_extrativistas_forms.deleted_objects:
+                atividade_extrativista.delete()
+
+            producoes_florestais = producoes_florestais_forms.save(commit=False)
+            for producao_florestal in producoes_florestais:
+                producao_florestal.lote = lote
+                producao_florestal.save()
+
+            for producao_florestal in producoes_florestais_forms.deleted_objects:
+                producao_florestal.delete()
+
+            bovinoculturas = bovinoculturas_forms.save(commit=False)
+            for bovinocultura in bovinoculturas:
+                bovinocultura.lote = lote
+                bovinocultura.save()
+
+            for bovinocultura in bovinoculturas_forms.deleted_objects:
+                bovinocultura.delete()
+
+            outras_criacoes = outras_criacoes_forms.save(commit=False)
+            for outra_criacao in outras_criacoes:
+                outra_criacao.lote = lote
+                outra_criacao.save()
+
+            for outra_criacao in outras_criacoes_forms.deleted_objects:
+                outra_criacao.delete()
+
+            bovinoculturas_leiteira = bovinoculturas_leiteira_forms.save(commit=False)
+            for bovinocultura_leiteira in bovinoculturas_leiteira:
+                bovinocultura_leiteira.lote = lote
+                bovinocultura_leiteira.save()
+
+            for bovinocultura_leiteira in bovinoculturas_leiteira_forms.deleted_objects:
+                bovinocultura_leiteira.delete()
+
+            bovinoculturas_corte = bovinoculturas_corte_forms.save(commit=False)
+            for bovinocultura_corte in bovinoculturas_corte:
+                bovinocultura_corte.lote = lote
+                bovinocultura_corte.save()
+
+            for bovinocultura_corte in bovinoculturas_corte_forms.deleted_objects:
+                bovinocultura_corte.delete()
+
+            origens_animais = origens_animais_forms.save(commit=False)
+            for origem_animal in origens_animais:
+                origem_animal.lote = lote
+                origem_animal.save()
+
+            for origem_animal in origens_animais_forms.deleted_objects:
+                origem_animal.delete()
+
+            niveis_tecnologicos_producao_animal = niveis_tecnologicos_producao_animal_forms.save(commit=False)
+            for nivel_tecnologico_producao_animal in niveis_tecnologicos_producao_animal:
+                nivel_tecnologico_producao_animal.lote = lote
+                nivel_tecnologico_producao_animal.save()
+
+            for nivel_tecnologico_producao_animal in niveis_tecnologicos_producao_animal_forms.deleted_objects:
+                nivel_tecnologico_producao_animal.delete()
+
+            processados_beneficiados = processados_beneficiados_forms.save(commit=False)
+            for processado_beneficiado in processados_beneficiados:
+                processado_beneficiado.lote = lote
+                processado_beneficiado.save()
+
+            for processado_beneficiado in processados_beneficiados_forms.deleted_objects:
+                processado_beneficiado.delete()
 
             template = reverse('core:listar_diagnosticos_por_projeto_assentamento', kwargs={'contrato_id': projeto_assentamento.contrato_id, 'pa_id': projeto_assentamento.pk})
             return redirect(template)

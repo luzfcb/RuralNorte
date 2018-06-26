@@ -942,7 +942,7 @@ class ProducaoVegetal(AuditoriaAbstractModel):
         (CANAL_COMERCIALIZACAO_VENDA_DIRETA_AO_CONSUMIDOR, 'Venda direta ao consumidor (de casa em casa)'),
         (CANAL_COMERCIALIZACAO_VENDA_EM_FEIRAS, 'Venda em feiras'),
         (CANAL_COMERCIALIZACAO_ENTREGA_PARA_SUPERMERCADOS_MERCEARIAS_AÇOUGUES, 'Entrega para supermercados, mercearias, açougues, etc'),
-        (CANAL_COMERCIALIZACAO_VENDA_PARA_INDUSTRIAS_AGROINDUSTRIAS_LATICINIOS, 'Venda p/ indústrias, e/ou agroindústrias (laticínios etc'),
+        (CANAL_COMERCIALIZACAO_VENDA_PARA_INDUSTRIAS_AGROINDUSTRIAS_LATICINIOS, 'Venda p/ indústrias, e/ou agroindústrias (laticínios etc)'),
         (CANAL_COMERCIALIZACAO_VENDA_PARA_AGENTES_ATRAVESSADORES, 'Venda para agentes "atravessadores"'),
         (CANAL_COMERCIALIZACAO_OUTROS, 'Outros')
     )
@@ -981,6 +981,8 @@ class Cultura(ProducaoVegetal):
 
     def save(self, *args, **kwargs):
         self.classificacao = self.CLASSIFICACAO_CULTURA
+        self.medida_area_plantada = self.MEDIDA_HA
+        self.producao_unidade_medida = self.UNIDADE_MEDIDA_KG
         super().save(*args, **kwargs)
 
     class Meta:
@@ -1006,6 +1008,7 @@ class Olericultura(ProducaoVegetal):
 
     def save(self, *args, **kwargs):
         self.classificacao = self.CLASSIFICACAO_OLERICULTURA
+        self.medida_area_plantada = self.MEDIDA_M2
         super().save(*args, **kwargs)
 
     class Meta:
@@ -1031,6 +1034,8 @@ class Fruticultura(ProducaoVegetal):
 
     def save(self, *args, **kwargs):
         self.classificacao = self.CLASSIFICACAO_FRUTICULTURA
+        self.medida_area_plantada = self.MEDIDA_HA
+        self.producao_unidade_medida = self.UNIDADE_MEDIDA_KG
         super().save(*args, **kwargs)
 
     class Meta:
@@ -1312,7 +1317,7 @@ class DescarteAnimal(AuditoriaAbstractModel):
         (CANAL_COMERCIALIZACAO_OUTROS, 'Outros')
     )
     canal_comercializacao = models.IntegerField('Formas/Canais de Comercialização',
-                                                choices=canal_comercializacao_choices)
+                                                choices=canal_comercializacao_choices, blank=True, null=True)
     canal_comercializacao_outros = models.CharField('Outros (Especificar)', max_length=30, blank=True, null=True)
 
 
