@@ -1209,6 +1209,349 @@ NivelTecnologicoProducaoAnimalInlineFormSet = forms.inlineformset_factory(
     }
 )
 
+class ProblemaAmbientalForm(forms.ModelForm):
+    class Meta:
+        model = models.ProblemaAmbiental
+        fields = '__all__'
+
+ProblemaAmbientalFormSet = forms.modelformset_factory(
+    models.ProblemaAmbiental,
+    form=ProblemaAmbientalForm,
+    extra=0
+)
+
+ProblemaAmbientalInlineFormSet = forms.inlineformset_factory(
+    models.Lote,
+    models.ProblemaAmbiental,
+    extra=1,
+    fields=('tipo_problema', 'outros'),
+    formset=ProblemaAmbientalFormSet,
+    can_delete=True,
+    widgets={
+        'tipo_problema': forms.Select(
+            attrs={
+                'class': 'form-control',
+                'style': 'margin-bottom: 1rem;'
+            }
+        ),
+        'outros': forms.TextInput(
+            attrs={
+                'class': 'form-control valor',
+                'placeholder': 'Especifique'
+            }
+        )
+    }
+)
+
+class PraticaConservacionistaForm(forms.ModelForm):
+    class Meta:
+        model = models.PraticaConservacionista
+        fields = '__all__'
+
+PraticaConservacionistaFormSet = forms.modelformset_factory(
+    models.PraticaConservacionista,
+    form=PraticaConservacionistaForm,
+    extra=0
+)
+
+PraticaConservacionistaInlineFormSet = forms.inlineformset_factory(
+    models.Lote,
+    models.PraticaConservacionista,
+    extra=1,
+    fields=('tipo_pratica',),
+    formset=PraticaConservacionistaFormSet,
+    can_delete=True,
+    widgets={
+        'tipo_pratica': forms.Select(
+            attrs={
+                'class': 'form-control',
+                'style': 'margin-bottom: 1rem;'
+            }
+        )
+    }
+)
+
+class LicenciamentoAmbientalForm(forms.ModelForm):
+    class Meta:
+        model = models.LicenciamentoAmbiental
+        fields = '__all__'
+
+LicenciamentoAmbientalFormSet = forms.modelformset_factory(
+    models.LicenciamentoAmbiental,
+    form=LicenciamentoAmbientalForm,
+    extra=0
+)
+
+LicenciamentoAmbientalInlineFormSet = forms.inlineformset_factory(
+    models.Lote,
+    models.LicenciamentoAmbiental,
+    extra=1,
+    fields=('tipo_atividade', 'outros'),
+    formset=LicenciamentoAmbientalFormSet,
+    can_delete=True,
+    widgets={
+        'tipo_atividade': forms.Select(
+            attrs={
+                'class': 'form-control',
+                'style': 'margin-bottom: 1rem;'
+            }
+        ),
+        'outros': forms.TextInput(
+            attrs={
+                'class': 'form-control valor',
+                'placeholder': 'Especifique'
+            }
+        )
+    }
+)
+
+class AtendimentoSaudeForm(forms.ModelForm):
+    class Meta:
+        model = models.AtendimentoSaude
+        fields = ['hospital', 'posto_saude', 'farmacia', 'outros', 'outros_especificacao']
+        widgets = {
+            'hospital': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'style': 'margin-bottom: 1rem;'
+                }
+            ),
+            'posto_saude': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'style': 'margin-bottom: 1rem;'
+                }
+            ),
+            'farmacia': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'style': 'margin-bottom: 1rem;'
+                }
+            ),
+            'outros': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'style': 'margin-bottom: 1rem;'
+                }
+            ),
+            'outros_especificacao': forms.TextInput(
+                attrs={
+                    'class': 'form-control valor',
+                    'placeholder': 'Especifique'
+                }
+            )
+        }
+
+class ProgramaSaudeForm(forms.ModelForm):
+    class Meta:
+        model = models.ProgramaSaude
+        fields = '__all__'
+
+ProgramaSaudeFormSet = forms.modelformset_factory(
+    models.ProgramaSaude,
+    form=ProgramaSaudeForm,
+    extra=0
+)
+
+ProgramaSaudeInlineFormSet = forms.inlineformset_factory(
+    models.Lote,
+    models.ProgramaSaude,
+    extra=1,
+    fields=('programa_saude',),
+    formset=ProgramaSaudeFormSet,
+    can_delete=True,
+    widgets={
+        'programa_saude': forms.Select(
+            attrs={
+                'class': 'form-control',
+                'style': 'margin-bottom: 1rem;'
+            }
+        )
+    }
+)
+
+class AtividadeFisicaForm(forms.ModelForm):
+    class Meta:
+        model = models.AtividadeFisica
+        fields = '__all__'
+
+AtividadeFisicaFormSet = forms.modelformset_factory(
+    models.AtividadeFisica,
+    form=AtividadeFisicaForm,
+    extra=0
+)
+
+AtividadeFisicaInlineFormSet = forms.inlineformset_factory(
+    models.Lote,
+    models.AtividadeFisica,
+    extra=1,
+    fields=('atividade_fisica', 'outros'),
+    formset=AtividadeFisicaFormSet,
+    can_delete=True,
+    widgets={
+        'atividade_fisica': forms.Select(
+            attrs={
+                'class': 'form-control',
+                'style': 'margin-bottom: 1rem;'
+            }
+        ),
+        'outros': forms.TextInput(
+            attrs={
+                'class': 'form-control valor',
+                'placeholder': 'Especifique'
+            }
+        )
+    }
+)
+
+class EspacoDisponivelForm(forms.ModelForm):
+    class Meta:
+        model = models.EspacoDisponivel
+        fields = '__all__'
+
+EspacoDisponivelFormSet = forms.modelformset_factory(
+    models.EspacoDisponivel,
+    form=EspacoDisponivelForm,
+    extra=0
+)
+
+EspacoDisponivelInlineFormSet = forms.inlineformset_factory(
+    models.Lote,
+    models.EspacoDisponivel,
+    extra=1,
+    fields=('espaco_disponivel',),
+    formset=EspacoDisponivelFormSet,
+    can_delete=True,
+    widgets={
+        'espaco_disponivel': forms.Select(
+            attrs={
+                'class': 'form-control',
+                'style': 'margin-bottom: 1rem;'
+            }
+        )
+    }
+)
+
+class EstabelecimentoEnsinoForm(forms.ModelForm):
+    class Meta:
+        model = models.EstabelecimentoEnsino
+        fields = '__all__'
+
+EstabelecimentoEnsinoFormSet = forms.modelformset_factory(
+    models.EstabelecimentoEnsino,
+    form=EstabelecimentoEnsinoForm,
+    extra=0
+)
+
+EstabelecimentoEnsinoInlineFormSet = forms.inlineformset_factory(
+    models.Lote,
+    models.EstabelecimentoEnsino,
+    extra=1,
+    fields=('estabelecimento_ensino',),
+    formset=EstabelecimentoEnsinoFormSet,
+    can_delete=True,
+    widgets={
+        'estabelecimento_ensino': forms.Select(
+            attrs={
+                'class': 'form-control',
+                'style': 'margin-bottom: 1rem;'
+            }
+        )
+    }
+)
+
+class FamiliaForm(forms.ModelForm):
+    class Meta:
+        model = models.Familia
+        fields = '__all__'
+
+FamiliaFormSet = forms.modelformset_factory(
+    models.Familia,
+    form=FamiliaForm,
+    extra=0
+)
+
+FamiliaInlineFormSet = forms.inlineformset_factory(
+    models.Lote,
+    models.Familia,
+    extra=1,
+    fields=('lote',),
+    formset=FamiliaFormSet,
+    can_delete=True,
+    widgets={
+        'lote': forms.HiddenInput(
+            attrs={
+                'class': 'form-control',
+                'style': 'margin-bottom: 1rem;'
+            }
+        )
+    }
+)
+
+# class MembroForm(forms.ModelForm):
+#     class Meta:
+#         model = models.Membro
+#         fields = '__all__'
+#
+# MembroFormSet = forms.modelformset_factory(
+#     models.Membro,
+#     form=MembroForm,
+#     extra=0
+# )
+#
+# MembroInlineFormSet = forms.inlineformset_factory(
+#     models.Familia,
+#     models.Membro,
+#     extra=1,
+#     fields=('nome', 'parentesco', 'idade', 'escolaridade', 'estuda', 'cpf', 'trabalho_antes_do_lote'),
+#     formset=MembroFormSet,
+#     can_delete=True,
+#     widgets={
+#         'nome': forms.TextInput(
+#             attrs={
+#                 'class': 'form-control valor',
+#                 'placeholder': 'Informe o nome'
+#             }
+#         ),
+#         'parentesco': forms.Select(
+#             attrs={
+#                 'class': 'form-control',
+#                 'style': 'margin-bottom: 1rem;'
+#             }
+#         ),
+#         'idade': forms.NumberInput(
+#             attrs={
+#                 'class': 'form-control',
+#                 'placeholder': 'Informe a idade'
+#             }
+#         ),
+#         'escolaridade': forms.Select(
+#             attrs={
+#                 'class': 'form-control',
+#                 'style': 'margin-bottom: 1rem;'
+#             }
+#         ),
+#         'estuda': forms.Select(
+#             attrs={
+#                 'class': 'form-control',
+#                 'style': 'margin-bottom: 1rem;'
+#             }
+#         ),
+#         'cpf': forms.TextInput(
+#             attrs={
+#                 'class': 'form-control valor',
+#                 'placeholder': 'Informe o CPF'
+#             }
+#         ),
+#         'trabalho_antes_do_lote': forms.Select(
+#             attrs={
+#                 'class': 'form-control',
+#                 'style': 'margin-bottom: 1rem;'
+#             }
+#         )
+#     }
+# )
+
 class DiagnosticoForm(forms.ModelForm):
     class Meta:
         model = models.Lote
@@ -1222,9 +1565,9 @@ class DiagnosticoForm(forms.ModelForm):
             'agua_para_animais_plantio_outros', 'regularidade_abastecimento_agua', 'tipo_estrada_acesso',
             'situacao_estrada_acesso', 'situacao_cercado_lote', 'possui_pastagem_em_pastejo_rotacionado',
             'pratica_inseminacao_artificial_no_rebanho_leiteiro', 'area_preservacao_permanente',
-            'area_preservacao_permanente_cercada', 'area_pastejo_rotacionado',
-            'necessita_autoriacao_exploracao_florestal_queima_controlada', 'qualidade_servico_saude',
-            'frequencia_atividade_fisica', 'oferta_transporte_interno'
+            'area_preservacao_permanente_cercada', 'destino_lixo_domestico_nao_organico', 'destino_material_organico',
+            'area_pastejo_rotacionado', 'necessita_autoriacao_exploracao_florestal_queima_controlada',
+            'qualidade_servico_saude', 'frequencia_atividade_fisica', 'oferta_transporte_interno'
         ]
 
         widgets = {
@@ -1401,6 +1744,16 @@ class DiagnosticoForm(forms.ModelForm):
                 }
             ),
             'area_preservacao_permanente_cercada': forms.Select(
+                attrs={
+                    'class': 'form-control'
+                }
+            ),
+            'destino_lixo_domestico_nao_organico': forms.Select(
+                attrs={
+                    'class': 'form-control'
+                }
+            ),
+            'destino_material_organico': forms.Select(
                 attrs={
                     'class': 'form-control'
                 }

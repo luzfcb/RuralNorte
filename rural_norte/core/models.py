@@ -324,6 +324,46 @@ class Lote(AuditoriaAbstractModel):
     area_preservacao_permanente_cercada = models.IntegerField(
         '39. A Área de Preservação Permanente está cercada ou isolada?', choices=sim_nao_choices
     )
+
+    DESTINO_LIXO_DOMESTICO_ESPALHADO_NO_LOTE = 10
+    DESTINO_LIXO_DOMESTICO_QUEIMA = 20
+    DESTINO_LIXO_DOMESTICO_ENTERRA = 30
+    DESTINO_LIXO_DOMESTICO_JOGA_NOS_CURSOS_DAGUA = 40
+    DESTINO_LIXO_DOMESTICO_RECICLA_REAPROVEITA_LIXO_INORGANICO = 50
+    DESTINO_LIXO_DOMESTICO_DEPOSITA_A_CEU_ABERTO_NO_LOTE = 60
+    DESTINO_LIXO_DOMESTICO_NAO_SE_APLICA = 999
+
+    destino_lixo_domestico_nao_organico_choices = Choices(
+        (DESTINO_LIXO_DOMESTICO_ESPALHADO_NO_LOTE, 'Espalhado no lote'),
+        (DESTINO_LIXO_DOMESTICO_QUEIMA, 'Queima'),
+        (DESTINO_LIXO_DOMESTICO_ENTERRA, 'Enterra'),
+        (DESTINO_LIXO_DOMESTICO_JOGA_NOS_CURSOS_DAGUA, "Joga nos cursos d'água"),
+        (DESTINO_LIXO_DOMESTICO_RECICLA_REAPROVEITA_LIXO_INORGANICO, 'Recicla/reaproveita lixo inorgânico'),
+        (DESTINO_LIXO_DOMESTICO_DEPOSITA_A_CEU_ABERTO_NO_LOTE, 'Deposita a céu aberto no lote'),
+        (DESTINO_LIXO_DOMESTICO_NAO_SE_APLICA, 'Não se aplica'),
+    )
+
+    destino_lixo_domestico_nao_organico = models.IntegerField(
+        '42. Qual o destino do lixo doméstico não orgânico?', choices=destino_lixo_domestico_nao_organico_choices
+    )
+
+    DESTINO_MATERIAL_ORGANICO_USO_PARA_ALIMENTACAO_DE_ANIMAIS = 10
+    DESTINO_MATERIAL_ORGANICO_FAZ_COMPOSTAGEM = 20
+    DESTINO_MATERIAL_ENTERRA_JUNTO_COM_INORGANICO = 30
+    DESTINO_MATERIAL_DEPOSITA_A_CEU_ABERTO_NO_LOTE = 40
+    DESTINO_MATERIAL_NAO_SE_APLICA = 999
+
+    destino_material_organico_choices = Choices(
+        (DESTINO_MATERIAL_ORGANICO_USO_PARA_ALIMENTACAO_DE_ANIMAIS, 'Uso para alimentação de animais'),
+        (DESTINO_MATERIAL_ORGANICO_FAZ_COMPOSTAGEM, 'Faz compostagem'),
+        (DESTINO_MATERIAL_ENTERRA_JUNTO_COM_INORGANICO, 'Enterra junto com inorgânico'),
+        (DESTINO_MATERIAL_DEPOSITA_A_CEU_ABERTO_NO_LOTE, "Deposita a céu aberto no lote"),
+        (DESTINO_MATERIAL_NAO_SE_APLICA, 'Não se aplica'),
+    )
+
+    destino_material_organico = models.IntegerField(
+        '43. Qual o destino do material orgânico?', choices=destino_material_organico_choices
+    )
     possui_capineira = models.IntegerField(
         'Possui Capineira?', choices=sim_nao_choices, default=CHOICE_NAO
     )

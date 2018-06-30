@@ -5,6 +5,7 @@ from rural_norte.core import views
 app_name = "core"
 urlpatterns = [
     path("", views.LoteListView.as_view(), name="lote-list"),
+    path("login/", views.login, name="login"),
     path("contratos/", views.listar_contratos, name="listar_contratos"),
     path("contratos/<int:contrato_id>/projetos_assentamento/", views.listar_projetos_por_contrato, name="listar_projetos_por_contrato"),
     path("contratos/<int:contrato_id>/projetos_assentamento/<int:pa_id>/diagnosticos/", views.listar_diagnosticos_por_projeto_assentamento, name="listar_diagnosticos_por_projeto_assentamento"),

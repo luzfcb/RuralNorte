@@ -76,6 +76,7 @@ THIRD_PARTY_APPS = [
     'django_tables2',
     'django_filters',
     'widget_tweaks',
+    'stronghold',
 ]
 LOCAL_APPS = [
     'rural_norte.users.apps.UsersConfig',
@@ -142,6 +143,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    # 'stronghold.middleware.LoginRequiredMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'cuser.middleware.CuserMiddleware',
@@ -287,6 +289,11 @@ ACCOUNT_ADAPTER = 'rural_norte.users.adapters.AccountAdapter'
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 SOCIALACCOUNT_ADAPTER = 'rural_norte.users.adapters.SocialAccountAdapter'
 
+
+STRONGHOLD_PUBLIC_NAMED_URLS = (
+    'account_login', 'admin:login', 'rest_framework:login', 'socialaccount_login_canceled', 'socialaccount_login_error',
+    'account_confirm_email', 'account_signup', 'account_email_verification_sent'
+)
 
 # Your stuff...
 # ------------------------------------------------------------------------------
