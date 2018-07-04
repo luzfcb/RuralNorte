@@ -1460,34 +1460,6 @@ EstabelecimentoEnsinoInlineFormSet = forms.inlineformset_factory(
     }
 )
 
-class FamiliaForm(forms.ModelForm):
-    class Meta:
-        model = models.Familia
-        fields = '__all__'
-
-FamiliaFormSet = forms.modelformset_factory(
-    models.Familia,
-    form=FamiliaForm,
-    extra=0
-)
-
-FamiliaInlineFormSet = forms.inlineformset_factory(
-    models.Lote,
-    models.Familia,
-    extra=1,
-    fields=('lote',),
-    formset=FamiliaFormSet,
-    can_delete=True,
-    widgets={
-        'lote': forms.HiddenInput(
-            attrs={
-                'class': 'form-control',
-                'style': 'margin-bottom: 1rem;'
-            }
-        )
-    }
-)
-
 # class MembroForm(forms.ModelForm):
 #     class Meta:
 #         model = models.Membro

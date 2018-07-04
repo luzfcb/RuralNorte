@@ -79,33 +79,37 @@
               </b>
             </div>
             <div class="card-body">
-              <div class="form-group col-md-12">
-
-                {{ FamiliaInlineFormSet.management_form }}
-
-                <div class="form-row">
-                  {% for form in FamiliaInlineFormSet %}
-                    {{ form.id }}
-                    <fieldset class="border p-2" style="width: 100%;">
-                      {% if forloop.last %}
-                        <legend><b style="font-size: 1rem;">Família #</b></legend>
-                      {% else %}
-                        <legend><b style="font-size: 1rem;">Família #{{ forloop.counter }}</b></legend>
-                      {% endif %}
-                      <div class="col-md-2" style="margin-top: 7%;">
-                        {{ form.DELETE.label }}
-                        {{ form.DELETE }}
-                        <!-- <a style="border: none; margin-top: 2em;" class="form-control" href="#"
-                          title="Excluir">
-                          <i class="fa fa-trash-o fa-lg"></i>
-                        </a> -->
-                      </div>
-                    </fieldset>
-                  {% endfor %}
-                </div>
-              </div>
             </div>
           </div>
+
+          {#          <div class="form-group col-md-6">#}
+          {##}
+          {#            {{ ContatoInlineFormSet.management_form }}#}
+          {##}
+          {#            <div class="card card-register">#}
+          {#              <div class="card-header"><b>Contato(s):</b></div>#}
+          {#              <div class="card-body">#}
+          {#                <div class="form-row">#}
+          {#                  {% for form in ContatoInlineFormSet %}#}
+          {#                    {{ form.id }}#}
+          {#                    <div class="col-md-10">#}
+          {#                      {{ form.telefone.label_tag }}#}
+          {#                      {{ form.telefone }}#}
+          {#                      {{ form.telefone.errors }}#}
+          {#                    </div>#}
+          {#                    <div class="col-md-2" style="margin-top: 7%;">#}
+          {#                      {{ form.DELETE.label }}#}
+          {#                      {{ form.DELETE }}#}
+          {#                      <!-- <a style="border: none; margin-top: 2em;" class="form-control" href="#"#}
+          {#                        title="Excluir">#}
+          {#                        <i class="fa fa-trash-o fa-lg"></i>#}
+          {#                      </a> -->#}
+          {#                    </div>#}
+          {#                  {% endfor %}#}
+          {#                </div>#}
+          {#              </div>#}
+          {#            </div>#}
+          {#          </div>#}
 
           <div class="form-group col-md-6">
 
@@ -114,23 +118,30 @@
             <div class="card card-register">
               <div class="card-header"><b>Contato(s):</b></div>
               <div class="card-body">
-                <div class="form-row">
+                <div>
                   {% for form in ContatoInlineFormSet %}
-                    {{ form.id }}
-                    <div class="col-md-10">
-                      {{ form.telefone.label_tag }}
-                      {{ form.telefone }}
-                      {{ form.telefone.errors }}
-                    </div>
-                    <div class="col-md-2" style="margin-top: 7%;">
-                      {{ form.DELETE.label }}
-                      {{ form.DELETE }}
-                      <!-- <a style="border: none; margin-top: 2em;" class="form-control" href="#"
-                        title="Excluir">
-                        <i class="fa fa-trash-o fa-lg"></i>
-                      </a> -->
+                    <div id="{{ form.prefix }}-row" class="dynamic-form form-row">
+                      {{ form.id }}
+                      <div class="col-md-10">
+                        {{ form.telefone.label_tag }}
+                        {{ form.telefone }}
+                        {{ form.telefone.errors }}
+                      </div>
+                      <div class="col-md-2" style="margin-top: 7%;">
+                        <a href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Contato">
+                          <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                        </a>
+                        <div hidden="true">{{ form.DELETE }}</div>
+{#                        {{ form.DELETE.label }}#}
+{#                        {{ form.DELETE }}#}
+                      </div>
                     </div>
                   {% endfor %}
+                </div>
+                <div>
+                  <a href="javascript:void(0)" class="btn btn-success add-row" title="Novo Contato" id="contatos">
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                  </a>
                 </div>
               </div>
             </div>
@@ -1898,31 +1909,53 @@
 {% endblock %}
 
 {% block js %}
-  {#  <script>#}
-  {#    $(document).ready(function () {#}
-  {#      var contatos = document.getElementsByClassName('form-control contatos'),#}
-  {#        valores = document.getElementsByClassName('form-control valor');#}
-  {##}
-  {#      $('.contato').each(function (i, e) {#}
-  {#        $(e).mask('(00) 00000-0000');#}
-  {#      });#}
-  {##}
-  {#      $('.valor').each(function (i, e) {#}
-  {#        $(e).mask('000.000.000.000.000,00', {reverse: true});#}
-  {#      });#}
-  {##}
-  {#      $('#my_form').submit(function (e) {#}
-  {#        e.preventDefault();#}
-  {#        [].forEach.call(contatos, function (contato) {#}
-  {#          $(contato).unmask();#}
-  {#        });#}
-  {##}
-  {#        $('.valor').each(function (i, e) {#}
-  {#          console.log(e.value);#}
-  {#          $(e).unmask();#}
-  {#          console.log(e.value);#}
-  {#        });#}
-  {#      });#}
-  {#    });#}
-  {#  </script>#}
+
+  <script>
+    function updateElementIndex(el, prefix, ndx) {
+      var id_regex = new RegExp('(' + prefix + '-\\d+)');
+      var replacement = prefix + '-' + ndx;
+      if ($(el).attr("for")) $(el).attr("for", $(el).attr("for").replace(id_regex, replacement));
+      if (el.id) el.id = el.id.replace(id_regex, replacement);
+      if (el.name) el.name = el.name.replace(id_regex, replacement);
+    }
+
+    function addForm(btn, prefix) {
+      var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
+      var row = $('.dynamic-form:last').clone(true).get(0);
+      $(row).insertAfter($('.dynamic-form:last')).children('.hidden').removeClass('hidden');
+      $(row).children().not(':last').children().each(function() {
+        updateElementIndex(this, prefix, formCount);
+        $(this).val('');
+      });
+      $(row).find('.delete-row').click(function() {
+        deleteForm(this, prefix);
+      });
+      $('#id_' + prefix + '-TOTAL_FORMS').val(formCount + 1);
+      return false;
+    }
+
+    function deleteForm(btn, prefix) {
+      console.log($(btn).parents('.dynamic-form').get(0));
+      $(btn).parents('.dynamic-form').remove();
+      var forms = $('.dynamic-form');
+      $('#id_' + prefix + '-TOTAL_FORMS').val(forms.length);
+      for (var i=0, formCount=forms.length; i<formCount; i++) {
+        $(forms.get(i)).children().not(':last').children().each(function() {
+          updateElementIndex(this, prefix, i);
+        });
+      }
+      return false;
+    }
+
+    $(document).ready(function () {
+      $(function () {
+        $('.add-row').click(function() {
+          return addForm(this, this.id);
+        });
+        $('.delete-row').click(function() {
+          return deleteForm(this, this.id);
+        })
+      })
+    });
+  </script>
 {% endblock %}

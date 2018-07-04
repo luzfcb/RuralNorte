@@ -624,10 +624,6 @@ def editar_diagnostico(request, pa_id, diagnostico_id):
         prefix='estabelecimentos_ensino',
         queryset=form.instance.estabelecimentosEnsino.all()
     )
-    familias_forms = forms.FamiliaInlineFormSet(
-        prefix='familias',
-        queryset=form.instance.familias.all()
-    )
 
     if request.method == "POST":
         inlines = []
@@ -862,13 +858,6 @@ def editar_diagnostico(request, pa_id, diagnostico_id):
         )
         inlines.append(estabelecimentos_ensino_forms)
 
-        familias_forms = forms.FamiliaInlineFormSet(
-            request.POST,
-            prefix='familias',
-            queryset=form.instance.familias.all()
-        )
-        inlines.append(familias_forms)
-
         if form.is_valid() and all([item.is_valid() for item in inlines]):
             lote = form.save(commit=False)
             lote.save()
@@ -925,7 +914,6 @@ def editar_diagnostico(request, pa_id, diagnostico_id):
         'AtividadeFisicaInlineFormSet': atividades_fisicas_forms,
         'EspacoDisponivelInlineFormSet': espacos_disponiveis_forms,
         'EstabelecimentoEnsinoInlineFormSet': estabelecimentos_ensino_forms,
-        'FamiliaInlineFormSet': familias_forms,
         'title': 'Editar Diagnóstico'
     }
     return render(request, template_name, context)
