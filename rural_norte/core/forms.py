@@ -15,7 +15,8 @@ ContatoFormSet = forms.modelformset_factory(
 ContatoInlineFormSet = forms.inlineformset_factory(
     models.Lote,
     models.Contato,
-    extra=1,
+    extra=0,
+    min_num=1,
     fields=('telefone',),
     formset=ContatoFormSet,
     can_delete=True,

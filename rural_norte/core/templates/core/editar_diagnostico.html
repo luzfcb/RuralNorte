@@ -128,18 +128,16 @@
                         {{ form.telefone.errors }}
                       </div>
                       <div class="col-md-2" style="margin-top: 7%;">
-                        <a href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Contato">
+                        <a id="contatos" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Contato">
                           <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
                         </a>
                         <div hidden="true">{{ form.DELETE }}</div>
-{#                        {{ form.DELETE.label }}#}
-{#                        {{ form.DELETE }}#}
                       </div>
                     </div>
                   {% endfor %}
                 </div>
                 <div>
-                  <a href="javascript:void(0)" class="btn btn-success add-row" title="Novo Contato" id="contatos">
+                  <a id="contatos" href="javascript:void(0)" class="btn btn-success add-row" title="Novo Contato">
                     <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
                   </a>
                 </div>
@@ -1935,8 +1933,10 @@
     }
 
     function deleteForm(btn, prefix) {
-      console.log($(btn).parents('.dynamic-form').get(0));
-      $(btn).parents('.dynamic-form').remove();
+      $(btn).parents('.dynamic-form').hide();
+      {#$(btn).parents('.dynamic-form').remove();#}
+      var id = $(btn).parents('.dynamic-form').children().attr('id').replace('-id', '-DELETE');
+      document.getElementById(id).checked = true;
       var forms = $('.dynamic-form');
       $('#id_' + prefix + '-TOTAL_FORMS').val(forms.length);
       for (var i=0, formCount=forms.length; i<formCount; i++) {
