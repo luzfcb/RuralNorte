@@ -44,7 +44,8 @@ DocumentoLoteFormSet = forms.modelformset_factory(
 DocumentoLoteInlineFormSet = forms.inlineformset_factory(
     models.Lote,
     models.DocumentoLote,
-    extra=1,
+    extra=0,
+    min_num=1,
     fields=('tipo_documento',),
     formset=DocumentoLoteFormSet,
     can_delete=True,

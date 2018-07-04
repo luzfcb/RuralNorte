@@ -120,14 +120,14 @@
               <div class="card-body">
                 <div>
                   {% for form in ContatoInlineFormSet %}
-                    <div id="{{ form.prefix }}-row" class="dynamic-form form-row">
+                    <div id="{{ form.prefix }}-row" class="dynamic-form-contatos form-row">
                       {{ form.id }}
                       <div class="col-md-10">
                         {{ form.telefone.label_tag }}
                         {{ form.telefone }}
                         {{ form.telefone.errors }}
                       </div>
-                      <div class="col-md-2" style="margin-top: 7%;">
+                      <div class="col-md-2" style="margin-top: 6%;">
                         <a id="contatos" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Contato">
                           <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
                         </a>
@@ -136,7 +136,7 @@
                     </div>
                   {% endfor %}
                 </div>
-                <div>
+                <div style="margin-top: 1rem;">
                   <a id="contatos" href="javascript:void(0)" class="btn btn-success add-row" title="Novo Contato">
                     <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
                   </a>
@@ -175,23 +175,28 @@
             <div class="card card-register">
               <div class="card-header"><b>1. Qual documento o lote possui?</b></div>
               <div class="card-body">
-                <div class="form-row">
+                <div>
                   {% for form in DocumentoLoteInlineFormSet %}
-                    {{ form.id }}
-                    <div class="col-md-10">
-                      {{ form.tipo_documento.label_tag }}
-                      {{ form.tipo_documento }}
-                      {{ form.tipo_documento.errors }}
-                    </div>
-                    <div class="col-md-2" style="margin-top: 7%;">
-                      {{ form.DELETE.label }}
-                      {{ form.DELETE }}
-                      <!-- <a style="border: none; margin-top: 2em;" class="form-control" href="#"
-                        title="Excluir">
-                        <i class="fa fa-trash-o fa-lg"></i>
-                      </a> -->
+                    <div id="{{ form.prefix }}-row" class="dynamic-form-documentos_lote form-row">
+                      {{ form.id }}
+                      <div class="col-md-10">
+                        {{ form.tipo_documento.label_tag }}
+                        {{ form.tipo_documento }}
+                        {{ form.tipo_documento.errors }}
+                      </div>
+                      <div class="col-md-2" style="margin-top: 6%;">
+                        <a id="documentos_lote" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Documento">
+                          <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                        </a>
+                        <div hidden="true">{{ form.DELETE }}</div>
+                      </div>
                     </div>
                   {% endfor %}
+                </div>
+                <div style="margin-top: 1rem;">
+                  <a id="documentos_lote" href="javascript:void(0)" class="btn btn-success add-row" title="Novo Documento">
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                  </a>
                 </div>
               </div>
             </div>
@@ -1919,8 +1924,8 @@
 
     function addForm(btn, prefix) {
       var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
-      var row = $('.dynamic-form:last').clone(true).get(0);
-      $(row).insertAfter($('.dynamic-form:last')).children('.hidden').removeClass('hidden');
+      var row = $('.dynamic-form-' + prefix + ':last').clone(true).get(0);
+      $(row).insertAfter($('.dynamic-form-' + prefix + ':last')).children('.hidden').removeClass('hidden');
       $(row).children().not(':last').children().each(function() {
         updateElementIndex(this, prefix, formCount);
         $(this).val('');
@@ -1933,11 +1938,11 @@
     }
 
     function deleteForm(btn, prefix) {
-      $(btn).parents('.dynamic-form').hide();
+      $(btn).parents('.dynamic-form-' + prefix).hide();
       {#$(btn).parents('.dynamic-form').remove();#}
-      var id = $(btn).parents('.dynamic-form').children().attr('id').replace('-id', '-DELETE');
+      var id = $(btn).parents('.dynamic-form-' + prefix).children().attr('id').replace('-id', '-DELETE');
       document.getElementById(id).checked = true;
-      var forms = $('.dynamic-form');
+      var forms = $('.dynamic-form-' + prefix);
       $('#id_' + prefix + '-TOTAL_FORMS').val(forms.length);
       for (var i=0, formCount=forms.length; i<formCount; i++) {
         $(forms.get(i)).children().not(':last').children().each(function() {
