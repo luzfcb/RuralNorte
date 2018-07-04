@@ -25,6 +25,7 @@ ContatoInlineFormSet = forms.inlineformset_factory(
             attrs={
                 'class': 'form-control contatos',
                 'placeholder': 'Informe o telefone',
+                'style': 'margin-bottom: 1rem;'
             }
         )
     }
@@ -73,7 +74,8 @@ BeneficioSocialFormSet = forms.modelformset_factory(
 BeneficioSocialInlineFormSet = forms.inlineformset_factory(
     models.Lote,
     models.BeneficioSocial,
-    extra=1,
+    extra=0,
+    min_num=1,
     fields=('tipo_beneficio', 'outros'),
     formset=BeneficioSocialFormSet,
     can_delete=True,
@@ -107,7 +109,8 @@ AutoDeclaracaoEtniaFormSet = forms.modelformset_factory(
 AutoDeclaracaoEtniaInlineFormSet = forms.inlineformset_factory(
     models.Lote,
     models.AutoDeclaracaoEtnia,
-    extra=1,
+    extra=0,
+    min_num=1,
     fields=('tipo_declaracao_etnia', 'quantidade', 'outros'),
     formset=AutoDeclaracaoEtniaFormSet,
     can_delete=True,
@@ -147,7 +150,8 @@ EstruturaOrganizativaFormSet = forms.modelformset_factory(
 EstruturaOrganizativaInlineFormSet = forms.inlineformset_factory(
     models.Lote,
     models.EstruturaOrganizativa,
-    extra=1,
+    extra=0,
+    min_num=1,
     fields=('tipo_estrutura_organizativa', 'frequencia'),
     formset=EstruturaOrganizativaFormSet,
     can_delete=True,
@@ -181,7 +185,8 @@ FonteAguaFormSet = forms.modelformset_factory(
 FonteAguaInlineFormSet = forms.inlineformset_factory(
     models.Lote,
     models.FonteAgua,
-    extra=1,
+    extra=0,
+    min_num=1,
     fields=('fonte_agua', 'outra'),
     formset=FonteAguaFormSet,
     can_delete=True,
@@ -215,7 +220,8 @@ TratamentoAguaFormSet = forms.modelformset_factory(
 TratamentoAguaInlineFormSet = forms.inlineformset_factory(
     models.Lote,
     models.TratamentoAgua,
-    extra=1,
+    extra=0,
+    min_num=1,
     fields=('tratamento_agua', 'outros'),
     formset=TratamentoAguaFormSet,
     can_delete=True,
@@ -249,7 +255,8 @@ ConstrucaoLoteFormSet = forms.modelformset_factory(
 ConstrucaoLoteInlineFormSet = forms.inlineformset_factory(
     models.Lote,
     models.ConstrucaoLote,
-    extra=1,
+    extra=0,
+    min_num=1,
     fields=('construcao_no_lote', 'quantidade', 'outros'),
     formset=ConstrucaoLoteFormSet,
     can_delete=True,
@@ -289,7 +296,8 @@ BemProdutivoFormSet = forms.modelformset_factory(
 BemProdutivoInlineFormSet = forms.inlineformset_factory(
     models.Lote,
     models.BemProdutivo,
-    extra=1,
+    extra=0,
+    min_num=1,
     fields=('bem_produtivo', 'quantidade', 'outros'),
     formset=BemProdutivoFormSet,
     can_delete=True,
@@ -329,7 +337,8 @@ AplicacaoCreditoFormSet = forms.modelformset_factory(
 AplicacaoCreditoInlineFormSet = forms.inlineformset_factory(
     models.Lote,
     models.AplicacaoCredito,
-    extra=1,
+    extra=0,
+    min_num=1,
     fields=('tipo_aplicacao_credito', 'valor'),
     formset=AplicacaoCreditoFormSet,
     can_delete=True,
@@ -363,7 +372,8 @@ CreditoBancarioFormSet = forms.modelformset_factory(
 CreditoBancarioInlineFormSet = forms.inlineformset_factory(
     models.Lote,
     models.CreditoBancario,
-    extra=1,
+    extra=0,
+    min_num=1,
     fields=('credito_bancario', 'valor', 'adimplente', 'outros'),
     formset=CreditoBancarioFormSet,
     can_delete=True,

@@ -122,12 +122,12 @@
                   {% for form in ContatoInlineFormSet %}
                     <div id="{{ form.prefix }}-row" class="dynamic-form-contatos form-row">
                       {{ form.id }}
-                      <div class="col-md-10">
+                      <div class="col-md-11">
                         {{ form.telefone.label_tag }}
                         {{ form.telefone }}
                         {{ form.telefone.errors }}
                       </div>
-                      <div class="col-md-2" style="margin-top: 6%;">
+                      <div class="col-md-1" style="margin-top: 6%;">
                         <a id="contatos" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Contato">
                           <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
                         </a>
@@ -136,7 +136,7 @@
                     </div>
                   {% endfor %}
                 </div>
-                <div style="margin-top: 1rem;">
+                <div>
                   <a id="contatos" href="javascript:void(0)" class="btn btn-success add-row" title="Novo Contato">
                     <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
                   </a>
@@ -179,12 +179,12 @@
                   {% for form in DocumentoLoteInlineFormSet %}
                     <div id="{{ form.prefix }}-row" class="dynamic-form-documentos_lote form-row">
                       {{ form.id }}
-                      <div class="col-md-10">
+                      <div class="col-md-11">
                         {{ form.tipo_documento.label_tag }}
                         {{ form.tipo_documento }}
                         {{ form.tipo_documento.errors }}
                       </div>
-                      <div class="col-md-2" style="margin-top: 6%;">
+                      <div class="col-md-1" style="margin-top: 6%;">
                         <a id="documentos_lote" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Documento">
                           <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
                         </a>
@@ -193,7 +193,7 @@
                     </div>
                   {% endfor %}
                 </div>
-                <div style="margin-top: 1rem;">
+                <div>
                   <a id="documentos_lote" href="javascript:void(0)" class="btn btn-success add-row" title="Novo Documento">
                     <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
                   </a>
@@ -215,28 +215,33 @@
             <div class="card card-register">
               <div class="card-header"><b>4. Quais os tipos de benefício?</b></div>
               <div class="card-body">
-                <div class="form-row">
+                <div>
                   {% for form in BeneficioSocialInlineFormSet %}
-                    {{ form.id }}
-                    <div class="col-md-5">
-                      {{ form.tipo_beneficio.label_tag }}
-                      {{ form.tipo_beneficio }}
-                      {{ form.tipo_beneficio.errors }}
-                    </div>
-                    <div class="col-md-5">
-                      {{ form.outros.label_tag }}
-                      {{ form.outros }}
-                      {{ form.outros.errors }}
-                    </div>
-                    <div class="col-md-2" style="margin-top: 7%;">
-                      {{ form.DELETE.label }}
-                      {{ form.DELETE }}
-                      <!-- <a style="border: none; margin-top: 2em;" class="form-control" href="#"
-                        title="Excluir">
-                        <i class="fa fa-trash-o fa-lg"></i>
-                      </a> -->
+                    <div id="{{ form.prefix }}-row" class="dynamic-form-beneficios_sociais form-row">
+                      {{ form.id }}
+                      <div class="col-md-5">
+                        {{ form.tipo_beneficio.label_tag }}
+                        {{ form.tipo_beneficio }}
+                        {{ form.tipo_beneficio.errors }}
+                      </div>
+                      <div class="col-md-6">
+                        {{ form.outros.label_tag }}
+                        {{ form.outros }}
+                        {{ form.outros.errors }}
+                      </div>
+                      <div class="col-md-1" style="margin-top: 6%;">
+                        <a id="beneficios_sociais" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Benefício">
+                          <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                        </a>
+                        <div hidden="true">{{ form.DELETE }}</div>
+                      </div>
                     </div>
                   {% endfor %}
+                </div>
+                <div>
+                  <a id="beneficios_sociais" href="javascript:void(0)" class="btn btn-success add-row" title="Novo Benefício">
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                  </a>
                 </div>
               </div>
             </div>
@@ -249,33 +254,38 @@
             <div class="card card-register">
               <div class="card-header"><b>5. Quantos moradores se declaram...</b></div>
               <div class="card-body">
-                <div class="form-row">
+                <div>
                   {% for form in AutoDeclaracaoEtniaInlineFormSet %}
-                    {{ form.id }}
-                    <div class="col-md-3">
-                      {{ form.tipo_declaracao_etnia.label_tag }}
-                      {{ form.tipo_declaracao_etnia }}
-                      {{ form.tipo_declaracao_etnia.errors }}
-                    </div>
-                    <div class="col-md-3">
-                      {{ form.quantidade.label_tag }}
-                      {{ form.quantidade }}
-                      {{ form.quantidade.errors }}
-                    </div>
-                    <div class="col-md-4">
-                      {{ form.outros.label_tag }}
-                      {{ form.outros }}
-                      {{ form.outros.errors }}
-                    </div>
-                    <div class="col-md-2" style="margin-top: 7%;">
-                      {{ form.DELETE.label }}
-                      {{ form.DELETE }}
-                      <!-- <a style="border: none; margin-top: 2em;" class="form-control" href="#"
-                        title="Excluir">
-                        <i class="fa fa-trash-o fa-lg"></i>
-                      </a> -->
+                    <div id="{{ form.prefix }}-row" class="dynamic-form-auto_declaracoes form-row">
+                      {{ form.id }}
+                      <div class="col-md-3">
+                        {{ form.tipo_declaracao_etnia.label_tag }}
+                        {{ form.tipo_declaracao_etnia }}
+                        {{ form.tipo_declaracao_etnia.errors }}
+                      </div>
+                      <div class="col-md-3">
+                        {{ form.quantidade.label_tag }}
+                        {{ form.quantidade }}
+                        {{ form.quantidade.errors }}
+                      </div>
+                      <div class="col-md-5">
+                        {{ form.outros.label_tag }}
+                        {{ form.outros }}
+                        {{ form.outros.errors }}
+                      </div>
+                      <div class="col-md-1" style="margin-top: 6%;">
+                        <a id="auto_declaracoes" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Autodeclaração">
+                          <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                        </a>
+                        <div hidden="true">{{ form.DELETE }}</div>
+                      </div>
                     </div>
                   {% endfor %}
+                </div>
+                <div>
+                  <a id="auto_declaracoes" href="javascript:void(0)" class="btn btn-success add-row" title="Nova Autodeclaração">
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                  </a>
                 </div>
               </div>
             </div>
@@ -288,28 +298,33 @@
             <div class="card card-register">
               <div class="card-header"><b>6. Das estruturas organizativas internas ao assentamento diga qual existe no assentamento e de quais os membros da família participam</b></div>
               <div class="card-body">
-                <div class="form-row">
+                <div>
                   {% for form in EstruturaOrganizativaInlineFormSet %}
-                    {{ form.id }}
-                    <div class="col-md-6">
-                      {{ form.tipo_estrutura_organizativa.label_tag }}
-                      {{ form.tipo_estrutura_organizativa }}
-                      {{ form.tipo_estrutura_organizativa.errors }}
-                    </div>
-                    <div class="col-md-5">
-                      {{ form.frequencia.label_tag }}
-                      {{ form.frequencia }}
-                      {{ form.frequencia.errors }}
-                    </div>
-                    <div class="col-md-1" style="margin-top: 3%;">
-                      {{ form.DELETE.label }}
-                      {{ form.DELETE }}
-                      <!-- <a style="border: none; margin-top: 2em;" class="form-control" href="#"
-                        title="Excluir">
-                        <i class="fa fa-trash-o fa-lg"></i>
-                      </a> -->
+                    <div id="{{ form.prefix }}-row" class="dynamic-form-estruturas_organizativas form-row">
+                      {{ form.id }}
+                      <div class="col-md-6">
+                        {{ form.tipo_estrutura_organizativa.label_tag }}
+                        {{ form.tipo_estrutura_organizativa }}
+                        {{ form.tipo_estrutura_organizativa.errors }}
+                      </div>
+                      <div class="col-md-5">
+                        {{ form.frequencia.label_tag }}
+                        {{ form.frequencia }}
+                        {{ form.frequencia.errors }}
+                      </div>
+                      <div class="col-md-1" style="margin-top: 2.7%;">
+                        <a id="estruturas_organizativas" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Estrutura">
+                          <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                        </a>
+                        <div hidden="true">{{ form.DELETE }}</div>
+                      </div>
                     </div>
                   {% endfor %}
+                </div>
+                <div>
+                  <a id="estruturas_organizativas" href="javascript:void(0)" class="btn btn-success add-row" title="Nova Estrutura">
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                  </a>
                 </div>
               </div>
             </div>
@@ -343,28 +358,33 @@
             <div class="card card-register">
               <div class="card-header"><b>11. De onde vem a água que abastece a família?</b></div>
               <div class="card-body">
-                <div class="form-row">
+                <div>
                   {% for form in FonteAguaInlineFormSet %}
-                    {{ form.id }}
-                    <div class="col-md-5">
-                      {{ form.fonte_agua.label_tag }}
-                      {{ form.fonte_agua }}
-                      {{ form.fonte_agua.errors }}
-                    </div>
-                    <div class="col-md-5">
-                      {{ form.outra.label_tag }}
-                      {{ form.outra }}
-                      {{ form.outra.errors }}
-                    </div>
-                    <div class="col-md-2" style="margin-top: 7%;">
-                      {{ form.DELETE.label }}
-                      {{ form.DELETE }}
-                      <!-- <a style="border: none; margin-top: 2em;" class="form-control" href="#"
-                        title="Excluir">
-                        <i class="fa fa-trash-o fa-lg"></i>
-                      </a> -->
+                    <div id="{{ form.prefix }}-row" class="dynamic-form-fontes_agua form-row">
+                      {{ form.id }}
+                      <div class="col-md-5">
+                        {{ form.fonte_agua.label_tag }}
+                        {{ form.fonte_agua }}
+                        {{ form.fonte_agua.errors }}
+                      </div>
+                      <div class="col-md-6">
+                        {{ form.outra.label_tag }}
+                        {{ form.outra }}
+                        {{ form.outra.errors }}
+                      </div>
+                      <div class="col-md-1" style="margin-top: 6%;">
+                        <a id="fontes_agua" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Fonte">
+                          <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                        </a>
+                        <div hidden="true">{{ form.DELETE }}</div>
+                      </div>
                     </div>
                   {% endfor %}
+                </div>
+                <div>
+                  <a id="fontes_agua" href="javascript:void(0)" class="btn btn-success add-row" title="Nova Fonte">
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                  </a>
                 </div>
               </div>
             </div>
@@ -377,28 +397,33 @@
             <div class="card card-register">
               <div class="card-header"><b>12. Qual a forma tratamento da água para consumo?</b></div>
               <div class="card-body">
-                <div class="form-row">
+                <div>
                   {% for form in TratamentoAguaInlineFormSet %}
-                    {{ form.id }}
-                    <div class="col-md-5">
-                      {{ form.tratamento_agua.label_tag }}
-                      {{ form.tratamento_agua }}
-                      {{ form.tratamento_agua.errors }}
-                    </div>
-                    <div class="col-md-5">
-                      {{ form.outros.label_tag }}
-                      {{ form.outros }}
-                      {{ form.outros.errors }}
-                    </div>
-                    <div class="col-md-2" style="margin-top: 7%;">
-                      {{ form.DELETE.label }}
-                      {{ form.DELETE }}
-                      <!-- <a style="border: none; margin-top: 2em;" class="form-control" href="#"
-                        title="Excluir">
-                        <i class="fa fa-trash-o fa-lg"></i>
-                      </a> -->
+                    <div id="{{ form.prefix }}-row" class="dynamic-form-tratamentos_agua form-row">
+                      {{ form.id }}
+                      <div class="col-md-5">
+                        {{ form.tratamento_agua.label_tag }}
+                        {{ form.tratamento_agua }}
+                        {{ form.tratamento_agua.errors }}
+                      </div>
+                      <div class="col-md-6">
+                        {{ form.outros.label_tag }}
+                        {{ form.outros }}
+                        {{ form.outros.errors }}
+                      </div>
+                      <div class="col-md-1" style="margin-top: 6%;">
+                        <a id="tratamentos_agua" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Tratamento">
+                          <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                        </a>
+                        <div hidden="true">{{ form.DELETE }}</div>
+                      </div>
                     </div>
                   {% endfor %}
+                </div>
+                <div>
+                  <a id="tratamentos_agua" href="javascript:void(0)" class="btn btn-success add-row" title="Novo Tratamento">
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                  </a>
                 </div>
               </div>
             </div>
@@ -462,42 +487,47 @@
             <div class="card card-register">
               <div class="card-header"><b>21. O que tem construído no lote?</b></div>
               <div class="card-body">
-                <div class="form-row">
+                <div>
                   {% for form in ConstrucaoLoteInlineFormSet %}
-                    {{ form.id }}
-                    <fieldset class="border p-2" style="width: 100%;">
-                      {% if forloop.last %}
-                        <legend><b style="font-size: 1rem;">Construção #</b></legend>
-                      {% else %}
-                        <legend><b style="font-size: 1rem;">Construção #{{ forloop.counter }}</b></legend>
-                      {% endif %}
-                      <div class="row">
-                        <div class="col-md-4">
-                          {{ form.construcao_no_lote.label_tag }}
-                          {{ form.construcao_no_lote }}
-                          {{ form.construcao_no_lote.errors }}
-                        </div>
-                        <div class="col-md-3">
-                          {{ form.quantidade.label_tag }}
-                          {{ form.quantidade }}
-                          {{ form.quantidade.errors }}
-                        </div>
-                        <div class="col-md-3">
-                          {{ form.outros.label_tag }}
-                          {{ form.outros }}
-                          {{ form.outros.errors }}
-                        </div>
-                        <div class="col-md-2" style="margin-top: 3%;">
-                          {{ form.DELETE.label }}
-                          {{ form.DELETE }}
-                          <!-- <a style="border: none; margin-top: 2em;" class="form-control" href="#"
-                            title="Excluir">
-                            <i class="fa fa-trash-o fa-lg"></i>
-                          </a> -->
-                        </div>
+                    <div id="{{ form.prefix }}-row" class="dynamic-form-construcoes_lote form-row">
+                      {{ form.id }}
+{#                    <fieldset class="border p-2" style="width: 100%;">#}
+{#                      {% if forloop.last %}#}
+{#                        <legend><b style="font-size: 1rem;">Construção #</b></legend>#}
+{#                      {% else %}#}
+{#                        <legend><b style="font-size: 1rem;">Construção #{{ forloop.counter }}</b></legend>#}
+{#                      {% endif %}#}
+{#                      <div class="row">#}
+                      <div class="col-md-4">
+                        {{ form.construcao_no_lote.label_tag }}
+                        {{ form.construcao_no_lote }}
+                        {{ form.construcao_no_lote.errors }}
                       </div>
-                    </fieldset>
+                      <div class="col-md-3">
+                        {{ form.quantidade.label_tag }}
+                        {{ form.quantidade }}
+                        {{ form.quantidade.errors }}
+                      </div>
+                      <div class="col-md-4">
+                        {{ form.outros.label_tag }}
+                        {{ form.outros }}
+                        {{ form.outros.errors }}
+                      </div>
+                      <div class="col-md-1" style="margin-top: 2.7%;">
+                        <a id="construcoes_lote" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Construção">
+                          <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                        </a>
+                        <div hidden="true">{{ form.DELETE }}</div>
+                      </div>
+{#                      </div>#}
+{#                    </fieldset>#}
+                    </div>
                   {% endfor %}
+                </div>
+                <div>
+                  <a id="construcoes_lote" href="javascript:void(0)" class="btn btn-success add-row" title="Nova Construção">
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                  </a>
                 </div>
               </div>
             </div>
@@ -510,42 +540,47 @@
             <div class="card card-register">
               <div class="card-header"><b>22. Bens produtivos disponíveis no lote...</b></div>
               <div class="card-body">
-                <div class="form-row">
+                <div>
                   {% for form in BemProdutivoInlineFormSet %}
-                    {{ form.id }}
-                    <fieldset class="border p-2" style="width: 100%;">
-                      {% if forloop.last %}
-                        <legend><b style="font-size: 1rem;">Bem Produtivo #</b></legend>
-                      {% else %}
-                        <legend><b style="font-size: 1rem;">Bem Produtivo #{{ forloop.counter }}</b></legend>
-                      {% endif %}
-                      <div class="row">
-                        <div class="col-md-4">
-                          {{ form.bem_produtivo.label_tag }}
-                          {{ form.bem_produtivo }}
-                          {{ form.bem_produtivo.errors }}
-                        </div>
-                        <div class="col-md-3">
-                          {{ form.quantidade.label_tag }}
-                          {{ form.quantidade }}
-                          {{ form.quantidade.errors }}
-                        </div>
-                        <div class="col-md-3">
-                          {{ form.outros.label_tag }}
-                          {{ form.outros }}
-                          {{ form.outros.errors }}
-                        </div>
-                        <div class="col-md-2" style="margin-top: 3%;">
-                          {{ form.DELETE.label }}
-                          {{ form.DELETE }}
-                          <!-- <a style="border: none; margin-top: 2em;" class="form-control" href="#"
-                            title="Excluir">
-                            <i class="fa fa-trash-o fa-lg"></i>
-                          </a> -->
-                        </div>
+                    <div id="{{ form.prefix }}-row" class="dynamic-form-bens_produtivos form-row">
+                      {{ form.id }}
+{#                    <fieldset class="border p-2" style="width: 100%;">#}
+{#                      {% if forloop.last %}#}
+{#                        <legend><b style="font-size: 1rem;">Bem Produtivo #</b></legend>#}
+{#                      {% else %}#}
+{#                        <legend><b style="font-size: 1rem;">Bem Produtivo #{{ forloop.counter }}</b></legend>#}
+{#                      {% endif %}#}
+{#                      <div class="row">#}
+                      <div class="col-md-4">
+                        {{ form.bem_produtivo.label_tag }}
+                        {{ form.bem_produtivo }}
+                        {{ form.bem_produtivo.errors }}
                       </div>
-                    </fieldset>
+                      <div class="col-md-3">
+                        {{ form.quantidade.label_tag }}
+                        {{ form.quantidade }}
+                        {{ form.quantidade.errors }}
+                      </div>
+                      <div class="col-md-4">
+                        {{ form.outros.label_tag }}
+                        {{ form.outros }}
+                        {{ form.outros.errors }}
+                      </div>
+                      <div class="col-md-1" style="margin-top: 2.7%;">
+                        <a id="bens_produtivos" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Bem produtivo">
+                          <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                        </a>
+                        <div hidden="true">{{ form.DELETE }}</div>
+                      </div>
+{#                      </div>#}
+{#                    </fieldset>#}
+                    </div>
                   {% endfor %}
+                </div>
+                <div>
+                  <a id="bens_produtivos" href="javascript:void(0)" class="btn btn-success add-row" title="Novo Bem produtivo">
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                  </a>
                 </div>
               </div>
             </div>
@@ -558,37 +593,42 @@
             <div class="card card-register">
               <div class="card-header"><b>23. Com relação aos créditos, como está a aplicação no lote?</b></div>
               <div class="card-body">
-                <div class="form-row">
+                <div>
                   {% for form in AplicacaoCreditoInlineFormSet %}
-                    {{ form.id }}
-                    <fieldset class="border p-2" style="width: 100%;">
-                      {% if forloop.last %}
-                        <legend><b style="font-size: 1rem;">Aplicação de Crédito #</b></legend>
-                      {% else %}
-                        <legend><b style="font-size: 1rem;">Aplicação de Crédito #{{ forloop.counter }}</b></legend>
-                      {% endif %}
-                      <div class="row">
-                        <div class="col-md-6">
-                          {{ form.tipo_aplicacao_credito.label_tag }}
-                          {{ form.tipo_aplicacao_credito }}
-                          {{ form.tipo_aplicacao_credito.errors }}
-                        </div>
-                        <div class="col-md-5">
-                          {{ form.valor.label_tag }}
-                          {{ form.valor }}
-                          {{ form.valor.errors }}
-                        </div>
-                        <div class="col-md-1" style="margin-top: 3%;">
-                          {{ form.DELETE.label }}
-                          {{ form.DELETE }}
-                          <!-- <a style="border: none; margin-top: 2em;" class="form-control" href="#"
-                            title="Excluir">
-                            <i class="fa fa-trash-o fa-lg"></i>
-                          </a> -->
-                        </div>
+                    <div id="{{ form.prefix }}-row" class="dynamic-form-aplicacoes_creditos form-row">
+                      {{ form.id }}
+{#                    <fieldset class="border p-2" style="width: 100%;">#}
+{#                      {% if forloop.last %}#}
+{#                        <legend><b style="font-size: 1rem;">Aplicação de Crédito #</b></legend>#}
+{#                      {% else %}#}
+{#                        <legend><b style="font-size: 1rem;">Aplicação de Crédito #{{ forloop.counter }}</b></legend>#}
+{#                      {% endif %}#}
+{#                      <div class="row">#}
+                      <div class="col-md-6">
+                        {{ form.tipo_aplicacao_credito.label_tag }}
+                        {{ form.tipo_aplicacao_credito }}
+                        {{ form.tipo_aplicacao_credito.errors }}
                       </div>
-                    </fieldset>
+                      <div class="col-md-5">
+                        {{ form.valor.label_tag }}
+                        {{ form.valor }}
+                        {{ form.valor.errors }}
+                      </div>
+                      <div class="col-md-1" style="margin-top: 2.7%;">
+                        <a id="aplicacoes_creditos" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Aplicação de Crédito">
+                          <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                        </a>
+                        <div hidden="true">{{ form.DELETE }}</div>
+                      </div>
+{#                      </div>#}
+{#                    </fieldset>#}
+                    </div>
                   {% endfor %}
+                </div>
+                <div>
+                  <a id="aplicacoes_creditos" href="javascript:void(0)" class="btn btn-success add-row" title="Nova Aplicação de Crédito">
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                  </a>
                 </div>
               </div>
             </div>
@@ -1925,6 +1965,7 @@
     function addForm(btn, prefix) {
       var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
       var row = $('.dynamic-form-' + prefix + ':last').clone(true).get(0);
+      $(row).show();
       $(row).insertAfter($('.dynamic-form-' + prefix + ':last')).children('.hidden').removeClass('hidden');
       $(row).children().not(':last').children().each(function() {
         updateElementIndex(this, prefix, formCount);
