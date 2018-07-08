@@ -602,7 +602,8 @@ OlericulturaFormSet = forms.modelformset_factory(
 OlericulturaInlineFormSet = forms.inlineformset_factory(
     models.Lote,
     models.Olericultura,
-    extra=1,
+    extra=0,
+    min_num=1,
     fields=(
         'tipo_producao', 'tipo_producao_outros', 'area_plantada', 'producao_consumo', 'producao_comercio',
         'producao_unidade_medida', 'valor', 'irrigacao', 'area_irrigada', 'medida_area_irrigada', 'tipo_irrigacao',
@@ -703,7 +704,8 @@ FruticulturaFormSet = forms.modelformset_factory(
 FruticulturaInlineFormSet = forms.inlineformset_factory(
     models.Lote,
     models.Fruticultura,
-    extra=1,
+    extra=0,
+    min_num=1,
     fields=(
         'tipo_producao', 'tipo_producao_outros', 'area_plantada', 'producao_consumo', 'producao_comercio', 'valor',
         'irrigacao', 'area_irrigada', 'medida_area_irrigada', 'tipo_irrigacao', 'canal_comercializacao', 'mercado_institucional'
