@@ -641,47 +641,52 @@
             <div class="card card-register">
               <div class="card-header"><b>24. Com relação aos créditos bancários, como está a aplicação na parcela?</b></div>
               <div class="card-body">
-                <div class="form-row">
+                <div>
                   {% for form in CreditoBancarioInlineFormSet %}
-                    {{ form.id }}
-                    <fieldset class="border p-2" style="width: 100%;">
-                      {% if forloop.last %}
-                        <legend><b style="font-size: 1rem;">Crédito Bancário #</b></legend>
-                      {% else %}
-                        <legend><b style="font-size: 1rem;">Crédito Bancário #{{ forloop.counter }}</b></legend>
-                      {% endif %}
-                      <div class="row">
-                        <div class="col-md-3">
-                          {{ form.credito_bancario.label_tag }}
-                          {{ form.credito_bancario }}
-                          {{ form.credito_bancario.errors }}
-                        </div>
-                        <div class="col-md-2">
-                          {{ form.valor.label_tag }}
-                          {{ form.valor }}
-                          {{ form.valor.errors }}
-                        </div>
-                        <div class="col-md-2">
-                          {{ form.adimplente.label_tag }}
-                          {{ form.adimplente }}
-                          {{ form.adimplente.errors }}
-                        </div>
-                        <div class="col-md-4">
-                          {{ form.outros.label_tag }}
-                          {{ form.outros }}
-                          {{ form.outros.errors }}
-                        </div>
-                        <div class="col-md-1" style="margin-top: 3%;">
-                          {{ form.DELETE.label }}
-                          {{ form.DELETE }}
-                          <!-- <a style="border: none; margin-top: 2em;" class="form-control" href="#"
-                            title="Excluir">
-                            <i class="fa fa-trash-o fa-lg"></i>
-                          </a> -->
-                        </div>
+                    <div id="{{ form.prefix }}-row" class="dynamic-form-creditos_bancarios form-row">
+                      {{ form.id }}
+{#                    <fieldset class="border p-2" style="width: 100%;">#}
+{#                      {% if forloop.last %}#}
+{#                        <legend><b style="font-size: 1rem;">Crédito Bancário #</b></legend>#}
+{#                      {% else %}#}
+{#                        <legend><b style="font-size: 1rem;">Crédito Bancário #{{ forloop.counter }}</b></legend>#}
+{#                      {% endif %}#}
+{#                      <div class="row">#}
+                      <div class="col-md-3">
+                        {{ form.credito_bancario.label_tag }}
+                        {{ form.credito_bancario }}
+                        {{ form.credito_bancario.errors }}
                       </div>
-                    </fieldset>
+                      <div class="col-md-2">
+                        {{ form.valor.label_tag }}
+                        {{ form.valor }}
+                        {{ form.valor.errors }}
+                      </div>
+                      <div class="col-md-2">
+                        {{ form.adimplente.label_tag }}
+                        {{ form.adimplente }}
+                        {{ form.adimplente.errors }}
+                      </div>
+                      <div class="col-md-4">
+                        {{ form.outros.label_tag }}
+                        {{ form.outros }}
+                        {{ form.outros.errors }}
+                      </div>
+                      <div class="col-md-1" style="margin-top: 2.7%;">
+                        <a id="creditos_bancarios" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Crédito Bancário">
+                          <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                        </a>
+                        <div hidden="true">{{ form.DELETE }}</div>
+                      </div>
+{#                      </div>#}
+{#                    </fieldset>#}
+                    </div>
                   {% endfor %}
+                </div>
+                <div>
+                  <a id="creditos_bancarios" href="javascript:void(0)" class="btn btn-success add-row" title="Novo Crédito Bancário">
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                  </a>
                 </div>
               </div>
             </div>
@@ -699,92 +704,97 @@
               <div class="card-body">
                 <div class="form-row">
                   {% for form in CulturaInlineFormSet %}
+                    <div id="{{ form.prefix }}-row" class="dynamic-form-culturas form-row">
                     {{ form.id }}
-                    <fieldset class="border p-2" style="width: 100%;">
-                      {% if forloop.last %}
-                        <legend><b style="font-size: 1rem;">Cultura #</b></legend>
-                      {% else %}
-                        <legend><b style="font-size: 1rem;">Cultura #{{ forloop.counter }}</b></legend>
-                      {% endif %}
-                      <div class="row">
-                        <div class="col-md-5">
-                          {{ form.tipo_producao.label_tag }}
-                          {{ form.tipo_producao }}
-                          {{ form.tipo_producao.errors }}
-                        </div>
-                        <div class="col-md-5">
-                          {{ form.tipo_producao_outros.label_tag }}
-                          {{ form.tipo_producao_outros }}
-                          {{ form.tipo_producao_outros.errors }}
-                        </div>
-                        <div class="col-md-2">
-                          {{ form.area_plantada.label_tag }}
-                          {{ form.area_plantada }}
-                          {{ form.area_plantada.errors }}
-                        </div>
-                        <div class="col-md-2">
-                          {{ form.producao_consumo.label_tag }}
-                          {{ form.producao_consumo }}
-                          {{ form.producao_consumo.errors }}
-                        </div>
-                        <div class="col-md-2">
-                          {{ form.producao_comercio.label_tag }}
-                          {{ form.producao_comercio }}
-                          {{ form.producao_comercio.errors }}
-                        </div>
-                        <div class="col-md-2">
-                          {{ form.valor.label_tag }}
-                          {{ form.valor }}
-                          {{ form.valor.errors }}
-                        </div>
-                        <div class="col-md-4">
-                          {{ form.canal_comercializacao.label_tag }}
-                          {{ form.canal_comercializacao }}
-                          {{ form.canal_comercializacao.errors }}
-                        </div>
-                        <div class="col-md-2">
-                          {{ form.mercado_institucional.label_tag }}
-                          {{ form.mercado_institucional }}
-                          {{ form.mercado_institucional.errors }}
-                        </div>
-                        <div class="col-md-12">
-                          <fieldset class="border p-2" style="width: 100%;">
-                            <legend><b style="font-size: 1rem;">28. Sobre o Nível Tecnológico de Produção, existe(m) alguma(s) cultura(s) irrigada(s)?</b></legend>
-                            <div class="form-row">
-                              <div class="col-md-3">
-                                {{ form.irrigacao.label_tag }}
-                                {{ form.irrigacao }}
-                                {{ form.irrigacao.errors }}
+                      <fieldset class="border p-2" style="width: 100%;">
+                        {% if forloop.last %}
+                          <legend><b style="font-size: 1rem;">Cultura #</b></legend>
+                        {% else %}
+                          <legend><b style="font-size: 1rem;">Cultura #{{ forloop.counter }}</b></legend>
+                        {% endif %}
+                        <div class="row">
+                          <div class="col-md-5">
+                            {{ form.tipo_producao.label_tag }}
+                            {{ form.tipo_producao }}
+                            {{ form.tipo_producao.errors }}
+                          </div>
+                          <div class="col-md-5">
+                            {{ form.tipo_producao_outros.label_tag }}
+                            {{ form.tipo_producao_outros }}
+                            {{ form.tipo_producao_outros.errors }}
+                          </div>
+                          <div class="col-md-2">
+                            {{ form.area_plantada.label_tag }}
+                            {{ form.area_plantada }}
+                            {{ form.area_plantada.errors }}
+                          </div>
+                          <div class="col-md-2">
+                            {{ form.producao_consumo.label_tag }}
+                            {{ form.producao_consumo }}
+                            {{ form.producao_consumo.errors }}
+                          </div>
+                          <div class="col-md-2">
+                            {{ form.producao_comercio.label_tag }}
+                            {{ form.producao_comercio }}
+                            {{ form.producao_comercio.errors }}
+                          </div>
+                          <div class="col-md-2">
+                            {{ form.valor.label_tag }}
+                            {{ form.valor }}
+                            {{ form.valor.errors }}
+                          </div>
+                          <div class="col-md-4">
+                            {{ form.canal_comercializacao.label_tag }}
+                            {{ form.canal_comercializacao }}
+                            {{ form.canal_comercializacao.errors }}
+                          </div>
+                          <div class="col-md-2">
+                            {{ form.mercado_institucional.label_tag }}
+                            {{ form.mercado_institucional }}
+                            {{ form.mercado_institucional.errors }}
+                          </div>
+                          <div class="col-md-12">
+                            <fieldset class="border p-2" style="width: 100%;">
+                              <legend><b style="font-size: 1rem;">28. Sobre o Nível Tecnológico de Produção, existe(m) alguma(s) cultura(s) irrigada(s)?</b></legend>
+                              <div class="form-row">
+                                <div class="col-md-3">
+                                  {{ form.irrigacao.label_tag }}
+                                  {{ form.irrigacao }}
+                                  {{ form.irrigacao.errors }}
+                                </div>
+                                <div class="col-md-3">
+                                  {{ form.area_irrigada.label_tag }}
+                                  {{ form.area_irrigada }}
+                                  {{ form.area_irrigada.errors }}
+                                </div>
+                                <div class="col-md-3">
+                                  {{ form.medida_area_irrigada.label_tag }}
+                                  {{ form.medida_area_irrigada }}
+                                  {{ form.medida_area_irrigada.errors }}
+                                </div>
+                                <div class="col-md-3">
+                                  {{ form.tipo_irrigacao.label_tag }}
+                                  {{ form.tipo_irrigacao }}
+                                  {{ form.tipo_irrigacao.errors }}
+                                </div>
                               </div>
-                              <div class="col-md-3">
-                                {{ form.area_irrigada.label_tag }}
-                                {{ form.area_irrigada }}
-                                {{ form.area_irrigada.errors }}
-                              </div>
-                              <div class="col-md-3">
-                                {{ form.medida_area_irrigada.label_tag }}
-                                {{ form.medida_area_irrigada }}
-                                {{ form.medida_area_irrigada.errors }}
-                              </div>
-                              <div class="col-md-3">
-                                {{ form.tipo_irrigacao.label_tag }}
-                                {{ form.tipo_irrigacao }}
-                                {{ form.tipo_irrigacao.errors }}
-                              </div>
-                            </div>
-                          </fieldset>
+                            </fieldset>
+                          </div>
+                          <div class="col-md-1" style="margin-top: 2.7%;">
+                            <a id="culturas" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Cultura">
+                              <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                            </a>
+                            <div hidden="true">{{ form.DELETE }}</div>
+                          </div>
                         </div>
-                        <div class="col-md-12" style="margin-top: 1%;">
-                          {{ form.DELETE.label }}
-                          {{ form.DELETE }}
-                          <!-- <a style="border: none; margin-top: 2em;" class="form-control" href="#"
-                            title="Excluir">
-                            <i class="fa fa-trash-o fa-lg"></i>
-                          </a> -->
-                        </div>
-                      </div>
-                    </fieldset>
+                      </fieldset>
+                    </div>
                   {% endfor %}
+                </div>
+                <div>
+                  <a id="culturas" href="javascript:void(0)" class="btn btn-success add-row" title="Nova Cultura">
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                  </a>
                 </div>
               </div>
             </div>
@@ -1968,9 +1978,20 @@
       $(row).show();
       $(row).insertAfter($('.dynamic-form-' + prefix + ':last')).children('.hidden').removeClass('hidden');
       $(row).children().not(':last').children().each(function() {
-        updateElementIndex(this, prefix, formCount);
-        $(this).val('');
-      });
+          updateElementIndex(this, prefix, formCount);
+          $(this).val('');
+        });
+      if (prefix == 'culturas') {
+        $(row).children().each(function () {
+          if($(this).is('fieldset')) {
+            $(this).children().children().not(':last').children().each(function () {
+              updateElementIndex(this, prefix, formCount);
+              $(this).val('');
+            });
+          }
+        });
+      }
+
       $(row).find('.delete-row').click(function() {
         deleteForm(this, prefix);
       });
