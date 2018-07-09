@@ -729,7 +729,8 @@ AtividadeExtrativistaFormSet = forms.modelformset_factory(
 AtividadeExtrativistaInlineFormSet = forms.inlineformset_factory(
     models.Lote,
     models.AtividadeExtrativista,
-    extra=1,
+    extra=0,
+    min_num=1,
     fields=(
         'especificacao', 'outros', 'quantidade_frutos_ano', 'quantidade_palmitos_ano', 'valor', 'canal_comercializacao',
         'mercado_institucional'
@@ -758,7 +759,8 @@ AtividadeExtrativistaInlineFormSet = forms.inlineformset_factory(
         'quantidade_palmitos_ano': forms.NumberInput(
             attrs={
                 'class': 'form-control',
-                'placeholder': 'Informe a quantidade'
+                'placeholder': 'Informe a quantidade',
+                'style': 'max-width: 95%'
             }
         ),
         'valor': forms.TextInput(
@@ -796,7 +798,8 @@ ProducaoFlorestalFormSet = forms.modelformset_factory(
 ProducaoFlorestalInlineFormSet = forms.inlineformset_factory(
     models.Lote,
     models.ProducaoFlorestal,
-    extra=1,
+    extra=0,
+    min_num=1,
     fields=(
         'especificacao', 'outros', 'quantidade_produzida_ano', 'area_plantada', 'valor', 'canal_comercializacao'
     ),
@@ -843,9 +846,43 @@ ProducaoFlorestalInlineFormSet = forms.inlineformset_factory(
 )
 
 class BovinoculturaForm(forms.ModelForm):
+    especificacao = forms.ChoiceField(
+        choices=(('', '---------'),) + models.Bovinocultura.BOVINOCULTURA + ((999, 'Outros'),), widget=forms.Select(
+            attrs={
+                'class': 'form-control',
+                'style': 'margin-bottom: 1rem;'
+            }
+        ))
+
     class Meta:
         model = models.Bovinocultura
         fields = '__all__'
+        widgets = {
+            'tipo_criacao': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'style': 'margin-bottom: 1rem;'
+                }
+            ),
+            'especificacao': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'style': 'margin-bottom: 1rem;'
+                }
+            ),
+            'quantidade_cabecas': forms.NumberInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Informe a quantidade'
+                }
+            ),
+            'valor_cabeca': forms.TextInput(
+                attrs={
+                    'class': 'form-control valor',
+                    'placeholder': 'Informe o valor'
+                }
+            )
+        }
 
 BovinoculturaFormSet = forms.modelformset_factory(
     models.Bovinocultura,
@@ -856,42 +893,46 @@ BovinoculturaFormSet = forms.modelformset_factory(
 BovinoculturaInlineFormSet = forms.inlineformset_factory(
     models.Lote,
     models.Bovinocultura,
-    extra=1,
+    extra=0,
+    min_num=1,
     fields=('tipo_criacao', 'especificacao', 'quantidade_cabecas', 'valor_cabeca'),
+    form=BovinoculturaForm,
     formset=BovinoculturaFormSet,
-    can_delete=True,
-    widgets={
-        'tipo_criacao': forms.Select(
-            attrs={
-                'class': 'form-control',
-                'style': 'margin-bottom: 1rem;'
-            }
-        ),
-        'especificacao': forms.Select(
-            attrs={
-                'class': 'form-control',
-                'style': 'margin-bottom: 1rem;'
-            }
-        ),
-        'quantidade_cabecas': forms.NumberInput(
-            attrs={
-                'class': 'form-control',
-                'placeholder': 'Informe a quantidade'
-            }
-        ),
-        'valor_cabeca': forms.TextInput(
-            attrs={
-                'class': 'form-control valor',
-                'placeholder': 'Informe o valor'
-            }
-        )
-    }
+    can_delete=True
 )
 
 class OutraCriacaoForm(forms.ModelForm):
+    especificacao = forms.ChoiceField(
+        choices=(('', '---------'),) + models.OutraCriacao.OUTRA_CRIACAO + ((999, 'Outros'),), widget=forms.Select(
+            attrs={
+                'class': 'form-control',
+                'style': 'margin-bottom: 1rem;'
+            }
+        ))
+
     class Meta:
         model = models.OutraCriacao
         fields = '__all__'
+        widgets = {
+            'especificacao': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'style': 'margin-bottom: 1rem;'
+                }
+            ),
+            'quantidade_cabecas': forms.NumberInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Informe a quantidade'
+                }
+            ),
+            'valor_cabeca': forms.TextInput(
+                attrs={
+                    'class': 'form-control valor',
+                    'placeholder': 'Informe o valor'
+                }
+            )
+        }
 
 OutraCriacaoFormSet = forms.modelformset_factory(
     models.OutraCriacao,
@@ -902,30 +943,12 @@ OutraCriacaoFormSet = forms.modelformset_factory(
 OutraCriacaoInlineFormSet = forms.inlineformset_factory(
     models.Lote,
     models.OutraCriacao,
-    extra=1,
+    extra=0,
+    min_num=1,
     fields=('especificacao', 'quantidade_cabecas', 'valor_cabeca'),
+    form=OutraCriacaoForm,
     formset=OutraCriacaoFormSet,
-    can_delete=True,
-    widgets={
-        'especificacao': forms.Select(
-            attrs={
-                'class': 'form-control',
-                'style': 'margin-bottom: 1rem;'
-            }
-        ),
-        'quantidade_cabecas': forms.NumberInput(
-            attrs={
-                'class': 'form-control',
-                'placeholder': 'Informe a quantidade'
-            }
-        ),
-        'valor_cabeca': forms.TextInput(
-            attrs={
-                'class': 'form-control valor',
-                'placeholder': 'Informe o valor'
-            }
-        )
-    }
+    can_delete=True
 )
 
 class BovinoculturaLeiteiraForm(forms.ModelForm):
@@ -942,7 +965,8 @@ BovinoculturaLeiteiraFormSet = forms.modelformset_factory(
 BovinoculturaLeiteiraInlineFormSet = forms.inlineformset_factory(
     models.Lote,
     models.BovinoculturaLeiteira,
-    extra=1,
+    extra=0,
+    min_num=1,
     fields=(
         'especificacao', 'quantidade_cabecas_consumo', 'quantidade_cabecas_comercio', 'valor_cabeca',
         'canal_comercializacao', 'canal_comercializacao_outros'
@@ -1003,7 +1027,8 @@ BovinoculturaCorteFormSet = forms.modelformset_factory(
 BovinoculturaCorteInlineFormSet = forms.inlineformset_factory(
     models.Lote,
     models.BovinoculturaCorte,
-    extra=1,
+    extra=0,
+    min_num=1,
     fields=(
         'especificacao', 'quantidade_cabecas_consumo', 'quantidade_cabecas_comercio', 'valor_cabeca',
         'canal_comercializacao', 'canal_comercializacao_outros'
@@ -1110,7 +1135,8 @@ OrigemAnimalFormSet = forms.modelformset_factory(
 OrigemAnimalInlineFormSet = forms.inlineformset_factory(
     models.Lote,
     models.OrigemAnimal,
-    extra=1,
+    extra=0,
+    min_num=1,
     fields=(
         'especificacao', 'outros', 'producao_consumo', 'producao_comercio', 'valor', 'canal_comercializacao',
         'mercado_institucional'
@@ -1180,7 +1206,8 @@ ProcessadoBeneficiadoFormSet = forms.modelformset_factory(
 ProcessadoBeneficiadoInlineFormSet = forms.inlineformset_factory(
     models.Lote,
     models.ProcessadoBeneficiado,
-    extra=1,
+    extra=0,
+    min_num=1,
     fields=(
         'especificacao', 'outros', 'producao_consumo', 'producao_comercio', 'valor', 'canal_comercializacao',
         'mercado_institucional'
@@ -1204,7 +1231,8 @@ NivelTecnologicoProducaoAnimalFormSet = forms.modelformset_factory(
 NivelTecnologicoProducaoAnimalInlineFormSet = forms.inlineformset_factory(
     models.Lote,
     models.NivelTecnologicoProducaoAnimal,
-    extra=1,
+    extra=0,
+    min_num=1,
     fields=('tipo_capineira', 'area_capineira'),
     formset=NivelTecnologicoProducaoAnimalFormSet,
     can_delete=True,
@@ -1238,7 +1266,8 @@ ProblemaAmbientalFormSet = forms.modelformset_factory(
 ProblemaAmbientalInlineFormSet = forms.inlineformset_factory(
     models.Lote,
     models.ProblemaAmbiental,
-    extra=1,
+    extra=0,
+    min_num=1,
     fields=('tipo_problema', 'outros'),
     formset=ProblemaAmbientalFormSet,
     can_delete=True,
@@ -1272,7 +1301,8 @@ PraticaConservacionistaFormSet = forms.modelformset_factory(
 PraticaConservacionistaInlineFormSet = forms.inlineformset_factory(
     models.Lote,
     models.PraticaConservacionista,
-    extra=1,
+    extra=0,
+    min_num=1,
     fields=('tipo_pratica',),
     formset=PraticaConservacionistaFormSet,
     can_delete=True,
@@ -1300,7 +1330,8 @@ LicenciamentoAmbientalFormSet = forms.modelformset_factory(
 LicenciamentoAmbientalInlineFormSet = forms.inlineformset_factory(
     models.Lote,
     models.LicenciamentoAmbiental,
-    extra=1,
+    extra=0,
+    min_num=1,
     fields=('tipo_atividade', 'outros'),
     formset=LicenciamentoAmbientalFormSet,
     can_delete=True,
@@ -1371,7 +1402,8 @@ ProgramaSaudeFormSet = forms.modelformset_factory(
 ProgramaSaudeInlineFormSet = forms.inlineformset_factory(
     models.Lote,
     models.ProgramaSaude,
-    extra=1,
+    extra=0,
+    min_num=1,
     fields=('programa_saude',),
     formset=ProgramaSaudeFormSet,
     can_delete=True,
@@ -1399,7 +1431,8 @@ AtividadeFisicaFormSet = forms.modelformset_factory(
 AtividadeFisicaInlineFormSet = forms.inlineformset_factory(
     models.Lote,
     models.AtividadeFisica,
-    extra=1,
+    extra=0,
+    min_num=1,
     fields=('atividade_fisica', 'outros'),
     formset=AtividadeFisicaFormSet,
     can_delete=True,
@@ -1433,7 +1466,8 @@ EspacoDisponivelFormSet = forms.modelformset_factory(
 EspacoDisponivelInlineFormSet = forms.inlineformset_factory(
     models.Lote,
     models.EspacoDisponivel,
-    extra=1,
+    extra=0,
+    min_num=1,
     fields=('espaco_disponivel',),
     formset=EspacoDisponivelFormSet,
     can_delete=True,
@@ -1461,7 +1495,8 @@ EstabelecimentoEnsinoFormSet = forms.modelformset_factory(
 EstabelecimentoEnsinoInlineFormSet = forms.inlineformset_factory(
     models.Lote,
     models.EstabelecimentoEnsino,
-    extra=1,
+    extra=0,
+    min_num=1,
     fields=('estabelecimento_ensino',),
     formset=EstabelecimentoEnsinoFormSet,
     can_delete=True,
@@ -1474,6 +1509,44 @@ EstabelecimentoEnsinoInlineFormSet = forms.inlineformset_factory(
         )
     }
 )
+
+class NaoPossuiDocumentoForm(forms.ModelForm):
+    class Meta:
+        model = models.NaoPossuiDocumento
+        fields = ['certidao_nascimento', 'identidade', 'cpf', 'carteira_de_trabalho', 'certidao_de_casamento_ou_uniao_estavel']
+        widgets = {
+            'certidao_nascimento': forms.NumberInput(
+                attrs={
+                    'class': 'form-control valor',
+                    'placeholder': 'Informe a quantidade'
+                }
+            ),
+            'identidade': forms.NumberInput(
+                attrs={
+                    'class': 'form-control valor',
+                    'placeholder': 'Informe a quantidade'
+                }
+            ),
+            'cpf': forms.NumberInput(
+                attrs={
+                    'class': 'form-control valor',
+                    'placeholder': 'Informe a quantidade',
+                    'style': 'margin-top: 1.5rem;'
+                }
+            ),
+            'carteira_de_trabalho': forms.NumberInput(
+                attrs={
+                    'class': 'form-control valor',
+                    'placeholder': 'Informe a quantidade'
+                }
+            ),
+            'certidao_de_casamento_ou_uniao_estavel': forms.NumberInput(
+                attrs={
+                    'class': 'form-control valor',
+                    'placeholder': 'Informe a quantidade'
+                }
+            )
+        }
 
 # class MembroForm(forms.ModelForm):
 #     class Meta:

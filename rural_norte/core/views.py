@@ -624,6 +624,10 @@ def editar_diagnostico(request, pa_id, diagnostico_id):
         prefix='estabelecimentos_ensino',
         queryset=form.instance.estabelecimentosEnsino.all()
     )
+    nao_possui_documento_forms = forms.NaoPossuiDocumentoForm(
+        prefix='nao_possui_documento',
+        instance=form.instance.nao_possui_documento
+    )
 
     if request.method == "POST":
         inlines = []
@@ -858,6 +862,12 @@ def editar_diagnostico(request, pa_id, diagnostico_id):
         )
         inlines.append(estabelecimentos_ensino_forms)
 
+        nao_possui_documento_forms = forms.NaoPossuiDocumentoForm(
+            request.POST,
+            prefix='nao_possui_documento',
+            instance=form.instance.nao_possui_documento
+        )
+
         if form.is_valid() and all([item.is_valid() for item in inlines]):
             lote = form.save(commit=False)
             lote.save()
@@ -876,6 +886,10 @@ def editar_diagnostico(request, pa_id, diagnostico_id):
             atendimento_saude = atendimento_saude_forms.save(commit=False)
             atendimento_saude.lote = lote
             atendimento_saude.save()
+
+            nao_possui_documento = nao_possui_documento_forms.save(commit=False)
+            nao_possui_documento.lote = lote
+            nao_possui_documento.save()
 
             template = reverse('core:listar_diagnosticos_por_projeto_assentamento', kwargs={'contrato_id': projeto_assentamento.contrato_id, 'pa_id': projeto_assentamento.pk})
             return redirect(template)
@@ -914,6 +928,7 @@ def editar_diagnostico(request, pa_id, diagnostico_id):
         'AtividadeFisicaInlineFormSet': atividades_fisicas_forms,
         'EspacoDisponivelInlineFormSet': espacos_disponiveis_forms,
         'EstabelecimentoEnsinoInlineFormSet': estabelecimentos_ensino_forms,
+        'NaoPossuiDocumentoForm': nao_possui_documento_forms,
         'title': 'Editar Diagnóstico'
     }
     return render(request, template_name, context)
