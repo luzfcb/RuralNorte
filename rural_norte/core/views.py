@@ -204,7 +204,10 @@ def novo_diagnostico(request, pa_id):
         prefix='licenciamentos_ambientais',
         queryset=models.LicenciamentoAmbiental.objects.none()
     )
-
+    atendimento_saude_forms = forms.AtendimentoSaudeForm(
+        prefix='atendimento_saude',
+        instance=models.AtendimentoSaude()
+    )
     programas_saude_forms = forms.ProgramaSaudeInlineFormSet(
         prefix='programas_saude',
         queryset=models.ProgramaSaude.objects.none()
@@ -220,6 +223,10 @@ def novo_diagnostico(request, pa_id):
     estabelecimentos_ensino_forms = forms.EstabelecimentoEnsinoInlineFormSet(
         prefix='estabelecimentos_ensino',
         queryset=models.EstabelecimentoEnsino.objects.none()
+    )
+    nao_possui_documento_forms = forms.NaoPossuiDocumentoForm(
+        prefix='nao_possui_documento',
+        instance=models.NaoPossuiDocumento()
     )
 
     if request.method == "POST":
@@ -414,6 +421,12 @@ def novo_diagnostico(request, pa_id):
         )
         inlines.append(licenciamentos_ambientais_forms)
 
+        atendimento_saude_forms = forms.AtendimentoSaudeForm(
+            request.POST,
+            prefix='atendimento_saude',
+            instance=models.AtendimentoSaude()
+        )
+
         programas_saude_forms = forms.ProgramaSaudeInlineFormSet(
             request.POST,
             prefix='programas_saude',
@@ -442,7 +455,14 @@ def novo_diagnostico(request, pa_id):
         )
         inlines.append(estabelecimentos_ensino_forms)
 
-        if form.is_valid() and all([item.is_valid() for item in inlines]):
+        nao_possui_documento_forms = forms.NaoPossuiDocumentoForm(
+            request.POST,
+            prefix='nao_possui_documento',
+            instance=models.NaoPossuiDocumento()
+        )
+
+        if form.is_valid() and atendimento_saude_forms.is_valid() and nao_possui_documento_forms.is_valid()\
+            and all([item.is_valid() for item in inlines]):
             lote = form.save(commit=False)
             lote.save()
 
@@ -452,6 +472,14 @@ def novo_diagnostico(request, pa_id):
                 for item in inline:
                     item.lote = lote
                     item.save()
+
+            atendimento_saude = atendimento_saude_forms.save(commit=False)
+            atendimento_saude.lote = lote
+            atendimento_saude.save()
+
+            nao_possui_documento = nao_possui_documento_forms.save(commit=False)
+            nao_possui_documento.lote = lote
+            nao_possui_documento.save()
 
             template = reverse('core:listar_diagnosticos_por_projeto_assentamento', kwargs={'contrato_id': projeto_assentamento.contrato_id, 'pa_id': projeto_assentamento.pk})
             return redirect(template)
@@ -485,10 +513,12 @@ def novo_diagnostico(request, pa_id):
         'ProblemaAmbientalInlineFormSet': problemas_ambientais_forms,
         'PraticaConservacionistaInlineFormSet': praticas_conservacionistas_forms,
         'LicenciamentoAmbientalInlineFormSet': licenciamentos_ambientais_forms,
+        'AtendimentoSaudeForm': atendimento_saude_forms,
         'ProgramaSaudeInlineFormSet': programas_saude_forms,
         'AtividadeFisicaInlineFormSet': atividades_fisicas_forms,
         'EspacoDisponivelInlineFormSet': espacos_disponiveis_forms,
         'EstabelecimentoEnsinoInlineFormSet': estabelecimentos_ensino_forms,
+        'NaoPossuiDocumentoForm': nao_possui_documento_forms,
         'title': 'Registrar Diagnóstico'
     }
     return render(request, template_name, context)
@@ -613,7 +643,7 @@ def editar_diagnostico(request, pa_id, diagnostico_id):
     )
     atendimento_saude_forms = forms.AtendimentoSaudeForm(
         prefix='atendimento_saude',
-        # instance=form.instance.atendimentosSaude
+        instance=form.instance.atendimentosSaude
     )
     programas_saude_forms = forms.ProgramaSaudeInlineFormSet(
         prefix='programas_saude',
@@ -633,7 +663,7 @@ def editar_diagnostico(request, pa_id, diagnostico_id):
     )
     nao_possui_documento_forms = forms.NaoPossuiDocumentoForm(
         prefix='nao_possui_documento',
-        # instance=form.instance.nao_possui_documento
+        instance=form.instance.nao_possui_documento
     )
 
     if request.method == "POST":
