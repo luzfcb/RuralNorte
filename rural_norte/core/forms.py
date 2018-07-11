@@ -1,5 +1,63 @@
 from django import forms
+from django.forms import BaseInlineFormSet
 from . import models
+
+
+class BaseModelWithImagesFormset(BaseInlineFormSet):
+    """
+    The base formset for editing Books belonging to a Publisher, and the
+    BookImages belonging to those Books.
+    """
+
+    nested_formset = None
+
+    def get_nested_formset(self):
+        if not self.nested_formset:
+            raise NotImplementedError
+        return self.nested_formset
+
+    def add_fields(self, form, index):
+        super().add_fields(form, index)
+
+        # Save the formset for a Book's Images in the nested property.
+        nested_formset = self.get_nested_formset()
+        prefix_nested = '%s-%s-%s' % (
+            self.queryset.model._meta.db_table,
+            form.prefix,
+            nested_formset.get_default_prefix()
+        )
+        form.nested = nested_formset(
+            instance=form.instance,
+            data=form.data if form.is_bound else None,
+            files=form.files if form.is_bound else None,
+            prefix=prefix_nested
+        )
+
+    def is_valid(self):
+        """
+        Also validate the nested formsets.
+        """
+        result = super().is_valid()
+
+        if self.is_bound:
+            for form in self.forms:
+                if hasattr(form, 'nested'):
+                    result = result and form.nested.is_valid()
+
+        return result
+
+    def save(self, commit=True):
+        """
+        Also save the nested formsets.
+        """
+        result = super().save(commit=commit)
+
+        for form in self.forms:
+            if hasattr(form, 'nested'):
+                if not self._should_delete_form(form):
+                    form.nested.save(commit=commit)
+
+        return result
 
 class ContatoForm(forms.ModelForm):
     class Meta:

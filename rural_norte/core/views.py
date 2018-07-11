@@ -1,13 +1,44 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.utils import timezone
 from datetime import datetime
 from django.views import generic
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, FormView
+from django.views.generic.detail import SingleObjectMixin
 from django_tables2 import RequestConfig
 
 from . import models
 from . import tables
 from . import forms
+
+
+class BaseUpdateWithInlinesView(SingleObjectMixin, FormView):
+    """
+    For adding books to a Publisher, or editing them.
+    """
+
+    def get(self, request, *args, **kwargs):
+        # The Publisher we're editing:
+        self.object = self.get_object(queryset=self.get_queryset())
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        # The Publisher we're uploading for:
+        self.object = self.get_object(queryset=self.get_queryset())
+        return super().post(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['instance'] = self.object
+        return kwargs
+
+    def form_valid(self, form):
+        """
+        If the form is valid, redirect to the supplied URL.
+        """
+        form.save()
+
+        return HttpResponseRedirect(self.get_success_url())
 
 
 class LoteListView(ListView):
@@ -92,7 +123,7 @@ class Teste(generic.TemplateView):
 
 
 def novo_diagnostico(request, pa_id):
-    projeto_assentamento = models.ProjetoAssentamento.objects.only('id', 'contrato_id',).get(id=pa_id)
+    projeto_assentamento = models.ProjetoAssentamento.objects.only('id', 'contrato_id', ).get(id=pa_id)
 
     form = forms.DiagnosticoForm(
         initial={
@@ -248,7 +279,7 @@ def novo_diagnostico(request, pa_id):
 
         documentos_lote_forms = forms.DocumentoLoteInlineFormSet(
             request.POST,
-            prefix = 'documentos_lote',
+            prefix='documentos_lote',
             queryset=models.DocumentoLote.objects.none()
         )
         inlines.append(documentos_lote_forms)
@@ -461,7 +492,7 @@ def novo_diagnostico(request, pa_id):
             instance=models.NaoPossuiDocumento()
         )
 
-        if form.is_valid() and atendimento_saude_forms.is_valid() and nao_possui_documento_forms.is_valid()\
+        if form.is_valid() and atendimento_saude_forms.is_valid() and nao_possui_documento_forms.is_valid() \
             and all([item.is_valid() for item in inlines]):
             lote = form.save(commit=False)
             lote.save()
@@ -481,7 +512,9 @@ def novo_diagnostico(request, pa_id):
             nao_possui_documento.lote = lote
             nao_possui_documento.save()
 
-            template = reverse('core:listar_diagnosticos_por_projeto_assentamento', kwargs={'contrato_id': projeto_assentamento.contrato_id, 'pa_id': projeto_assentamento.pk})
+            template = reverse('core:listar_diagnosticos_por_projeto_assentamento',
+                               kwargs={'contrato_id': projeto_assentamento.contrato_id,
+                                       'pa_id': projeto_assentamento.pk})
             return redirect(template)
     template_name = 'core/editar_diagnostico.html'
     context = {
@@ -523,9 +556,10 @@ def novo_diagnostico(request, pa_id):
     }
     return render(request, template_name, context)
 
+
 def editar_diagnostico(request, pa_id, diagnostico_id):
     diagnostico = get_object_or_404(models.Lote, id=diagnostico_id)
-    projeto_assentamento = models.ProjetoAssentamento.objects.only('id', 'contrato_id',).get(id=pa_id)
+    projeto_assentamento = models.ProjetoAssentamento.objects.only('id', 'contrato_id', ).get(id=pa_id)
 
     form = forms.DiagnosticoForm(
         instance=diagnostico,
@@ -608,7 +642,8 @@ def editar_diagnostico(request, pa_id, diagnostico_id):
     )
     bovinoculturas_leiteira_forms = forms.BovinoculturaLeiteiraInlineFormSet(
         prefix='bovinoculturas_leiteira',
-        queryset=form.instance.descartesAnimais.filter(tipo_criacao=models.BovinoculturaLeiteira.TIPO_CRIACAO_GADO_LEITEIRO)
+        queryset=form.instance.descartesAnimais.filter(
+            tipo_criacao=models.BovinoculturaLeiteira.TIPO_CRIACAO_GADO_LEITEIRO)
     )
     bovinoculturas_corte_forms = forms.BovinoculturaCorteInlineFormSet(
         prefix='bovinoculturas_corte',
@@ -928,7 +963,9 @@ def editar_diagnostico(request, pa_id, diagnostico_id):
             nao_possui_documento.lote = lote
             nao_possui_documento.save()
 
-            template = reverse('core:listar_diagnosticos_por_projeto_assentamento', kwargs={'contrato_id': projeto_assentamento.contrato_id, 'pa_id': projeto_assentamento.pk})
+            template = reverse('core:listar_diagnosticos_por_projeto_assentamento',
+                               kwargs={'contrato_id': projeto_assentamento.contrato_id,
+                                       'pa_id': projeto_assentamento.pk})
             return redirect(template)
     template_name = 'core/editar_diagnostico.html'
     context = {
