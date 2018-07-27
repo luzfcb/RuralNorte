@@ -464,6 +464,13 @@ CreditoBancarioInlineFormSet = forms.inlineformset_factory(
 )
 
 class CulturaForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        # first call parent's constructor
+        super(CulturaForm, self).__init__(*args, **kwargs)
+        # there's a `fields` property now
+        self.fields['tipo_producao'].required = False
+
     tipo_producao = forms.ChoiceField(
         choices=(('', '---------'),) + models.Cultura.CULTURA + ((999, 'Outros'),), widget=forms.Select(
             attrs={
@@ -565,6 +572,13 @@ CulturaInlineFormSet = forms.inlineformset_factory(
 )
 
 class OlericulturaForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        # first call parent's constructor
+        super(OlericulturaForm, self).__init__(*args, **kwargs)
+        # there's a `fields` property now
+        self.fields['tipo_producao'].required = False
+
     tipo_producao = forms.ChoiceField(
         choices=(('', '---------'),) + models.Olericultura.OLERICULTURA + ((999, 'Outros'),), widget=forms.Select(
             attrs={
@@ -673,6 +687,13 @@ OlericulturaInlineFormSet = forms.inlineformset_factory(
 )
 
 class FruticulturaForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        # first call parent's constructor
+        super(FruticulturaForm, self).__init__(*args, **kwargs)
+        # there's a `fields` property now
+        self.fields['tipo_producao'].required = False
+
     tipo_producao = forms.ChoiceField(
         choices=(('', '---------'),) + models.Fruticultura.FRUTICULTURA + ((999, 'Outros'),), widget=forms.Select(
             attrs={
@@ -1205,6 +1226,13 @@ OrigemAnimalInlineFormSet = forms.inlineformset_factory(
 )
 
 class ProcessadoBeneficiadoForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        # first call parent's constructor
+        super(ProcessadoBeneficiadoForm, self).__init__(*args, **kwargs)
+        # there's a `fields` property now
+        self.fields['especificacao'].required = False
+
     especificacao = forms.ChoiceField(
         choices=(('', '---------'),) + models.ProcessadoBeneficiado.PROCESSADO_BENEFICIADO + ((999, 'Outros'),), widget=forms.Select(
             attrs={
@@ -1606,69 +1634,129 @@ class NaoPossuiDocumentoForm(forms.ModelForm):
             )
         }
 
-# class MembroForm(forms.ModelForm):
-#     class Meta:
-#         model = models.Membro
-#         fields = '__all__'
-#
-# MembroFormSet = forms.modelformset_factory(
-#     models.Membro,
-#     form=MembroForm,
-#     extra=0
-# )
-#
-# MembroInlineFormSet = forms.inlineformset_factory(
-#     models.Familia,
-#     models.Membro,
-#     extra=1,
-#     fields=('nome', 'parentesco', 'idade', 'escolaridade', 'estuda', 'cpf', 'trabalho_antes_do_lote'),
-#     formset=MembroFormSet,
-#     can_delete=True,
-#     widgets={
-#         'nome': forms.TextInput(
-#             attrs={
-#                 'class': 'form-control valor',
-#                 'placeholder': 'Informe o nome'
-#             }
-#         ),
-#         'parentesco': forms.Select(
-#             attrs={
-#                 'class': 'form-control',
-#                 'style': 'margin-bottom: 1rem;'
-#             }
-#         ),
-#         'idade': forms.NumberInput(
-#             attrs={
-#                 'class': 'form-control',
-#                 'placeholder': 'Informe a idade'
-#             }
-#         ),
-#         'escolaridade': forms.Select(
-#             attrs={
-#                 'class': 'form-control',
-#                 'style': 'margin-bottom: 1rem;'
-#             }
-#         ),
-#         'estuda': forms.Select(
-#             attrs={
-#                 'class': 'form-control',
-#                 'style': 'margin-bottom: 1rem;'
-#             }
-#         ),
-#         'cpf': forms.TextInput(
-#             attrs={
-#                 'class': 'form-control valor',
-#                 'placeholder': 'Informe o CPF'
-#             }
-#         ),
-#         'trabalho_antes_do_lote': forms.Select(
-#             attrs={
-#                 'class': 'form-control',
-#                 'style': 'margin-bottom: 1rem;'
-#             }
-#         )
-#     }
-# )
+class MembroForm(forms.ModelForm):
+    class Meta:
+        model = models.Membro
+        fields = '__all__'
+
+MembroFormSet = forms.modelformset_factory(
+    models.Membro,
+    form=MembroForm,
+    extra=0
+)
+
+MembroInlineFormSet = forms.inlineformset_factory(
+    models.Lote,
+    models.Membro,
+    extra=0,
+    min_num=1,
+    fields=(
+        'nome', 'parentesco', 'idade', 'escolaridade', 'estuda', 'cpf', 'trabalho_antes_do_lote',
+        'trabalho_fora_lote_quantidade_dias_ano', 'trabalho_fora_lote_valor_diaria', 'uso_frequente_bebida_alcoolica',
+        'uso_frequente_cigarro', 'uso_frequente_remedios_alto_custo', 'uso_frequente_outros', 'opcao_ensino_utilizada',
+        'opcao_ensino_utilizada_distancia_ate_escola', 'opcao_ensino_utilizada_oferta_de_transporte'
+    ),
+    formset=MembroFormSet,
+    can_delete=True,
+    widgets={
+        'nome': forms.TextInput(
+            attrs={
+                'class': 'form-control valor',
+                'placeholder': 'Informe o nome'
+            }
+        ),
+        'parentesco': forms.Select(
+            attrs={
+                'class': 'form-control',
+                'style': 'margin-bottom: 1rem;'
+            }
+        ),
+        'idade': forms.NumberInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'Informe a idade'
+            }
+        ),
+        'escolaridade': forms.Select(
+            attrs={
+                'class': 'form-control',
+                'style': 'margin-bottom: 1rem;'
+            }
+        ),
+        'estuda': forms.Select(
+            attrs={
+                'class': 'form-control',
+                'style': 'margin-bottom: 1rem;'
+            }
+        ),
+        'cpf': forms.TextInput(
+            attrs={
+                'class': 'form-control valor',
+                'placeholder': 'Informe o CPF'
+            }
+        ),
+        'trabalho_antes_do_lote': forms.Select(
+            attrs={
+                'class': 'form-control',
+                'style': 'margin-bottom: 1rem;'
+            }
+        ),
+        'trabalho_fora_lote_quantidade_dias_ano': forms.NumberInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'Informe a quantidade'
+            }
+        ),
+        'trabalho_fora_lote_valor_diaria': forms.TextInput(
+            attrs={
+                'class': 'form-control valor',
+                'placeholder': 'Informe o valor'
+            }
+        ),
+        'uso_frequente_bebida_alcoolica': forms.Select(
+            attrs={
+                'class': 'form-control',
+                'style': 'margin-bottom: 1rem;'
+            }
+        ),
+        'uso_frequente_cigarro': forms.Select(
+            attrs={
+                'class': 'form-control',
+                'style': 'margin-bottom: 1rem;'
+            }
+        ),
+        'uso_frequente_remedios_alto_custo': forms.Select(
+            attrs={
+                'class': 'form-control',
+                'style': 'margin-bottom: 1rem;'
+            }
+        ),
+        'uso_frequente_outros': forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'Especifique'
+            }
+        ),
+        'opcao_ensino_utilizada': forms.Select(
+            attrs={
+                'class': 'form-control',
+                'style': 'margin-bottom: 1rem;'
+            }
+        ),
+        'opcao_ensino_utilizada_distancia_ate_escola': forms.NumberInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'Informe a quantidade'
+            }
+        ),
+        'opcao_ensino_utilizada_oferta_de_transporte': forms.Select(
+            attrs={
+                'class': 'form-control',
+                'style': 'margin-bottom: 1rem;'
+            }
+        )
+    }
+)
 
 class DiagnosticoForm(forms.ModelForm):
     class Meta:

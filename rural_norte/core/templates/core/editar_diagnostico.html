@@ -77,8 +77,146 @@
                 DADOS PESSOAIS
                 <p>Informações Sobre Familiares Residentes no Lote</p>
               </b>
+              <span class="badge badge-warning">Obs: As Questões de nº 2, 37, 49 e 55 estão contidas neste formulário.</span>
             </div>
             <div class="card-body">
+              {{ MembroInlineFormSet.management_form }}
+
+              <div>
+                {% for form in MembroInlineFormSet %}
+                  <div id="{{ form.prefix }}-row" class="dynamic-form-membros form-row">
+                    {{ form.id }}
+                    <fieldset class="border p-2" style="width: 100%;">
+                      {% if forloop.last %}
+                        <legend><b style="font-size: 1rem;">Membro #</b></legend>
+                      {% else %}
+                        <legend><b style="font-size: 1rem;">Membro #{{ forloop.counter }}</b></legend>
+                      {% endif %}
+                      <div class="row">
+                        <div class="col-md-6">
+                          {{ form.nome.label_tag }}
+                          {{ form.nome }}
+                          {{ form.nome.errors }}
+                        </div>
+                        <div class="col-md-3">
+                          {{ form.parentesco.label_tag }}
+                          {{ form.parentesco }}
+                          {{ form.parentesco.errors }}
+                        </div>
+                        <div class="col-md-3">
+                          {{ form.idade.label_tag }}
+                          {{ form.idade }}
+                          {{ form.idade.errors }}
+                        </div>
+                        <div class="col-md-4">
+                          {{ form.escolaridade.label_tag }}
+                          {{ form.escolaridade }}
+                          {{ form.escolaridade.errors }}
+                        </div>
+                        <div class="col-md-3">
+                          {{ form.estuda.label_tag }}
+                          {{ form.estuda }}
+                          {{ form.estuda.errors }}
+                        </div>
+                        <div class="col-md-3">
+                          {{ form.cpf.label_tag }}
+                          {{ form.cpf }}
+                          {{ form.cpf.errors }}
+                        </div>
+                        <div class="col-md-4">
+                          <fieldset class="border p-2" style="width: 103%; margin-top: -10px;">
+                            <legend><b style="font-size: 1rem;">2. Antes de entrarem no lote, trabalhava onde?</b></legend>
+                            <div class="form-row">
+                              <div class="col-md-12">
+                                {#                                {{ form.trabalho_antes_do_lote.label_tag }}#}
+                                {{ form.trabalho_antes_do_lote }}
+                                {{ form.trabalho_antes_do_lote.errors }}
+                              </div>
+                            </div>
+                          </fieldset>
+                        </div>
+                        <div class="col-md-8">
+                          <fieldset class="border p-2" style="width: 100%; margin-top: -10px;">
+                            <legend><b style="font-size: 1rem;">37. Sobre a renda de trabalho fora do lote</b></legend>
+                            <div class="form-row">
+                              <div class="col-md-6">
+                                {{ form.trabalho_fora_lote_quantidade_dias_ano.label_tag }}
+                                {{ form.trabalho_fora_lote_quantidade_dias_ano }}
+                                {{ form.trabalho_fora_lote_quantidade_dias_ano.errors }}
+                              </div>
+                              <div class="col-md-6">
+                                {{ form.trabalho_fora_lote_valor_diaria.label_tag }}
+                                {{ form.trabalho_fora_lote_valor_diaria }}
+                                {{ form.trabalho_fora_lote_valor_diaria.errors }}
+                              </div>
+                            </div>
+                          </fieldset>
+                        </div>
+                        <div class="col-md-12">
+                          <fieldset class="border p-2" style="width: 100%;">
+                            <legend><b style="font-size: 1rem;">49. No lote há alguma pessoa que faz uso frequente de?</b></legend>
+                            <div class="form-row">
+                              <div class="col-md-3">
+                                {{ form.uso_frequente_bebida_alcoolica.label_tag }}
+                                {{ form.uso_frequente_bebida_alcoolica }}
+                                {{ form.uso_frequente_bebida_alcoolica.errors }}
+                              </div>
+                              <div class="col-md-3">
+                                {{ form.uso_frequente_cigarro.label_tag }}
+                                {{ form.uso_frequente_cigarro }}
+                                {{ form.uso_frequente_cigarro.errors }}
+                              </div>
+                              <div class="col-md-3">
+                                {{ form.uso_frequente_remedios_alto_custo.label_tag }}
+                                {{ form.uso_frequente_remedios_alto_custo }}
+                                {{ form.uso_frequente_remedios_alto_custo.errors }}
+                              </div>
+                              <div class="col-md-3">
+                                {{ form.uso_frequente_outros.label_tag }}
+                                {{ form.uso_frequente_outros }}
+                                {{ form.uso_frequente_outros.errors }}
+                              </div>
+                            </div>
+                          </fieldset>
+                        </div>
+                        <div class="col-md-12">
+                          <fieldset class="border p-2" style="width: 100%;">
+                            <legend><b style="font-size: 1rem;">55. No caso de <u>não haver</u> oferta de estabelecimento de ensino apropriado no asssentamento, qual a opção utilizada pelos familiares?</b></legend>
+                            <div class="form-row">
+                              <div class="col-md-4">
+                                {{ form.opcao_ensino_utilizada.label_tag }}
+                                {{ form.opcao_ensino_utilizada }}
+                                {{ form.opcao_ensino_utilizada.errors }}
+                              </div>
+                              <div class="col-md-4">
+                                {{ form.opcao_ensino_utilizada_distancia_ate_escola.label_tag }}
+                                {{ form.opcao_ensino_utilizada_distancia_ate_escola }}
+                                {{ form.opcao_ensino_utilizada_distancia_ate_escola.errors }}
+                              </div>
+                              <div class="col-md-4">
+                                {{ form.opcao_ensino_utilizada_oferta_de_transporte.label_tag }}
+                                {{ form.opcao_ensino_utilizada_oferta_de_transporte }}
+                                {{ form.opcao_ensino_utilizada_oferta_de_transporte.errors }}
+                              </div>
+                            </div>
+                          </fieldset>
+                        </div>
+                      </div>
+                      <div class="col-md-1" style="margin-top: 1%; padding-left: 1px;">
+                        <a id="membros" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Membro">
+                          <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                        </a>
+                        <div hidden="true">{{ form.DELETE }}</div>
+                      </div>
+                    </fieldset>
+                  </div>
+                {% endfor %}
+              </div>
+              <div style="margin-top: 1%;">
+                <a id="membros" href="javascript:void(0)" class="btn btn-success add-row" title="Novo Membro">
+                  <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                </a>
+              </div>
             </div>
           </div>
 
@@ -2025,12 +2163,19 @@
       });
       if (prefix == 'culturas' || prefix == 'olericulturas' || prefix == 'fruticulturas' || prefix == 'atividades_extrativistas'
         || prefix == 'producoes_florestais' || prefix == 'bovinoculturas_leiteira' || prefix == 'bovinoculturas_corte'
-        || prefix == 'origens_animais' || prefix == 'processados_beneficiados') {
+        || prefix == 'origens_animais' || prefix == 'processados_beneficiados' || prefix == 'membros') {
         $(row).children().each(function () {
           if($(this).is('fieldset')) {
             $(this).children().children().not(':last').children().each(function () {
-              updateElementIndex(this, prefix, formCount);
-              $(this).val('');
+              if($(this).is('fieldset')) {
+                $(this).children().children().children().each(function () {
+                  updateElementIndex(this, prefix, formCount);
+                  $(this).val('');
+                });
+              } else {
+                updateElementIndex(this, prefix, formCount);
+                $(this).val('');
+              }
             });
           }
         });
