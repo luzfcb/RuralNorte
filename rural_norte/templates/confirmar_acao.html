@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="card card-register mx-auto" style="max-width: 45%;">
+    <div class="card-header">{{ title }}</div>
+    <div class="card-body">
+      <form method="POST">
+        {% csrf_token %}
+        <p style="padding-left: 2%;">
+          {{ mensagem }} "{{ objeto }}"?
+        </p>
+        <div style="padding-left: 23%;">
+          <button class="{{ style_button }}" type="submit"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i> Tenho certeza!</button>
+          {% if diagnostico %}
+            <a class="btn btn-secondary" href="{% url 'core:listar_diagnosticos_por_projeto_assentamento' projeto_assentamento.contrato_id projeto_assentamento.pk %}">Voltar</a>
+{#          {% elif produto %}#}
+{#            <a class="btn btn-secondary" href="{% url 'produto:home' %}">Voltar</a>#}
+{#          {% elif fornecedor %}#}
+{#            <a class="btn btn-secondary" href="{% url 'fornecedor:home' %}">Voltar</a>#}
+{#          {% elif clientePJ %}#}
+{#            <a class="btn btn-secondary" href="{% url 'cliente:listar_clientesPJ' %}">Voltar</a>#}
+{#          {% elif clientePF %}#}
+{#            <a class="btn btn-secondary" href="{% url 'cliente:listar_clientesPF' %}">Voltar</a>#}
+{#          {% elif notaEntrada %}#}
+{#            <a class="btn btn-secondary" href="{% url 'estoque:listar_notasEntrada' %}">Voltar</a>#}
+{#          {% elif vendedor %}#}
+{#            <a class="btn btn-secondary" href="{% url 'vendedor:home' %}">Voltar</a>#}
+          {% endif %}
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,140 @@
+{% extends "core/listar_contratos.html" %}
+
+{% block breadcrumb %}
+  {{ block.super }}
+  <li class="breadcrumb-item">
+    <a href="{% url 'core:listar_projetos_por_contrato' projeto_assentamento.contrato.id %}">{{ projeto_assentamento.contrato }}</a>
+  </li>
+  <li class="breadcrumb-item">
+    <a href="{% url 'core:listar_projetos_por_contrato' projeto_assentamento.contrato.id %}">Projetos de Assentamento</a>
+  </li>
+
+  <li class="breadcrumb-item">
+    <a href="{% url 'core:listar_diagnosticos_por_projeto_assentamento' projeto_assentamento.contrato.id projeto_assentamento.contrato.id %}">{{ projeto_assentamento }}</a>
+  </li>
+  <li class="breadcrumb-item">
+    <a href="{% url 'core:listar_diagnosticos_por_projeto_assentamento' projeto_assentamento.contrato.id projeto_assentamento.contrato.id %}">Diagnósticos</a>
+  </li>
+{% endblock %}
+
+{% block content %}
+  <div class="form-group col-md-11" style="padding-top: 6px;">
+    {% comment %}<i class="fa fa-table fa-lg"></i>{% endcomment %} <b>Projeto de Assentamento</b>
+  </div>
+  <table class="table table-bordered" width="100%" cellspacing="0">
+    <thead>
+    <tr>
+      <th style="text-align: center;">Código</th>
+      <th>Nome</th>
+      <th>Município</th>
+      <th style="text-align: center;">Capacidade</th>
+      <th style="text-align: center;">Beneficiários</th>
+      <th style="text-align: center;">Data de Criação</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="text-align: center;">{{ projeto_assentamento.codigo }}</td>
+      <td>{{ projeto_assentamento.nome }}</td>
+      <td>{{ projeto_assentamento.municipio }}</td>
+      <td style="text-align: center;">{{ projeto_assentamento.capacidade_projeto }}</td>
+      <td style="text-align: center;">{{ projeto_assentamento.lotes.count }}</td>
+      <td style="text-align: center;">{{ projeto_assentamento.data_criacao|date:'d/m/Y' }}</td>
+    </tr>
+    </tbody>
+  </table>
+  <div class="card mb-3">
+    <div class="card-header" style="height: 65px;">
+      <div class="form-row" style="height: 40px;">
+        <div class="form-group col-md-11" style="padding-top: 6px;">
+          <i class="fa fa-table fa-lg"></i> <b>Diagnósticos registrados</b>
+        </div>
+        <div class="form-group col-md-1" style="padding-left: 30px;">
+          <a class="btn btn-success" href="{% url 'core:novo_diagnostico' projeto_assentamento.pk %}" title="Novo Diagnóstico">
+            <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+          <thead>
+          <tr>
+            <th style="text-align: center;">Código SIPRA</th>
+            <th>Entrevistador</th>
+            <th>Nome</th>
+            <th>Contato(s)</th>
+            <th style="text-align: center;">Data de Homologação</th>
+            <th style="text-align: center;">Data da Visita</th>
+            <th style="text-align: center;">Lote Nº</th>
+            <th style="text-align: center;">Área (ha)</th>
+            <th style="text-align: center;">CAD - Único</th>
+            <th style="text-align: center;">Situação</th>
+            <th style="text-align: center; width: 13%;">Ações</th>
+          </tr>
+          </thead>
+          <!-- <tfoot>
+            <tr>
+              <th>Nome</th>
+              <th>Descrição</th>
+              <th>Última alteração</th>
+              <th>Ações</th>
+            </tr>
+          </tfoot> -->
+          <tbody>
+          {% for diagnostico in diagnosticos %}
+            <tr>
+              <td style="text-align: center;">{{ diagnostico.codigo_sipra }}</td>
+              <td style="text-align: center;">{{ diagnostico.entrevistador }}</td>
+              <td>
+                {% for familia in diagnostico.familias.all %}
+                  {% for membro in familia.membros.all %}
+                    ({{ membro.get_parentesco_display }}) {{ membro.nome }}
+                  {% endfor %}
+                {% endfor %}
+              </td>
+              <td>
+                {% for contato in diagnostico.contatos.all %}
+                  {{ contato }}
+                {% endfor %}
+              </td>
+              <td style="text-align: center;">{{ diagnostico.data_homologacao|date:'d/m/Y' }}</td>
+              <td style="text-align: center;">{{ diagnostico.data_visita|date:'d/m/Y' }}</td>
+              <td style="text-align: center;">{{ diagnostico.numero }}</td>
+              <td style="text-align: center;">{{ diagnostico.area }}</td>
+              <td style="text-align: center;">{{ diagnostico.get_cad_unico_display }}</td>
+              <td style="text-align: center;">{{ diagnostico.get_ocupante_irregular_display }}</td>
+              <td style="text-align: center;">
+                <div class="container">
+                  <div class="row" style="margin-left: 25%;">
+                    <div>
+                      <a href="{% url 'core:lote-detail' diagnostico.id %}"
+                         title="Diagnósticos" style="margin: 5px;">
+                        <i class="fa fa-eye fa-lg text-primary"></i>
+                      </a>
+                    </div>
+                    <div>
+                      <a href="{% url 'core:editar_diagnostico' projeto_assentamento.pk diagnostico.id %}"
+                         title="Editar" style="margin: 2px;">
+                        <i class="fa fa-pencil fa-lg text-primary"></i>
+                      </a>
+                    </div>
+                    {#                    <div>#}
+                    {#                      <a href="{% url 'core:excluir_diagnostico' projeto_assentamento.pk diagnostico.id %}"#}
+                    {#                         title="Excluir" style="margin: 5px;">#}
+                    {#                        <i class="fa fa-trash-o fa-lg text-danger"></i>#}
+                    {#                      </a>#}
+                    {#                    </div>#}
+                  </div>
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card-footer small text-muted">Atualizado em {{ atualizado_em }}</div>
+  </div>
+{% endblock %}

@@ -1316,24 +1316,24 @@
     <h3>PRODUÇÃO ANIMAL</h3>
   </div>
 
-  {% for producao_animal in object.producoesAnimais.all %}
-    {% if producao_animal.classificacao == producao_animal.CLASSIFICACAO_BOVINOCULTURA %}
-      <div class="container" style="margin-top: 10px;">
-        <div class="row" style="margin-bottom: 5px;">
-          <b>31. Sobre o Efetivo Animal do último ano agrícola.</b>
-        </div>
-        <div class="row">
-          <table class="table table-bordered">
-            <thead>
-            <tr>
-              <th scope="col" style="text-align: center;">Especificação</th>
-              <th scope="col" style="text-align: center;">Gado Leiteiro - Nº de Cabeças</th>
-              <th scope="col" style="text-align: center;">R$/Cabeça</th>
-              <th scope="col" style="text-align: center;">Gado de Corte - Nº de Cabeças</th>
-              <th scope="col" style="text-align: center;">R$/Cabeça</th>
-            </tr>
-            </thead>
-            <tbody>
+  <div class="container" style="margin-top: 10px;">
+    <div class="row" style="margin-bottom: 5px;">
+      <b>31. Sobre o Efetivo Animal do último ano agrícola.</b>
+    </div>
+    <div class="row">
+      <table class="table table-bordered">
+        <thead>
+        <tr>
+          <th scope="col" style="text-align: center;">Especificação</th>
+          <th scope="col" style="text-align: center;">Gado Leiteiro - Nº de Cabeças</th>
+          <th scope="col" style="text-align: center;">R$/Cabeça</th>
+          <th scope="col" style="text-align: center;">Gado de Corte - Nº de Cabeças</th>
+          <th scope="col" style="text-align: center;">R$/Cabeça</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for producao_animal in object.producoesAnimais.all %}
+          {% if producao_animal.classificacao == producao_animal.CLASSIFICACAO_BOVINOCULTURA %}
             <tr>
               <td scope="col">{{ producao_animal.get_especificacao_display }}</td>
               {% if producao_animal.tipo_criacao == producao_animal.TIPO_CRIACAO_GADO_LEITEIRO %}
@@ -1348,36 +1348,40 @@
                 <td scope="col" style="text-align: center;">{{ producao_animal.valor_cabeca }}</td>
               {% endif %}
             </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    {% elif producao_animal.classificacao == producao_animal.CLASSIFICACAO_OUTRA_CRIACAO %}
-      <div class="container">
-        <div class="row" style="margin-bottom: 5px;">
-          <b>Outras Criações Animais - Efetivo Anual</b>
-        </div>
-        <div class="row">
-          <table class="table table-bordered">
-            <thead>
-            <tr>
-              <th scope="col" style="text-align: center;">Especificação</th>
-              <th scope="col" style="text-align: center;">Nº de Cabeças</th>
-              <th scope="col" style="text-align: center;">R$/Cabeça</th>
-            </tr>
-            </thead>
-            <tbody>
+          {% endif %}
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row" style="margin-bottom: 5px;">
+      <b>Outras Criações Animais - Efetivo Anual</b>
+    </div>
+    <div class="row">
+      <table class="table table-bordered">
+        <thead>
+        <tr>
+          <th scope="col" style="text-align: center;">Especificação</th>
+          <th scope="col" style="text-align: center;">Nº de Cabeças</th>
+          <th scope="col" style="text-align: center;">R$/Cabeça</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for producao_animal in object.producoesAnimais.all %}
+          {% if producao_animal.classificacao == producao_animal.CLASSIFICACAO_OUTRA_CRIACAO %}
             <tr>
               <td scope="col">{{ producao_animal.get_especificacao_display }}</td>
               <td scope="col" style="text-align: center;">{{ producao_animal.quantidade_cabecas }}</td>
               <td scope="col" style="text-align: center;">{{ producao_animal.valor_cabeca }}</td>
             </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    {% endif %}
-  {% endfor %}
+          {% endif %}
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
 
   {% for descarte_animal in object.descartesAnimais.all %}
     {% if descarte_animal.tipo_criacao == descarte_animal.TIPO_CRIACAO_GADO_LEITEIRO %}

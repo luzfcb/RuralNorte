@@ -70,9 +70,9 @@ INSTALLED_APPS += ['django_extensions']  # noqa F405
 CELERY_ALWAYS_EAGER = True
 # Your stuff...
 # ------------------------------------------------------------------------------
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': str(ROOT_DIR.path('db2.sqlite3')),
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': str(ROOT_DIR.path('db2.sqlite3')),
+#     }
+# }

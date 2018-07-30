@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block breadcrumb %}
+  {{ block.super }}
+  <li class="breadcrumb-item">
+    <a href="{% url 'core:listar_contratos' %}">Contratos</a>
+  </li>
+{% endblock %}
+
+{% block content %}
+  <div class="card mb-3">
+    <div class="card-header" style="height: 65px;">
+      <div class="form-row" style="height: 40px;">
+        <div class="form-group col-md-11" style="padding-top: 6px;">
+          <i class="fa fa-table fa-lg"></i> <b>Contratos registrados</b>
+        </div>
+{#        <div class="form-group col-md-1" style="padding-left: 30px;">#}
+{#          <a class="btn btn-success" href="{% url 'produto:nova_categoria' %}" title="Nova categoria">#}
+{#            <i class="fa fa-plus fa-lg" aria-hidden="true"></i>#}
+{#          </a>#}
+{#        </div>#}
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+          <thead>
+          <tr>
+            <th style="text-align: center;">Número</th>
+            <th style="text-align: center;">Ano</th>
+            <th style="text-align: center; width: 30%;">Data de Registro</th>
+            <th style="text-align: center; width: 13%;">Ações</th>
+          </tr>
+          </thead>
+          <!-- <tfoot>
+            <tr>
+              <th>Nome</th>
+              <th>Descrição</th>
+              <th>Última alteração</th>
+              <th>Ações</th>
+            </tr>
+          </tfoot> -->
+          <tbody>
+          {% for contrato in contratos %}
+            <tr>
+              <td style="text-align: center;">{{ contrato.numero }}</td>
+              <td style="text-align: center;">{{ contrato.ano }}</td>
+              <td style="text-align: center;">{{ contrato.cadastrado_em|date:'d/m/Y' }}</td>
+              <td style="text-align: center;">
+                <div class="container">
+                  <div class="row" style="margin-left: 25%;">
+                    <div>
+                      <a href="{% url 'core:listar_projetos_por_contrato' contrato.id %}"
+                         title="Projetos de Assentamento" style="margin: 5px;">
+                        <i class="fa fa-eye fa-lg text-primary"></i>
+                      </a>
+                    </div>
+{#                    <div>#}
+{#                      <a href="{% url 'produto:excluir_categoria' categoria.id %}"#}
+{#                         title="Excluir" style="margin: 5px;">#}
+{#                        <i class="fa fa-trash-o fa-lg text-danger"></i>#}
+{#                      </a>#}
+{#                    </div>#}
+                  </div>
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card-footer small text-muted">Atualizado em {{ atualizado_em }}</div>
+  </div>
+{% endblock %}

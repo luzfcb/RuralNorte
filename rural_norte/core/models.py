@@ -54,22 +54,26 @@ class AuditoriaAbstractModel(models.Model):
     ativo = property(_ativo)
 
 
-class ProjetoAssentamento(AuditoriaAbstractModel):
-    CONTRATO_10 = 10
-    CONTRATO_11 = 11
-    CONTRATO_18 = 18
+class Contrato(AuditoriaAbstractModel):
+    numero = models.PositiveIntegerField('Número do Contrato')
+    ano = models.PositiveIntegerField('Ano do Contrato')
 
-    contrato_choices = Choices(
-        (CONTRATO_10, '10.000/2015'),
-        (CONTRATO_11, '11.000/2015'),
-        (CONTRATO_18, '18.000/2015')
-    )
-    contrato = models.IntegerField('Contrato', choices=contrato_choices)
+    def __str__(self):
+        return f'{self.numero}/{self.ano}'
+        # return '{}/{}-{nome}'.format(self.numero, self.ano, nome='Teste')
+
+    class Meta:
+        unique_together = (('numero', 'ano'),)
+
+
+class ProjetoAssentamento(AuditoriaAbstractModel):
+    contrato = models.ForeignKey(Contrato, verbose_name='Contrato', related_name='projetos_assentamento',
+                                 on_delete=models.CASCADE, null=True)
     codigo = models.CharField('Código do PA', max_length=15)
     nome = models.CharField('Nome do PA', max_length=50)
     municipio = models.CharField('Município', max_length=100)
     data_criacao = models.DateField('Data de Criação')
-    capacidade_projeto = models.IntegerField('Capacidade do Projeto')
+    capacidade_projeto = models.PositiveIntegerField('Capacidade do Projeto')
 
     def __str__(self):
         return '%s | %s' % (self.codigo, self.nome)
@@ -84,13 +88,15 @@ class Lote(AuditoriaAbstractModel):
     projeto_assentamento = models.ForeignKey(
         ProjetoAssentamento, verbose_name='PA', related_name='lotes', on_delete=models.CASCADE
     )
-    data_homologacao = models.DateField('Data Homologação', blank=True, null=True)
+    data_homologacao = models.DateField('Data da Homologação', blank=True, null=True)
+    data_visita = models.DateField('Data da Visita', blank=True, null=True)
     codigo_sipra = models.CharField('Código SIPRA', max_length=15, blank=True, null=True)
     area = models.DecimalField('Área (ha)', max_digits=10, decimal_places=4)
     numero = models.IntegerField('Lote N.º')
     entrevistador = models.CharField('Nome do Entrevistador', max_length=50)
     coordenada_x = models.CharField('Coordenada "X"', max_length=30)
     coordenada_y = models.CharField('Coordenada "Y"', max_length=30)
+    banda_coordenada = models.CharField('Banda', max_length=30, blank=True, null=True)
 
     CHOICE_SIM = 1
     CHOICE_NAO = 0
@@ -104,7 +110,17 @@ class Lote(AuditoriaAbstractModel):
         choices=sim_nao_choices
     )
     cad_unico = models.IntegerField('CAD - Único', choices=sim_nao_choices)
-    ocupante_irregular = models.IntegerField('Ocupante irregular?', choices=sim_nao_choices)
+
+    STATUS_REGULAR = 10
+    STATUS_IRREGULAR = 20
+    STATUS_BLOQUEADO = 30
+
+    status_choices = Choices(
+        (STATUS_REGULAR, 'Regular'),
+        (STATUS_IRREGULAR, 'Irregular'),
+        (STATUS_BLOQUEADO, 'Bloqueado')
+    )
+    ocupante_irregular = models.IntegerField('Status do Ocupante', choices=status_choices)
     ocupante_irregular_tempo = models.CharField(
         'Em caso afirmativo, há quanto tempo?', max_length=30, blank=True, null=True
     )
@@ -296,23 +312,63 @@ class Lote(AuditoriaAbstractModel):
         '20. Como está cercado o lote?',
         choices=situacao_cercado_lote_choices
     )
+    possui_pastagem_em_pastejo_rotacionado = models.IntegerField(
+        '34. Possui Pastagem em Pastejo Rotacionado?', choices=sim_nao_choices
+    )
+    pratica_inseminacao_artificial_no_rebanho_leiteiro = models.IntegerField(
+        '35. Pratica inseminação aritificial no rebanho leiteiro?', choices=sim_nao_choices
+    )
     area_preservacao_permanente = models.IntegerField(
         '38. Existe Área de Preservação Permanente (APP) dentro do seu lote/parcela?', choices=sim_nao_choices
     )
     area_preservacao_permanente_cercada = models.IntegerField(
         '39. A Área de Preservação Permanente está cercada ou isolada?', choices=sim_nao_choices
     )
+
+    DESTINO_LIXO_DOMESTICO_ESPALHADO_NO_LOTE = 10
+    DESTINO_LIXO_DOMESTICO_QUEIMA = 20
+    DESTINO_LIXO_DOMESTICO_ENTERRA = 30
+    DESTINO_LIXO_DOMESTICO_JOGA_NOS_CURSOS_DAGUA = 40
+    DESTINO_LIXO_DOMESTICO_RECICLA_REAPROVEITA_LIXO_INORGANICO = 50
+    DESTINO_LIXO_DOMESTICO_DEPOSITA_A_CEU_ABERTO_NO_LOTE = 60
+    DESTINO_LIXO_DOMESTICO_NAO_SE_APLICA = 999
+
+    destino_lixo_domestico_nao_organico_choices = Choices(
+        (DESTINO_LIXO_DOMESTICO_ESPALHADO_NO_LOTE, 'Espalhado no lote'),
+        (DESTINO_LIXO_DOMESTICO_QUEIMA, 'Queima'),
+        (DESTINO_LIXO_DOMESTICO_ENTERRA, 'Enterra'),
+        (DESTINO_LIXO_DOMESTICO_JOGA_NOS_CURSOS_DAGUA, "Joga nos cursos d'água"),
+        (DESTINO_LIXO_DOMESTICO_RECICLA_REAPROVEITA_LIXO_INORGANICO, 'Recicla/reaproveita lixo inorgânico'),
+        (DESTINO_LIXO_DOMESTICO_DEPOSITA_A_CEU_ABERTO_NO_LOTE, 'Deposita a céu aberto no lote'),
+        (DESTINO_LIXO_DOMESTICO_NAO_SE_APLICA, 'Não se aplica'),
+    )
+
+    destino_lixo_domestico_nao_organico = models.IntegerField(
+        '42. Qual o destino do lixo doméstico não orgânico?', choices=destino_lixo_domestico_nao_organico_choices
+    )
+
+    DESTINO_MATERIAL_ORGANICO_USO_PARA_ALIMENTACAO_DE_ANIMAIS = 10
+    DESTINO_MATERIAL_ORGANICO_FAZ_COMPOSTAGEM = 20
+    DESTINO_MATERIAL_ENTERRA_JUNTO_COM_INORGANICO = 30
+    DESTINO_MATERIAL_DEPOSITA_A_CEU_ABERTO_NO_LOTE = 40
+    DESTINO_MATERIAL_NAO_SE_APLICA = 999
+
+    destino_material_organico_choices = Choices(
+        (DESTINO_MATERIAL_ORGANICO_USO_PARA_ALIMENTACAO_DE_ANIMAIS, 'Uso para alimentação de animais'),
+        (DESTINO_MATERIAL_ORGANICO_FAZ_COMPOSTAGEM, 'Faz compostagem'),
+        (DESTINO_MATERIAL_ENTERRA_JUNTO_COM_INORGANICO, 'Enterra junto com inorgânico'),
+        (DESTINO_MATERIAL_DEPOSITA_A_CEU_ABERTO_NO_LOTE, "Deposita a céu aberto no lote"),
+        (DESTINO_MATERIAL_NAO_SE_APLICA, 'Não se aplica'),
+    )
+
+    destino_material_organico = models.IntegerField(
+        '43. Qual o destino do material orgânico?', choices=destino_material_organico_choices
+    )
     possui_capineira = models.IntegerField(
         'Possui Capineira?', choices=sim_nao_choices, default=CHOICE_NAO
     )
-    possui_pastagem_em_pastejo_rotacionado = models.IntegerField(
-        '34. Possui Pastagem em Pastejo Rotacionado?', choices=sim_nao_choices
-    )
     area_pastejo_rotacionado = models.DecimalField(
         'Tamanho da área em sistema de Pastejo Rotacionado (ha)', max_digits=10, decimal_places=4, blank=True, null=True
-    )
-    pratica_inseminacao_artificial_no_rebanho_leiteiro = models.IntegerField(
-        '35. Pratica inseminação aritificial no rebanho leiteiro?', choices=sim_nao_choices
     )
     necessita_licenciamento_ambiental = models.IntegerField(
         'Necessita de licenciamento ambiental de atividade?', choices=sim_nao_choices, default=CHOICE_NAO
@@ -387,7 +443,7 @@ class DocumentoLote(AuditoriaAbstractModel):
         (TIPO_DOCUMENTO_TITULO_DEFINITIVO_REGISTRADO_CARTORIO, 'Título Definitivo - registrado cartório'),
         (TIPO_DOCUMENTO_MATRICULA_DA_PROPRIEDADE, 'Matrícula da Propriedade')
     )
-    tipo_documento = models.IntegerField('Documento', choices=tipo_documento_choices)
+    tipo_documento = models.IntegerField('Documento', choices=tipo_documento_choices, blank=True, null=True)
 
     def __str__(self):
         return self.tipo_documento_choices[self.tipo_documento]
@@ -415,7 +471,7 @@ class BeneficioSocial(AuditoriaAbstractModel):
         (TIPO_BENEFICIO_BOLSA_VERDE, 'Bolsa verde'),
         (TIPO_BENEFICIO_OUTROS, 'Outros')
     )
-    tipo_beneficio = models.IntegerField('Benefício', choices=tipo_beneficio_choices)
+    tipo_beneficio = models.IntegerField('Benefício', choices=tipo_beneficio_choices, blank=True, null=True)
     outros = models.CharField('Outros', max_length=30, blank=True, null=True)
 
     def __str__(self):
@@ -444,9 +500,9 @@ class AutoDeclaracaoEtnia(AuditoriaAbstractModel):
         (TIPO_DECLARACAO_ETNIA_ORIENTAIS, 'Orientais'),
         (TIPO_DECLARACAO_ETNIA_OUTROS, 'Outros')
     )
-    tipo_declaracao_etnia = models.IntegerField('Etnia', choices=tipo_declaracao_etnia_choices)
+    tipo_declaracao_etnia = models.IntegerField('Etnia', choices=tipo_declaracao_etnia_choices, blank=True, null=True)
     outros = models.CharField('Outros', max_length=30, blank=True, null=True)
-    quantidade = models.IntegerField('Quantos?')
+    quantidade = models.IntegerField('Quantos?', blank=True, null=True)
 
     def __str__(self):
         return '%s - %s' % (self.tipo_declaracao_etnia_choices[self.tipo_declaracao_etnia], self.quantidade)
@@ -484,7 +540,7 @@ class EstruturaOrganizativa(AuditoriaAbstractModel):
         (TIPO_ESTRUTURA_ORGANIZATIVA_GRUPOS_DE_LASER_E_CULTURA, 'Grupos de laser e cultura')
     )
     tipo_estrutura_organizativa = models.IntegerField('Estrutura organizativa',
-                                                      choices=tipo_estrutura_organizativa_choices)
+                                                      choices=tipo_estrutura_organizativa_choices, blank=True, null=True)
 
     FREQUENCIA_FREQUENTE = 10
     FREQUENCIA_REGULARMENTE = 20
@@ -497,7 +553,7 @@ class EstruturaOrganizativa(AuditoriaAbstractModel):
         (FREQUENCIA_RARAMENTE, 'Raramente (<50%)'),
         (FREQUENCIA_NAO_PARTICIPA, 'Não Participa'),
     )
-    frequencia = models.IntegerField('Frequência', choices=frequencia_choices)
+    frequencia = models.IntegerField('Frequência', choices=frequencia_choices, blank=True, null=True)
 
     def __str__(self):
         return '%s - %s' % (self.tipo_estrutura_organizativa_choices[self.tipo_estrutura_organizativa], self.frequencia_choices[self.frequencia])
@@ -531,7 +587,7 @@ class FonteAgua(AuditoriaAbstractModel):
         (FONTE_DE_AGUA_REDE_DE_AGUA_ENCANADA, 'Rede de água encanada'),
         (FONTE_DE_AGUA_OUTRA, 'Outra')
     )
-    fonte_agua = models.IntegerField('Fonte de água', choices=fonte_agua_choices)
+    fonte_agua = models.IntegerField('Fonte de água', choices=fonte_agua_choices, blank=True, null=True)
     outra = models.CharField('Outra (Especificar)', max_length=30, blank=True, null=True)
 
     def __str__(self):
@@ -563,7 +619,7 @@ class TratamentoAgua(AuditoriaAbstractModel):
         (TRATAMENTO_AGUA_DESSALINIZACAO, 'Dessalinização'),
         (TRATAMENTO_AGUA_OUTRA, 'Outros')
     )
-    tratamento_agua = models.IntegerField('Forma de tratamento', choices=tratamento_agua_choices)
+    tratamento_agua = models.IntegerField('Forma de tratamento', choices=tratamento_agua_choices, blank=True, null=True)
     outros = models.CharField('Outros (Especificar)', max_length=30, blank=True, null=True)
 
     def __str__(self):
@@ -603,9 +659,9 @@ class ConstrucaoLote(AuditoriaAbstractModel):
         (CONSTRUCAO_NO_LOTE_AGROINDUSTRIA, 'Agroindústria'),
         (CONSTRUCAO_NO_LOTE_OUTROS, 'Outros')
     )
-    construcao_no_lote = models.IntegerField('Construção', choices=construcao_no_lote_choices)
+    construcao_no_lote = models.IntegerField('Construção', choices=construcao_no_lote_choices, blank=True, null=True)
     outros = models.CharField('Outros', max_length=30, blank=True, null=True)
-    quantidade = models.IntegerField('Quantidade')
+    quantidade = models.IntegerField('Quantidade', blank=True, null=True)
 
     def __str__(self):
         retorno = ''
@@ -661,9 +717,9 @@ class BemProdutivo(AuditoriaAbstractModel):
         (BEM_PRODUTIVO_MOTOSSERRA, 'Motosserra'),
         (BEM_PRODUTIVO_OUTROS, 'Outros')
     )
-    bem_produtivo = models.IntegerField('Bem produtivo', choices=bem_produtivo_choices)
+    bem_produtivo = models.IntegerField('Bem produtivo', choices=bem_produtivo_choices, blank=True, null=True)
     outros = models.CharField('Outros', max_length=30, blank=True, null=True)
-    quantidade = models.IntegerField('Quantidade')
+    quantidade = models.IntegerField('Quantidade', blank=True, null=True)
 
     def __str__(self):
         retorno = ''
@@ -702,8 +758,8 @@ class AplicacaoCredito(AuditoriaAbstractModel):
         (TIPO_APLICACAO_CREDITO_REFORMA_MORADIA, 'Reforma Moradia'),
         (TIPO_APLICACAO_CREDITO_PNHR_REFORMA, 'PNHR-Reforma')
     )
-    tipo_aplicacao_credito = models.IntegerField('Tipo de crédito', choices=tipo_aplicacao_credito_choices)
-    valor = models.DecimalField('Valor (R$)', max_digits=10, decimal_places=2)
+    tipo_aplicacao_credito = models.IntegerField('Tipo de crédito', choices=tipo_aplicacao_credito_choices, blank=True, null=True)
+    valor = models.DecimalField('Valor (R$)', max_digits=10, decimal_places=2, blank=True, null=True)
 
     def __str__(self):
         return '{} - R$ {}'.format(self.tipo_aplicacao_credito_choices[self.tipo_aplicacao_credito], self.valor)
@@ -733,9 +789,9 @@ class CreditoBancario(AuditoriaAbstractModel):
         (CREDITO_BANCARIO_RECUPERACAO_COMPLEMENTAR, 'Recuperação (Complementar)'),
         (CREDITO_BANCARIO_OUTROS, 'Outros')
     )
-    credito_bancario = models.IntegerField('Tipo de crédito', choices=credito_bancario_choices)
+    credito_bancario = models.IntegerField('Tipo de crédito', choices=credito_bancario_choices, blank=True, null=True)
     outros = models.CharField('Outros', max_length=30, blank=True, null=True)
-    valor = models.DecimalField('Valor (R$)', max_digits=10, decimal_places=2)
+    valor = models.DecimalField('Valor (R$)', max_digits=10, decimal_places=2, blank=True, null=True)
 
     CHOICE_SIM = 1
     CHOICE_NAO = 0
@@ -744,7 +800,7 @@ class CreditoBancario(AuditoriaAbstractModel):
         (CHOICE_SIM, 'Sim'),
         (CHOICE_NAO, 'Não')
     )
-    adimplente = models.IntegerField('Adimplente?', choices=sim_nao_choices)
+    adimplente = models.IntegerField('Adimplente?', choices=sim_nao_choices, blank=True, null=True)
 
     def __str__(self):
         retorno = ''
@@ -764,7 +820,7 @@ class ProducaoVegetal(AuditoriaAbstractModel):
     CLASSIFICACAO_CULTURA = 1
     CLASSIFICACAO_OLERICULTURA = 2
     CLASSIFICACAO_FRUTICULTURA = 3
-    classificacao = models.IntegerField('Classificação')
+    classificacao = models.IntegerField('Classificação', blank=True, null=True)
 
     TIPO_PRODUCAO_AMENDOIM = 10
     TIPO_PRODUCAO_ARROZ = 20
@@ -864,9 +920,9 @@ class ProducaoVegetal(AuditoriaAbstractModel):
     tipo_producao_choices = CULTURA + OLERICULTURA + FRUTICULTURA + (
         (TIPO_PRODUCAO_OUTROS, 'Outros'),
     )
-    tipo_producao = models.IntegerField('Tipo de produção', choices=tipo_producao_choices)
+    tipo_producao = models.IntegerField('Tipo de produção', choices=tipo_producao_choices, blank=True, null=True)
     tipo_producao_outros = models.CharField('Tipo de produção (Outros)', max_length=30, blank=True, null=True)
-    area_plantada = models.DecimalField('Área plantada', max_digits=10, decimal_places=4)
+    area_plantada = models.DecimalField('Área plantada', max_digits=10, decimal_places=4, blank=True, null=True)
 
     MEDIDA_HA = 1
     MEDIDA_M2 = 2
@@ -875,7 +931,7 @@ class ProducaoVegetal(AuditoriaAbstractModel):
         (MEDIDA_HA, 'ha'),
         (MEDIDA_M2, 'm2')
     )
-    medida_area_plantada = models.IntegerField('Medida da área plantada', choices=medida_choices)
+    medida_area_plantada = models.IntegerField('Medida da área plantada', choices=medida_choices, blank=True, null=True)
     producao_consumo = models.FloatField('Produção (Consumo)', blank=True, null=True)
     producao_comercio = models.FloatField('Produção (Comércio)', blank=True, null=True)
 
@@ -887,7 +943,7 @@ class ProducaoVegetal(AuditoriaAbstractModel):
         (UNIDADE_MEDIDA_UN, 'un')
     )
     producao_unidade_medida = models.IntegerField(
-        'Unidade de medida da produção', choices=unidade_medida_choices, blank=True, null=True
+        'Unidade de medida', choices=unidade_medida_choices, blank=True, null=True
     )
     valor = models.DecimalField('Valor (R$)', max_digits=10, decimal_places=4, blank=True, null=True)
 
@@ -926,7 +982,7 @@ class ProducaoVegetal(AuditoriaAbstractModel):
         (CANAL_COMERCIALIZACAO_VENDA_DIRETA_AO_CONSUMIDOR, 'Venda direta ao consumidor (de casa em casa)'),
         (CANAL_COMERCIALIZACAO_VENDA_EM_FEIRAS, 'Venda em feiras'),
         (CANAL_COMERCIALIZACAO_ENTREGA_PARA_SUPERMERCADOS_MERCEARIAS_AÇOUGUES, 'Entrega para supermercados, mercearias, açougues, etc'),
-        (CANAL_COMERCIALIZACAO_VENDA_PARA_INDUSTRIAS_AGROINDUSTRIAS_LATICINIOS, 'Venda p/ indústrias, e/ou agroindústrias (laticínios etc'),
+        (CANAL_COMERCIALIZACAO_VENDA_PARA_INDUSTRIAS_AGROINDUSTRIAS_LATICINIOS, 'Venda p/ indústrias, e/ou agroindústrias (laticínios etc)'),
         (CANAL_COMERCIALIZACAO_VENDA_PARA_AGENTES_ATRAVESSADORES, 'Venda para agentes "atravessadores"'),
         (CANAL_COMERCIALIZACAO_OUTROS, 'Outros')
     )
@@ -965,6 +1021,8 @@ class Cultura(ProducaoVegetal):
 
     def save(self, *args, **kwargs):
         self.classificacao = self.CLASSIFICACAO_CULTURA
+        self.medida_area_plantada = self.MEDIDA_HA
+        self.producao_unidade_medida = self.UNIDADE_MEDIDA_KG
         super().save(*args, **kwargs)
 
     class Meta:
@@ -990,6 +1048,7 @@ class Olericultura(ProducaoVegetal):
 
     def save(self, *args, **kwargs):
         self.classificacao = self.CLASSIFICACAO_OLERICULTURA
+        self.medida_area_plantada = self.MEDIDA_M2
         super().save(*args, **kwargs)
 
     class Meta:
@@ -1015,6 +1074,8 @@ class Fruticultura(ProducaoVegetal):
 
     def save(self, *args, **kwargs):
         self.classificacao = self.CLASSIFICACAO_FRUTICULTURA
+        self.medida_area_plantada = self.MEDIDA_HA
+        self.producao_unidade_medida = self.UNIDADE_MEDIDA_KG
         super().save(*args, **kwargs)
 
     class Meta:
@@ -1044,11 +1105,11 @@ class AtividadeExtrativista(AuditoriaAbstractModel):
         (ESPECIFICACAO_PEQUI, 'Pequi(Kg)'),
         (ESPECIFICACAO_OUTROS, 'Outros')
     )
-    especificacao = models.IntegerField('Especificação', choices=especificacao_choices)
+    especificacao = models.IntegerField('Especificação', choices=especificacao_choices, blank=True, null=True)
     outros = models.CharField('Outros', max_length=30, blank=True, null=True)
-    quantidade_frutos_ano = models.IntegerField('Quantidade Colhida / Ano - Fruto(s)')
-    quantidade_palmitos_ano = models.IntegerField('Quantidade Colhida / Ano - Palmito(s)')
-    valor = models.DecimalField('Valor R$/Kg', max_digits=10, decimal_places=2)
+    quantidade_frutos_ano = models.IntegerField('Quantidade Colhida / Ano - Fruto(s)', blank=True, null=True)
+    quantidade_palmitos_ano = models.IntegerField('Quantidade Colhida / Ano - Palmito(s)', blank=True, null=True)
+    valor = models.DecimalField('Valor R$/Kg', max_digits=10, decimal_places=2, blank=True, null=True)
 
     CANAL_COMERCIALIZACAO_VENDA_DIRETA_AO_CONSUMIDOR = 10
     CANAL_COMERCIALIZACAO_VENDA_EM_FEIRAS = 20
@@ -1114,11 +1175,11 @@ class ProducaoFlorestal(AuditoriaAbstractModel):
         (ESPECIFICACAO_SERINGUEIRA_M3_MADEIRA, 'Seringueira(m³/Madeira)'),
         (ESPECIFICACAO_OUTROS, 'Outros')
     )
-    especificacao = models.IntegerField('Especificação', choices=especificacao_choices)
+    especificacao = models.IntegerField('Especificação', choices=especificacao_choices, blank=True, null=True)
     outros = models.CharField('Outros', max_length=30, blank=True, null=True)
-    quantidade_produzida_ano = models.IntegerField('Quantidade produzida/ano')
-    area_plantada = models.DecimalField('Área plantada (ha)', max_digits=10, decimal_places=4)
-    valor = models.DecimalField('R$/Unidade colhida', max_digits=10, decimal_places=2)
+    quantidade_produzida_ano = models.IntegerField('Quantidade produzida/ano', blank=True, null=True)
+    area_plantada = models.DecimalField('Área plantada (ha)', max_digits=10, decimal_places=4, blank=True, null=True)
+    valor = models.DecimalField('R$/Unidade colhida', max_digits=10, decimal_places=2, blank=True, null=True)
 
     CANAL_COMERCIALIZACAO_VENDA_DIRETA_AO_CONSUMIDOR = 10
     CANAL_COMERCIALIZACAO_VENDA_EM_FEIRAS = 20
@@ -1171,7 +1232,7 @@ class ProducaoAnimal(AuditoriaAbstractModel):
         (TIPO_CRIACAO_GADO_LEITEIRO, 'Gado Leiteiro'),
         (TIPO_CRIACAO_GADO_DE_CORTE, 'Gado de Corte')
     )
-    tipo_criacao = models.IntegerField('Tipo de criação', choices=tipo_criacao_choices)
+    tipo_criacao = models.IntegerField('Tipo de criação', choices=tipo_criacao_choices, blank=True, null=True)
 
     ESPECIFICACAO_TOUROS = 10
     ESPECIFICACAO_VACAS = 20
@@ -1207,9 +1268,9 @@ class ProducaoAnimal(AuditoriaAbstractModel):
     especificacao_choices = BOVINOCULTURA + OUTRA_CRIACAO + (
         (ESPECIFICACAO_OUTROS, 'Outros'),
     )
-    especificacao = models.IntegerField('Especificação', choices=especificacao_choices)
-    quantidade_cabecas = models.IntegerField('Nº de Cabeça(s)')
-    valor_cabeca = models.DecimalField('R$/Cabeça', max_digits=7, decimal_places=2)
+    especificacao = models.IntegerField('Especificação', choices=especificacao_choices, blank=True, null=True)
+    quantidade_cabecas = models.IntegerField('Nº de Cabeça(s)', blank=True, null=True)
+    valor_cabeca = models.DecimalField('R$/Cabeça', max_digits=7, decimal_places=2, blank=True, null=True)
 
 
 class BovinoculturaManager(models.Manager):
@@ -1279,10 +1340,10 @@ class DescarteAnimal(AuditoriaAbstractModel):
         (ESPECIFICACAO_BEZERRAS, 'Bezerras(os)'),
         (ESPECIFICACAO_BOI, 'Boi')
     )
-    especificacao = models.IntegerField('Especificação', choices=especificacao_choices)
-    quantidade_cabecas_consumo = models.IntegerField('Nº de Cabeça(s) - Consumo')
-    quantidade_cabecas_comercio = models.IntegerField('Nº de Cabeça(s) - Comércio')
-    valor_cabeca = models.DecimalField('R$/Cabeça', max_digits=7, decimal_places=2)
+    especificacao = models.IntegerField('Especificação', choices=especificacao_choices, blank=True, null=True)
+    quantidade_cabecas_consumo = models.IntegerField('Nº de Cabeça(s) - Consumo', blank=True, null=True)
+    quantidade_cabecas_comercio = models.IntegerField('Nº de Cabeça(s) - Comércio', blank=True, null=True)
+    valor_cabeca = models.DecimalField('R$/Cabeça', max_digits=7, decimal_places=2, blank=True, null=True)
 
     CANAL_COMERCIALIZACAO_VENDA_PARA_OUTRO_PRODUTOR = 10
     CANAL_COMERCIALIZACAO_ENTREGA_PARA_FRIGORIFICO_ACOUGUE = 20
@@ -1296,7 +1357,7 @@ class DescarteAnimal(AuditoriaAbstractModel):
         (CANAL_COMERCIALIZACAO_OUTROS, 'Outros')
     )
     canal_comercializacao = models.IntegerField('Formas/Canais de Comercialização',
-                                                choices=canal_comercializacao_choices)
+                                                choices=canal_comercializacao_choices, blank=True, null=True)
     canal_comercializacao_outros = models.CharField('Outros (Especificar)', max_length=30, blank=True, null=True)
 
 
@@ -1389,11 +1450,11 @@ class Produto(AuditoriaAbstractModel):
     especificacao_choices = ORIGEM_ANIMAL + PROCESSADO_BENEFICIADO + (
         (ESPECIFICACAO_OUTROS, 'Outros'),
     )
-    especificacao = models.IntegerField('Especificação', choices=especificacao_choices)
+    especificacao = models.IntegerField('Especificação', choices=especificacao_choices, blank=True, null=True)
     outros = models.CharField('Outros (Especificar)', max_length=30, blank=True, null=True)
-    producao_consumo = models.IntegerField('Produção (Consumo)')
-    producao_comercio = models.IntegerField('Produção (Comércio)')
-    valor = models.DecimalField('Valor R$', max_digits=7, decimal_places=2)
+    producao_consumo = models.IntegerField('Produção (Consumo)', blank=True, null=True)
+    producao_comercio = models.IntegerField('Produção (Comércio)', blank=True, null=True)
+    valor = models.DecimalField('Valor R$', max_digits=7, decimal_places=2, blank=True, null=True)
 
     CANAL_COMERCIALIZACAO_VENDA_DIRETA_AO_CONSUMIDOR = 10
     CANAL_COMERCIALIZACAO_VENDA_EM_FEIRAS = 20
@@ -1456,9 +1517,6 @@ class OrigemAnimal(Produto):
 class NivelTecnologicoProducaoAnimal(AuditoriaAbstractModel):
     lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='niveisTecnologicosProducaoAnimal', on_delete=models.CASCADE)
 
-    CHOICE_SIM = 1
-    CHOICE_NAO = 0
-
     TIPO_CAPINEIRA_CANA = 10
     TIPO_CAPINEIRA_NAPIER = 20
     TIPO_CAPINEIRA_NAO_SE_APLICA = 99
@@ -1468,7 +1526,7 @@ class NivelTecnologicoProducaoAnimal(AuditoriaAbstractModel):
         (TIPO_CAPINEIRA_NAPIER, 'Napier'),
         (TIPO_CAPINEIRA_NAO_SE_APLICA, 'Não se aplica')
     )
-    tipo_capineira = models.IntegerField('Tipo de Capineira', choices=tipo_capineira_choices)
+    tipo_capineira = models.IntegerField('Tipo de Capineira', choices=tipo_capineira_choices, blank=True, null=True)
     area_capineira = models.DecimalField(
         'Área da capineira (ha)', max_digits=10, decimal_places=4, blank=True, null=True
     )
@@ -1476,12 +1534,6 @@ class NivelTecnologicoProducaoAnimal(AuditoriaAbstractModel):
     def __str__(self):
         return '{}: {}ha'.format(self.tipo_capineira_choices[self.tipo_capineira], self.area_capineira)
         return str(self.tipo_capineira)
-
-    def save(self, *args, **kwargs):
-        lote = self.lote
-        lote.possui_capineira = self.CHOICE_SIM
-        lote.save()
-        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = ''
@@ -1542,7 +1594,7 @@ class ProblemaAmbiental(AuditoriaAbstractModel):
         (TIPO_PROBLEMA_DESMATAMENTO, 'Desmatamento'),
         (TIPO_PROBLEMA_OUTROS, 'Outros')
     )
-    tipo_problema = models.IntegerField('Tipo de problema', choices=tipo_problema_choices)
+    tipo_problema = models.IntegerField('Tipo de problema', choices=tipo_problema_choices, blank=True, null=True)
     outros = models.CharField('Outros (Especificar)', max_length=50, blank=True, null=True)
 
     def __str__(self):
@@ -1580,7 +1632,7 @@ class PraticaConservacionista(AuditoriaAbstractModel):
         (TIPO_PRATICA_PLANTIOS_DE_ARVORES_PARA_PROTECAO_DE_MANACIAIS_AREAS_DEGRADADAS,
          'Plantios de árvores para proteção de mananciais / áreas degradadas')
     )
-    tipo_pratica = models.IntegerField('Prática Conservacionista', choices=tipo_pratica_choices)
+    tipo_pratica = models.IntegerField('Prática Conservacionista', choices=tipo_pratica_choices, blank=True, null=True)
 
     def __str__(self):
         return self.tipo_pratica_choices[self.tipo_pratica]
@@ -1588,64 +1640,6 @@ class PraticaConservacionista(AuditoriaAbstractModel):
     class Meta:
         verbose_name = ''
         verbose_name_plural = '41. Quais são as práticas conservacionistas praticadas na propriedade?'
-
-
-class DestinoLixoDomestico(AuditoriaAbstractModel):
-    lote = models.OneToOneField(
-        Lote, verbose_name='Lote', related_name='destinosLixoDomestico', on_delete=models.CASCADE,
-        primary_key=True,
-    )
-
-    DESTINO_ESPALHADO_NO_LOTE = 10
-    DESTINO_QUEIMA = 20
-    DESTINO_ENTERRA = 30
-    DESTINO_JOGA_NOS_CURSOS_DAGUA = 40
-    DESTINO_RECICLA_REAPROVEITA_LIXO_INORGANICO = 50
-    DESTINO_DEPOSITA_A_CEU_ABERTO_NO_LOTE = 60
-
-    destino_choices = Choices(
-        (DESTINO_ESPALHADO_NO_LOTE, 'Espalhado no lote'),
-        (DESTINO_QUEIMA, 'Queima'),
-        (DESTINO_ENTERRA, 'Enterra'),
-        (DESTINO_JOGA_NOS_CURSOS_DAGUA, "Joga nos cursos d'água"),
-        (DESTINO_RECICLA_REAPROVEITA_LIXO_INORGANICO, 'Recicla/reaproveita lixo inorgânico'),
-        (DESTINO_DEPOSITA_A_CEU_ABERTO_NO_LOTE, 'Deposita a céu aberto no lote')
-    )
-    destino = models.IntegerField('Destino', choices=destino_choices)
-
-    def __str__(self):
-        return self.destino_choices[self.destino]
-
-    class Meta:
-        verbose_name = ''
-        verbose_name_plural = '42. Qual o destino do lixo doméstico não orgânico?'
-
-
-class DestinoMaterialOrganico(AuditoriaAbstractModel):
-    lote = models.OneToOneField(
-        Lote, verbose_name='Lote', related_name='destinosMaterialOrganico', on_delete=models.CASCADE,
-        primary_key=True,
-    )
-
-    DESTINO_USO_PARA_ALIMENTACAO_DE_ANIMAIS = 10
-    DESTINO_FAZ_COMPOSTAGEM = 20
-    DESTINO_ENTERRA_JUNTO_COM_INORGANICO = 30
-    DESTINO_DEPOSITA_A_CEU_ABERTO_NO_LOTE = 40
-
-    destino_choices = Choices(
-        (DESTINO_USO_PARA_ALIMENTACAO_DE_ANIMAIS, 'Uso para alimentação de animais'),
-        (DESTINO_FAZ_COMPOSTAGEM, 'Faz compostagem'),
-        (DESTINO_ENTERRA_JUNTO_COM_INORGANICO, 'Enterra junto com inorgânico'),
-        (DESTINO_DEPOSITA_A_CEU_ABERTO_NO_LOTE, 'Deposita a céu aberto no lote')
-    )
-    destino = models.IntegerField('Destino', choices=destino_choices)
-
-    def __str__(self):
-        return self.destino_choices[self.destino]
-
-    class Meta:
-        verbose_name = ''
-        verbose_name_plural = '43. Qual o destino do material orgânico?'
 
 
 class LicenciamentoAmbiental(AuditoriaAbstractModel):
@@ -1668,7 +1662,7 @@ class LicenciamentoAmbiental(AuditoriaAbstractModel):
         (TIPO_ATIVIDADE_LAZER_E_TURISMO, 'Lazer e Turismo'),
         (TIPO_ATIVIDADE_OUTROS, 'Outros')
     )
-    tipo_atividade = models.IntegerField('Tipo de atividade', choices=tipo_atividade_choices)
+    tipo_atividade = models.IntegerField('Tipo de atividade', choices=tipo_atividade_choices, blank=True, null=True)
     outros = models.CharField('Outros (Especificar)', max_length=50, blank=True, null=True)
 
     def __str__(self):
@@ -1701,9 +1695,9 @@ class AtendimentoSaude(AuditoriaAbstractModel):
         (LOCAL_PA, 'P.A'),
         (LOCAL_CIDADE, 'Cidade')
     )
-    hospital = models.IntegerField('Hospital', choices=local_choices)
-    posto_saude = models.IntegerField('Posto de saúde', choices=local_choices)
-    farmacia = models.IntegerField('Farmácia', choices=local_choices)
+    hospital = models.IntegerField('Hospital', choices=local_choices, blank=True, null=True)
+    posto_saude = models.IntegerField('Posto de saúde', choices=local_choices, blank=True, null=True)
+    farmacia = models.IntegerField('Farmácia', choices=local_choices, blank=True, null=True)
     outros = models.IntegerField('Outros', choices=local_choices, blank=True, null=True)
     outros_especificacao = models.CharField('Outros (Especificar)', max_length=50, blank=True, null=True)
 
@@ -1735,7 +1729,7 @@ class ProgramaSaude(AuditoriaAbstractModel):
         (PROGRAMA_SAUDE_CAMPANHA_DE_VACINACAO, 'Campanha de vacinação'),
         (PROGRAMA_SAUDE_SAUDE_DA_MULHER, 'Saúde da Mulher')
     )
-    programa_saude = models.IntegerField('Programa/Tipo de atendimento à saúde', choices=programa_saude_choices)
+    programa_saude = models.IntegerField('Programa/Tipo de atendimento à saúde', choices=programa_saude_choices, blank=True, null=True)
 
     def __str__(self):
         return self.programa_saude_choices[self.programa_saude]
@@ -1759,7 +1753,7 @@ class AtividadeFisica(AuditoriaAbstractModel):
         (ATIVIDADE_FISICA_NENHUMA_ATIVIDADE_FISICA, 'Nenhuma atividade física'),
         (ATIVIDADE_FISICA_OUTROS, 'Outros')
     )
-    atividade_fisica = models.IntegerField('Esporte/atividade física', choices=atividade_fisica_choices)
+    atividade_fisica = models.IntegerField('Esporte/atividade física', choices=atividade_fisica_choices, blank=True, null=True)
     outros = models.CharField('Outros (Especificar)', max_length=50, blank=True, null=True)
 
     def __str__(self):
@@ -1787,7 +1781,7 @@ class EspacoDisponivel(AuditoriaAbstractModel):
         (ESPACO_DISPONIVEL_SALAO_DE_FESTAS, 'Salão de festas'),
         (ESPACO_DISPONIVEL_NAO_POSSUI, 'Não possui')
     )
-    espaco_disponivel = models.IntegerField('Espaço disponível', choices=espaco_disponivel_choices)
+    espaco_disponivel = models.IntegerField('Espaço disponível', choices=espaco_disponivel_choices, blank=True, null=True)
 
     def __str__(self):
         return self.espaco_disponivel_choices[self.espaco_disponivel]
@@ -1817,7 +1811,7 @@ class EstabelecimentoEnsino(AuditoriaAbstractModel):
         (ESTABELECIMENTO_ENSINO_ENSINO_PROFISSIONALIZANTE, 'Ensino Profissionalizante'),
         (ESTABELECIMENTO_ENSINO_NAO_HA_ESTABELECIMENTO_DE_ENSINO_NO_PA, 'Não há estabelecimento de ensino no PA')
     )
-    estabelecimento_ensino = models.IntegerField('Estabelecimento de ensino', choices=estabelecimento_ensino_choices)
+    estabelecimento_ensino = models.IntegerField('Estabelecimento de ensino', choices=estabelecimento_ensino_choices, blank=True, null=True)
 
     def __str__(self):
         return self.estabelecimento_ensino_choices[self.estabelecimento_ensino]
@@ -1849,88 +1843,8 @@ class NaoPossuiDocumento(AuditoriaAbstractModel):
         verbose_name_plural = '56. Com relação à documentação, quantas pessoas NÃO POSSUEM os documentos relacionados abaixo?'
 
 
-# class Pessoa(AuditoriaAbstractModel):
-#     nome = models.CharField('Nome', max_length=100)
-#
-#     PARENTESCO_CONJUGE = 1
-#     PARENTESCO_TITULAR = 2
-#     PARENTESCO_IRMAO_IRMA = 3
-#     PARENTESCO_TIO_TIA = 4
-#     PARENTESCO_PRIMO_PRIMA = 5
-#     PARENTESCO_FILHO_FILHA = 6
-#     PARENTESCO_CUNHADO_CUNHADA = 7
-#
-#     parentesco_choices = (
-#         (PARENTESCO_CONJUGE, 'Cônjuge'),
-#         (PARENTESCO_TITULAR, 'Titular'),
-#         (PARENTESCO_CONJUGE, 'Irmão(a)'),
-#         (PARENTESCO_CONJUGE, 'Tio(a)'),
-#         (PARENTESCO_CONJUGE, 'Primo(a)'),
-#         (PARENTESCO_CONJUGE, 'Filho(a)'),
-#         (PARENTESCO_CONJUGE, 'Cunhado(a)')
-#     )
-#     parentesco = models.IntegerField('Parentesco', choices=parentesco_choices)
-#     idade = models.IntegerField('Idade')
-#
-#     ESCOLARIDADE_NAO_ALFABETIZADO = 1
-#     ESCOLARIDADE_1_4_ANO = 2
-#     ESCOLARIDADE_5_9_ANO = 3
-#     ESCOLARIDADE_FUNDAMENTAL_COMPLETO = 4
-#     ESCOLARIDADE_EJA = 5
-#     ESCOLARIDADE_MEDIO_INCOMPLETO = 6
-#     ESCOLARIDADE_MEDIO_COMPLETO = 7
-#     ESCOLARIDADE_SUPERIOR_INCOMPLETO = 8
-#     ESCOLARIDADE_SUPERIOR_COMPLETO = 9
-#     ESCOLARIDADE_POS_GRADUACAO_INCOMPLETA = 10
-#     ESCOLARIDADE_POS_GRADUACAO_COMPLETA = 11
-#
-#     escolaridade_choices = (
-#         (ESCOLARIDADE_NAO_ALFABETIZADO, 'Não alfabetizado'),
-#         (ESCOLARIDADE_1_4_ANO, '1º ao 4º ano'),
-#         (ESCOLARIDADE_5_9_ANO, '5º ao 9º ano'),
-#         (ESCOLARIDADE_FUNDAMENTAL_COMPLETO, 'Fundamental completo'),
-#         (ESCOLARIDADE_EJA, 'EJA - Educação de Jovens e Adultos'),
-#         (ESCOLARIDADE_MEDIO_INCOMPLETO, 'Médio incompleto'),
-#         (ESCOLARIDADE_MEDIO_COMPLETO, 'Médio completo'),
-#         (ESCOLARIDADE_SUPERIOR_INCOMPLETO, 'Superior incompleto'),
-#         (ESCOLARIDADE_SUPERIOR_COMPLETO, 'Superior completo'),
-#         (ESCOLARIDADE_POS_GRADUACAO_INCOMPLETA, 'Pós Graduação incompleto'),
-#         (ESCOLARIDADE_POS_GRADUACAO_COMPLETA, 'Pós Graduação completo')
-#     )
-#
-#     CHOICE_SIM = 1
-#     CHOICE_NAO = 0
-#
-#     sim_nao_choices = (
-#         (CHOICE_SIM, 'Sim'),
-#         (CHOICE_NAO, 'Não')
-#     )
-#     estuda = models.IntegerField('Estuda?', choices=sim_nao_choices)
-#     cpf = models.CharField('CPF', max_length=11)
-#
-#
-# class Membro(AuditoriaAbstractModel):
-#     familia = models.ForeignKey('Familia', related_name="membros", on_delete=models.CASCADE)
-#     pessoa = models.ForeignKey('Pessoa', related_name="membros", on_delete=models.CASCADE)
-#
-#
-# class Familia(AuditoriaAbstractModel):
-#     lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='familias', on_delete=models.CASCADE)
-#     pessoas = models.ManyToManyField('Pessoa', through=Membro, through_fields=('familia', 'pessoa'),
-#                                      related_name='familias')
-class Familia(AuditoriaAbstractModel):
-    lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='familias', on_delete=models.CASCADE)
-
-    def __str__(self):
-        return ', '.join(self.membros.values_list('nome', flat=True))
-
-    class Meta:
-        verbose_name = 'Família'
-        verbose_name_plural = 'Famílias'
-
-
 class Membro(AuditoriaAbstractModel):
-    familia = models.ForeignKey(Familia, verbose_name='Familia', related_name='membros', on_delete=models.CASCADE)
+    lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='membros', on_delete=models.CASCADE)
     nome = models.CharField('Nome', max_length=100)
 
     PARENTESCO_TITULAR = 10
@@ -1956,8 +1870,8 @@ class Membro(AuditoriaAbstractModel):
         (PARENTESCO_NETO_NETA, 'Neto(a)'),
         (PARENTESCO_AGREGADO, 'Agregado(a)')
     )
-    parentesco = models.IntegerField('Parentesco', choices=parentesco_choices)
-    idade = models.IntegerField('Idade')
+    parentesco = models.IntegerField('Parentesco', choices=parentesco_choices, blank=True, null=True)
+    idade = models.IntegerField('Idade', blank=True, null=True)
 
     ESCOLARIDADE_NAO_ALFABETIZADO = 10
     ESCOLARIDADE_1_4_ANO = 20
@@ -1972,19 +1886,19 @@ class Membro(AuditoriaAbstractModel):
     ESCOLARIDADE_POS_GRADUACAO_COMPLETA = 110
 
     escolaridade_choices = Choices(
-        (ESCOLARIDADE_NAO_ALFABETIZADO, 'Não alfabetizado'),
-        (ESCOLARIDADE_1_4_ANO, '1º ao 4º ano'),
-        (ESCOLARIDADE_5_9_ANO, '5º ao 9º ano'),
-        (ESCOLARIDADE_FUNDAMENTAL_COMPLETO, 'Fundamental completo'),
-        (ESCOLARIDADE_EJA, 'EJA - Educação de Jovens e Adultos'),
-        (ESCOLARIDADE_MEDIO_INCOMPLETO, 'Médio incompleto'),
-        (ESCOLARIDADE_MEDIO_COMPLETO, 'Médio completo'),
-        (ESCOLARIDADE_SUPERIOR_INCOMPLETO, 'Superior incompleto'),
-        (ESCOLARIDADE_SUPERIOR_COMPLETO, 'Superior completo'),
-        (ESCOLARIDADE_POS_GRADUACAO_INCOMPLETA, 'Pós Graduação incompleto'),
-        (ESCOLARIDADE_POS_GRADUACAO_COMPLETA, 'Pós Graduação completo')
+        (ESCOLARIDADE_NAO_ALFABETIZADO, '(a) Não alfabetizado'),
+        (ESCOLARIDADE_1_4_ANO, '(b) 1º ao 4º ano'),
+        (ESCOLARIDADE_5_9_ANO, '(c) 5º ao 9º ano'),
+        (ESCOLARIDADE_FUNDAMENTAL_COMPLETO, '(d) Fundamental completo'),
+        (ESCOLARIDADE_EJA, '(e) EJA - Educação de Jovens e Adultos'),
+        (ESCOLARIDADE_MEDIO_INCOMPLETO, '(f) Médio incompleto'),
+        (ESCOLARIDADE_MEDIO_COMPLETO, '(g) Médio completo'),
+        (ESCOLARIDADE_SUPERIOR_INCOMPLETO, '(h) Superior incompleto'),
+        (ESCOLARIDADE_SUPERIOR_COMPLETO, '(i) Superior completo'),
+        (ESCOLARIDADE_POS_GRADUACAO_INCOMPLETA, '(j) Pós Graduação incompleto'),
+        (ESCOLARIDADE_POS_GRADUACAO_COMPLETA, '(k) Pós Graduação completo')
     )
-    escolaridade = models.IntegerField('Escolaridade', choices=escolaridade_choices)
+    escolaridade = models.IntegerField('Escolaridade', choices=escolaridade_choices, blank=True, null=True)
 
     CHOICE_SIM = 1
     CHOICE_NAO = 0
@@ -1993,7 +1907,7 @@ class Membro(AuditoriaAbstractModel):
         (CHOICE_SIM, 'Sim'),
         (CHOICE_NAO, 'Não')
     )
-    estuda = models.IntegerField('Estuda?', choices=sim_nao_choices)
+    estuda = models.IntegerField('Estuda?', choices=sim_nao_choices, blank=True, null=True)
     cpf = models.CharField('CPF', max_length=11, unique=True, blank=True, null=True)
 
     TRABALHO_ANTES_DO_LOTE_SEMPRE_TRABALHOU_NO_CAMPO = 10
@@ -2010,93 +1924,45 @@ class Membro(AuditoriaAbstractModel):
         blank=True, null=True
     )
 
+    trabalho_fora_lote_quantidade_dias_ano = models.IntegerField('Quantidade de dias/ano trabalha fora do lote', blank=True, null=True)
+    trabalho_fora_lote_valor_diaria = models.DecimalField('Valor da Diária (R$/dia)', max_digits=7, decimal_places=2, blank=True, null=True)
+
+    uso_frequente_bebida_alcoolica = models.IntegerField('Bebidas alcoólicas',
+                                                         choices=sim_nao_choices, blank=True, null=True)
+    uso_frequente_cigarro = models.IntegerField('Cigarros', choices=sim_nao_choices, blank=True, null=True)
+    uso_frequente_remedios_alto_custo = models.IntegerField('Remédios de Alto Custo',
+                                                            choices=sim_nao_choices, blank=True, null=True)
+    uso_frequente_outros = models.CharField('Uso Frequente (Outros)', max_length=30, blank=True, null=True)
+
+    OPCAO_ENSINO_UTILIZADA_FREQUENTA_ESCOLA_EM_OUTRO_ASSENTAMENTO = 10
+    OPCAO_ENSINO_UTILIZADA_FREQUENTA_ESCOLA_NA_CIDADE_MAIS_PRÓXIMA = 20
+    OPCAO_ENSINO_UTILIZADA_DEIXA_DE_FREQUENTAR_A_ESCOLA = 30
+    OPCAO_ENSINO_UTILIZADA_OUTROS = 99
+
+    opcao_ensino_utilizada_choices = Choices(
+        (OPCAO_ENSINO_UTILIZADA_FREQUENTA_ESCOLA_EM_OUTRO_ASSENTAMENTO, 'Frequenta escola em outro assentamento'),
+        (OPCAO_ENSINO_UTILIZADA_FREQUENTA_ESCOLA_NA_CIDADE_MAIS_PRÓXIMA, 'Frequenta escola na cidade mais próxima'),
+        (OPCAO_ENSINO_UTILIZADA_FREQUENTA_ESCOLA_EM_OUTRO_ASSENTAMENTO, 'Deixa de frequentar a escola'),
+        (OPCAO_ENSINO_UTILIZADA_FREQUENTA_ESCOLA_EM_OUTRO_ASSENTAMENTO, 'Outros')
+    )
+    opcao_ensino_utilizada = models.IntegerField('Opção de ensino utilizada', choices=opcao_ensino_utilizada_choices,
+                                                 blank=True, null=True)
+
+    opcao_ensino_utilizada_distancia_ate_escola = models.IntegerField('Distância até a escola (Km)', blank=True, null=True)
+    opcao_ensino_utilizada_oferta_de_transporte = models.IntegerField('Há oferta de transporte para a escola?',
+                                                                      choices=sim_nao_choices, blank=True, null=True)
+
     def __str__(self):
         return self.nome
 
 
 class Contato(AuditoriaAbstractModel):
     lote = models.ForeignKey(Lote, verbose_name='Lote', related_name='contatos', on_delete=models.CASCADE)
-    telefone = models.CharField('Telefone', max_length=12)
+    telefone = models.CharField('Telefone', max_length=12, blank=True, null=True)
 
     def __str__(self):
-        return self.telefone
+        return "({}) {}-{}".format(self.telefone[:2], self.telefone[2:-4], self.telefone[-4:])
 
     class Meta:
         verbose_name = 'Contato'
         verbose_name_plural = 'Contatos'
-
-
-class RendaTrabalhoForaLote(AuditoriaAbstractModel):
-    membro = models.OneToOneField(Membro, verbose_name='Membro', related_name='renda_trabalho_fora_lote',
-                                  on_delete=models.CASCADE, primary_key=True)
-    quantidade_dias_ano = models.IntegerField('Quantidade de dias/ano trabalha fora do lote')
-    valor = models.DecimalField('Valor da Diária (R$/dia)', max_digits=7, decimal_places=2)
-
-    def __str__(self):
-        return 'Dias/ano: {} - R$/diária: R$ {}'.format(self.quantidade_dias_ano, self.valor)
-
-    class Meta:
-        verbose_name = 'Renda de trabalho fora do lote'
-        verbose_name_plural = '37. Sobre a renda de trabalho fora do lote'
-
-
-class UsoFrequente(AuditoriaAbstractModel):
-    membro = models.ForeignKey(Membro, verbose_name='Membro', related_name='usos_frequentes', on_delete=models.CASCADE)
-
-    USO_FREQUENTE_BEBIDAS_ALCOOLICAS = 10
-    USO_FREQUENTE_CIGARROS = 20
-    USO_FREQUENTE_REMEDIOS_DE_ALTO_CUSTO = 30
-    USO_FREQUENTE_OUTROS = 40
-
-    uso_frequente_choices = Choices(
-        (USO_FREQUENTE_BEBIDAS_ALCOOLICAS, 'Bebidas alcoólicas'),
-        (USO_FREQUENTE_CIGARROS, 'Cigarros'),
-        (USO_FREQUENTE_REMEDIOS_DE_ALTO_CUSTO, 'Remédios de alto custo'),
-        (USO_FREQUENTE_OUTROS, 'Outros')
-    )
-    uso_frequente = models.IntegerField('Selecione', choices=uso_frequente_choices)
-    outros = models.CharField('Outros (Especificar)', max_length=50, blank=True, null=True)
-
-    def __str__(self):
-        return self.uso_frequente_choices[self.uso_frequente]
-
-
-    class Meta:
-        verbose_name = 'Faz o uso frequente de'
-        verbose_name_plural = '49. Quais os tipos de usos frequentes?'
-
-
-class OpcaoEnsinoUtilizada(AuditoriaAbstractModel):
-    membro = models.OneToOneField(Membro, verbose_name='Membro', related_name='opcao_ensino_utilizada',
-                                  on_delete=models.CASCADE, primary_key=True)
-
-    OPCAO_ENSINO_FREQUENTA_ESCOLA_EM_OUTRO_ASSENTAMENTO = 10
-    OPCAO_ENSINO_FREQUENTA_ESCOLA_NA_CIDADE_MAIS_PROXIMA = 20
-    OPCAO_ENSINO_FREQUENTA_DEIXA_DE_FREQUENTAR_A_ESCOLA = 30
-    OPCAO_ENSINO_OUTROS = 40
-
-    opcao_ensino_choices = Choices(
-        (OPCAO_ENSINO_FREQUENTA_ESCOLA_EM_OUTRO_ASSENTAMENTO, 'Frequenta escola em outro assentamento'),
-        (OPCAO_ENSINO_FREQUENTA_ESCOLA_NA_CIDADE_MAIS_PROXIMA, 'Frequenta escola na cidade mais próxima'),
-        (OPCAO_ENSINO_FREQUENTA_DEIXA_DE_FREQUENTAR_A_ESCOLA, 'Deixa de frequentar a escola'),
-        (OPCAO_ENSINO_OUTROS, 'Outros')
-    )
-    opcao_ensino = models.IntegerField('Selecione', choices=opcao_ensino_choices)
-    outros = models.CharField('Outros (Especificar)', max_length=50, blank=True, null=True)
-    distancia_percorrida = models.IntegerField('Distância até a escola (Km)')
-
-    CHOICE_SIM = 1
-    CHOICE_NAO = 0
-
-    sim_nao_choices = Choices(
-        (CHOICE_SIM, 'Sim'),
-        (CHOICE_NAO, 'Não')
-    )
-    oferta_de_transporte = models.IntegerField('Há oferta de transporte para a escola?', choices=sim_nao_choices)
-
-    def __str__(self):
-        return self.opcao_ensino_choices[self.opcao_ensino]
-
-    class Meta:
-        verbose_name = 'Opção de ensino utilizada:'
-        verbose_name_plural = '55. No caso de não haver oferta de estabelecimento de ensino apropriado no assentamento, qual a opção utilizada pelos familiares?'

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}Campo Diagnósticos{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <h2>Campo Diagnósticos</h2>
+
+    <div class="list-group">
+      {% for lote in object_list %}
+        <a href="{% url 'core:lote-detail' lote.id %}" class="list-group-item">
+          {% for familia in lote.familias.all %}
+            {% for membro in familia.membros.all %}
+              {% if membro.parentesco == membro.PARENTESCO_TITULAR or membro.parentesco == membro.PARENTESCO_CONJUGE %}
+                <div class="container">
+                  <div class="row">
+                    <div class="col">
+                      <h4 class="list-group-item-heading">{{ membro.get_parentesco_display }} - {{ membro }}</h4>
+                    </div>
+                  </div>
+                </div>
+              {% endif %}
+            {% endfor %}
+          {% endfor %}
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock content %}

@@ -1,114 +1,166 @@
-{% load static i18n %}<!DOCTYPE html>
+<!DOCTYPE html>
+{% load static %}
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>{% block title %}rural_norte{% endblock title %}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
 
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>Rural Norte</title>
+  <!-- Bootstrap core CSS-->
+  <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <!-- Custom fonts for this template-->
+  <link href="{% static 'vendor/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+  <!-- Page level plugin CSS-->
+  <link href="{% static 'vendor/datatables/dataTables.bootstrap4.css' %}" rel="stylesheet">
+  <!-- Custom styles for this template-->
+  <link href="{% static 'css/sb-admin.css' %}" rel="stylesheet">
+</head>
 
-    <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}">
+<body class="fixed-nav sticky-footer bg-dark" id="page-top">
+<!-- Navigation-->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
+  <a class="navbar-brand" href="#">
+    <i class="fa fa-home" aria-hidden="true"></i> Rural Norte
+  </a>
+  <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarResponsive">
+    <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
+      <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Menu Levels">
+        <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMulti" data-parent="#exampleAccordion">
+          <i class="fa fa-fw fa-sitemap"></i>
+          <span class="nav-link-text">Administração</span>
+        </a>
+        <ul class="sidenav-second-level collapse" id="collapseMulti">
+          <li>
+            <a href="{% url 'core:listar_contratos' %}">Campo Diagnóstico</a>
+          </li>
+          {#          <li>#}
+          {#            <a href="#">Fornecedores</a>#}
+          {#          </li>#}
+          {#          <li>#}
+          {#            <a href="#">Vendedores</a>#}
+          {#          </li>#}
+          {#          <li>#}
+          {#            <a class="nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMultiProduto">Produtos</a>#}
+          {#            <ul class="sidenav-third-level collapse" id="collapseMultiProduto">#}
+          {#              <li>#}
+          {#                <a href="#">Categorias</a>#}
+          {#              </li>#}
+          {#              <li>#}
+          {#                <a href="#">Produtos</a>#}
+          {#              </li>#}
+          {#            </ul>#}
+          {#          </li>#}
+          {#          <li>#}
+          {#            <a class="nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMultiEstoque">Estoque</a>#}
+          {#            <ul class="sidenav-third-level collapse" id="collapseMultiEstoque">#}
+          {#              <li>#}
+          {#                <a href="#">Notas de Entrada</a>#}
+          {#              </li>#}
+          {#                <li>#}
+          {#                  <a href="{% url 'produto:home' %}">Produtos</a>#}
+          {#                </li>#}
+          {#            </ul>#}
+          {#          </li>#}
+        </ul>
+      </li>
+    </ul>
+    <ul class="navbar-nav sidenav-toggler">
+      <li class="nav-item">
+        <a class="nav-link text-center" id="sidenavToggler">
+          <i class="fa fa-fw fa-angle-left"></i>
+        </a>
+      </li>
+    </ul>
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <form class="form-inline my-2 my-lg-0 mr-lg-2">
+          <div class="input-group">
+            <input class="form-control" type="text" placeholder="Buscar por...">
+            <span class="input-group-append">
+                <button class="btn btn-primary" type="button">
+                  <i class="fa fa-search"></i>
+                </button>
+              </span>
+          </div>
+        </form>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="modal" data-target="#exampleModal">
+          <i class="fa fa-fw fa-sign-out"></i>Sair</a>
+      </li>
+    </ul>
+  </div>
+</nav>
 
-    {% block css %}
-    
-    <!-- Latest compiled and minified Bootstrap 4 beta CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-    
+<div class="content-wrapper">
+  <div class="container-fluid">
+    {% if messages %}
+      <div class="alert alert-success alert-dismissable" id="success-alert">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        {% for message in messages %}
+          <p>{{ message }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+    <!-- Breadcrumbs-->
+    <ol class="breadcrumb">
+      {% block breadcrumb %}
+        <li class="breadcrumb-item">
+          <a href="#">Home</a>
+        </li>
+      {% endblock %}
+      <!-- <li class="breadcrumb-item active">Tables</li> -->
+    </ol>
 
-    <!-- Your stuff: Third-party CSS libraries go here -->
-    
-    <!-- This file stores project-specific CSS -->
-    
-    <link href="{% static 'css/project.css' %}" rel="stylesheet">
-    
-    
-    {% endblock %}
-
-  </head>
-
-  <body>
-
-    <div class="m-b-1">
-      <nav class="navbar navbar-expand-md navbar-light bg-light">
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <a class="navbar-brand" href="{% url 'home' %}">rural_norte</a>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'about' %}">About</a>
-            </li>
-            {% if request.user.is_authenticated %}
-              <li class="nav-item">
-                {# URL provided by django-allauth/account/urls.py #}
-                <a class="nav-link" href="{% url 'users:detail' request.user.username  %}">{% trans "My Profile" %}</a>
-              </li>
-              <li class="nav-item">
-                {# URL provided by django-allauth/account/urls.py #}
-                <a class="nav-link" href="{% url 'account_logout' %}">{% trans "Sign Out" %}</a>
-              </li>
-            {% else %}
-              <li class="nav-item">
-                {# URL provided by django-allauth/account/urls.py #}
-                <a id="sign-up-link" class="nav-link" href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a>
-              </li>
-              <li class="nav-item">
-                {# URL provided by django-allauth/account/urls.py #}
-                <a id="log-in-link" class="nav-link" href="{% url 'account_login' %}">{% trans "Sign In" %}</a>
-              </li>
-            {% endif %}
-          </ul>
-        </div>
-      </nav>
-
-    </div>
-
-    <div class="container">
-
-      {% if messages %}
-          {% for message in messages %}
-              <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">{{ message }}</div>
-          {% endfor %}
-      {% endif %}
-
+    <div class="content">
       {% block content %}
-        <p>Use this document as a way to quick start any new project.</p>
-      {% endblock content %}
+      {% endblock %}
+    </div>
+  </div>
 
-    </div> <!-- /container -->
+  <!-- /.content-wrapper-->
+  <footer class="sticky-footer">
+    <div class="container">
+      <div class="text-center">
+        <small>Copyright © Your Website 2018</small>
+      </div>
+    </div>
+  </footer>
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fa fa-angle-up"></i>
+  </a>
+</div>
 
-    {% block modal %}{% endblock modal %}
+<!-- Bootstrap core JavaScript-->
+<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'vendor/jquery/jquery.mask.min.js' %}"></script>
+<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<!-- Core plugin JavaScript-->
+<script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+<!-- Page level plugin JavaScript-->
+<script src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>
+<script src="{% static 'vendor/datatables/jquery.dataTables.js' %}"></script>
+<script src="{% static 'vendor/datatables/dataTables.bootstrap4.js' %}"></script>
+<!-- Custom scripts for all pages-->
+<script src="{% static 'js/sb-admin.min.js' %}"></script>
+<!-- Custom scripts for this page-->
+<script src="{% static 'js/sb-admin-datatables.min.js' %}"></script>
+<script src="{% static 'js/sb-admin-charts.min.js' %}"></script>
 
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    {% block javascript %}
-      
-      <!-- Required by Bootstrap v4 beta -->
-      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+{% block js %}
+  <script type="text/javascript">
+    $("#success-alert").fadeTo(1000, 500).slideUp(500, function(){
+      $("#success-alert").alert('close');
+    });
+  </script>
+{% endblock %}
 
-      <!-- Your stuff: Third-party javascript libraries go here -->
-      
-
-      <!-- place project specific Javascript in this file -->
-      
-      <script src="{% static 'js/project.js' %}"></script>
-      
-
-    {% endblock javascript %}
-  </body>
+</body>
 </html>
- 

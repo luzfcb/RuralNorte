@@ -1,0 +1,2217 @@
+{% extends "base.html" %}
+
+{% load widget_tweaks %}
+
+{#{% block breadcrumb %}#}
+{#  {{ block.super }}#}
+{#  <li class="breadcrumb-item">#}
+{#    {% if notaEntrada.id != null %}#}
+{#      {{ notaEntrada }}#}
+{#    {% else %}#}
+{#      Nova Nota (Entrada)#}
+{#    {% endif %}#}
+{#  </li>#}
+{#{% endblock %}#}
+
+{% block content %}
+  <div class="card card-register mx-auto" style="max-width: 100%;">
+    <div class="card-header"><b>{{ title }}</b></div>
+    <div class="card-body">
+      <form method="POST" id="my_form">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        {{ form.projeto_assentamento }}
+        {{ form.projeto_assentamento.errors }}
+
+        <div class="form-row">
+          <div class="form-group col-md-3">
+            {{ form.codigo_sipra.label_tag }}
+            {{ form.codigo_sipra }}
+            {{ form.codigo_sipra.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.data_homologacao.label_tag }}
+            {{ form.data_homologacao }}
+            {{ form.data_homologacao.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.data_visita.label_tag }}
+            {{ form.data_visita }}
+            {{ form.data_visita.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.area.label_tag }}
+            {{ form.area }}
+            {{ form.area.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.numero.label_tag }}
+            {{ form.numero }}
+            {{ form.numero.errors }}
+          </div>
+          <div class="form-group col-md-6">
+            {{ form.entrevistador.label_tag }}
+            {{ form.entrevistador }}
+            {{ form.entrevistador.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.coordenada_x.label_tag }}
+            {{ form.coordenada_x }}
+            {{ form.coordenada_x.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.coordenada_y.label_tag }}
+            {{ form.coordenada_y }}
+            {{ form.coordenada_y.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.banda_coordenada.label_tag }}
+            {{ form.banda_coordenada }}
+            {{ form.banda_coordenada.errors }}
+          </div>
+
+          <div class="card card-register mx-auto" style="width: 99%; margin-left: 0%; margin-right: 0%; margin-bottom: 2rem;">
+            <div class="card-header" style="text-align: center;">
+              <b>
+                DADOS PESSOAIS
+                <p>Informações Sobre Familiares Residentes no Lote</p>
+              </b>
+              <span class="badge badge-warning">Obs: As Questões de nº 2, 37, 49 e 55 estão contidas neste formulário.</span>
+            </div>
+            <div class="card-body">
+              {{ MembroInlineFormSet.management_form }}
+
+              <div>
+                {% for form in MembroInlineFormSet %}
+                  <div id="{{ form.prefix }}-row" class="dynamic-form-membros form-row">
+                    {{ form.id }}
+                    <fieldset class="border p-2" style="width: 100%;">
+                      {% if forloop.last %}
+                        <legend><b style="font-size: 1rem;">Membro #</b></legend>
+                      {% else %}
+                        <legend><b style="font-size: 1rem;">Membro #{{ forloop.counter }}</b></legend>
+                      {% endif %}
+                      <div class="row">
+                        <div class="col-md-6">
+                          {{ form.nome.label_tag }}
+                          {{ form.nome }}
+                          {{ form.nome.errors }}
+                        </div>
+                        <div class="col-md-3">
+                          {{ form.parentesco.label_tag }}
+                          {{ form.parentesco }}
+                          {{ form.parentesco.errors }}
+                        </div>
+                        <div class="col-md-3">
+                          {{ form.idade.label_tag }}
+                          {{ form.idade }}
+                          {{ form.idade.errors }}
+                        </div>
+                        <div class="col-md-4">
+                          {{ form.escolaridade.label_tag }}
+                          {{ form.escolaridade }}
+                          {{ form.escolaridade.errors }}
+                        </div>
+                        <div class="col-md-3">
+                          {{ form.estuda.label_tag }}
+                          {{ form.estuda }}
+                          {{ form.estuda.errors }}
+                        </div>
+                        <div class="col-md-3">
+                          {{ form.cpf.label_tag }}
+                          {{ form.cpf }}
+                          {{ form.cpf.errors }}
+                        </div>
+                        <div class="col-md-4">
+                          <fieldset class="border p-2" style="width: 103%; margin-top: -10px;">
+                            <legend><b style="font-size: 1rem;">2. Antes de entrarem no lote, trabalhava onde?</b></legend>
+                            <div class="form-row">
+                              <div class="col-md-12">
+                                {#                                {{ form.trabalho_antes_do_lote.label_tag }}#}
+                                {{ form.trabalho_antes_do_lote }}
+                                {{ form.trabalho_antes_do_lote.errors }}
+                              </div>
+                            </div>
+                          </fieldset>
+                        </div>
+                        <div class="col-md-8">
+                          <fieldset class="border p-2" style="width: 100%; margin-top: -10px;">
+                            <legend><b style="font-size: 1rem;">37. Sobre a renda de trabalho fora do lote</b></legend>
+                            <div class="form-row">
+                              <div class="col-md-6">
+                                {{ form.trabalho_fora_lote_quantidade_dias_ano.label_tag }}
+                                {{ form.trabalho_fora_lote_quantidade_dias_ano }}
+                                {{ form.trabalho_fora_lote_quantidade_dias_ano.errors }}
+                              </div>
+                              <div class="col-md-6">
+                                {{ form.trabalho_fora_lote_valor_diaria.label_tag }}
+                                {{ form.trabalho_fora_lote_valor_diaria }}
+                                {{ form.trabalho_fora_lote_valor_diaria.errors }}
+                              </div>
+                            </div>
+                          </fieldset>
+                        </div>
+                        <div class="col-md-12">
+                          <fieldset class="border p-2" style="width: 100%;">
+                            <legend><b style="font-size: 1rem;">49. No lote há alguma pessoa que faz uso frequente de?</b></legend>
+                            <div class="form-row">
+                              <div class="col-md-3">
+                                {{ form.uso_frequente_bebida_alcoolica.label_tag }}
+                                {{ form.uso_frequente_bebida_alcoolica }}
+                                {{ form.uso_frequente_bebida_alcoolica.errors }}
+                              </div>
+                              <div class="col-md-3">
+                                {{ form.uso_frequente_cigarro.label_tag }}
+                                {{ form.uso_frequente_cigarro }}
+                                {{ form.uso_frequente_cigarro.errors }}
+                              </div>
+                              <div class="col-md-3">
+                                {{ form.uso_frequente_remedios_alto_custo.label_tag }}
+                                {{ form.uso_frequente_remedios_alto_custo }}
+                                {{ form.uso_frequente_remedios_alto_custo.errors }}
+                              </div>
+                              <div class="col-md-3">
+                                {{ form.uso_frequente_outros.label_tag }}
+                                {{ form.uso_frequente_outros }}
+                                {{ form.uso_frequente_outros.errors }}
+                              </div>
+                            </div>
+                          </fieldset>
+                        </div>
+                        <div class="col-md-12">
+                          <fieldset class="border p-2" style="width: 100%;">
+                            <legend><b style="font-size: 1rem;">55. No caso de <u>não haver</u> oferta de estabelecimento de ensino apropriado no asssentamento, qual a opção utilizada pelos familiares?</b></legend>
+                            <div class="form-row">
+                              <div class="col-md-4">
+                                {{ form.opcao_ensino_utilizada.label_tag }}
+                                {{ form.opcao_ensino_utilizada }}
+                                {{ form.opcao_ensino_utilizada.errors }}
+                              </div>
+                              <div class="col-md-4">
+                                {{ form.opcao_ensino_utilizada_distancia_ate_escola.label_tag }}
+                                {{ form.opcao_ensino_utilizada_distancia_ate_escola }}
+                                {{ form.opcao_ensino_utilizada_distancia_ate_escola.errors }}
+                              </div>
+                              <div class="col-md-4">
+                                {{ form.opcao_ensino_utilizada_oferta_de_transporte.label_tag }}
+                                {{ form.opcao_ensino_utilizada_oferta_de_transporte }}
+                                {{ form.opcao_ensino_utilizada_oferta_de_transporte.errors }}
+                              </div>
+                            </div>
+                          </fieldset>
+                        </div>
+                      </div>
+                      <div class="col-md-1" style="margin-top: 1%; padding-left: 1px;">
+                        <a id="membros" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Membro">
+                          <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                        </a>
+                        <div hidden="true">{{ form.DELETE }}</div>
+                      </div>
+                    </fieldset>
+                  </div>
+                {% endfor %}
+              </div>
+              <div style="margin-top: 1%;">
+                <a id="membros" href="javascript:void(0)" class="btn btn-success add-row" title="Novo Membro">
+                  <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {#          <div class="form-group col-md-6">#}
+          {##}
+          {#            {{ ContatoInlineFormSet.management_form }}#}
+          {##}
+          {#            <div class="card card-register">#}
+          {#              <div class="card-header"><b>Contato(s):</b></div>#}
+          {#              <div class="card-body">#}
+          {#                <div class="form-row">#}
+          {#                  {% for form in ContatoInlineFormSet %}#}
+          {#                    {{ form.id }}#}
+          {#                    <div class="col-md-10">#}
+          {#                      {{ form.telefone.label_tag }}#}
+          {#                      {{ form.telefone }}#}
+          {#                      {{ form.telefone.errors }}#}
+          {#                    </div>#}
+          {#                    <div class="col-md-2" style="margin-top: 7%;">#}
+          {#                      {{ form.DELETE.label }}#}
+          {#                      {{ form.DELETE }}#}
+          {#                      <!-- <a style="border: none; margin-top: 2em;" class="form-control" href="#"#}
+          {#                        title="Excluir">#}
+          {#                        <i class="fa fa-trash-o fa-lg"></i>#}
+          {#                      </a> -->#}
+          {#                    </div>#}
+          {#                  {% endfor %}#}
+          {#                </div>#}
+          {#              </div>#}
+          {#            </div>#}
+          {#          </div>#}
+
+          <div class="form-group col-md-6">
+
+            {{ ContatoInlineFormSet.management_form }}
+
+            <div class="card card-register">
+              <div class="card-header"><b>Contato(s):</b></div>
+              <div class="card-body">
+                <div>
+                  {% for form in ContatoInlineFormSet %}
+                    <div id="{{ form.prefix }}-row" class="dynamic-form-contatos form-row">
+                      {{ form.id }}
+                      <div class="col-md-11">
+                        {{ form.telefone.label_tag }}
+                        {{ form.telefone }}
+                        {{ form.telefone.errors }}
+                      </div>
+                      <div class="col-md-1" style="margin-top: 6%;">
+                        <a id="contatos" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Contato">
+                          <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                        </a>
+                        <div hidden="true">{{ form.DELETE }}</div>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+                <div>
+                  <a id="contatos" href="javascript:void(0)" class="btn btn-success add-row" title="Novo Contato">
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group col-md-6">
+            <div class="form-group col-md-12" style="margin-top: -0.3rem; margin-bottom: 0.5rem;">
+              {{ form.outra_familia_no_lote.label_tag }}
+              {{ form.outra_familia_no_lote }}
+              {{ form.outra_familia_no_lote.errors }}
+            </div>
+            <div class="form-group col-md-12" style="margin-bottom: 0.5rem;">
+              {{ form.cad_unico.label_tag }}
+              {{ form.cad_unico }}
+              {{ form.cad_unico.errors }}
+            </div>
+            <div class="form-group col-md-12" style="margin-bottom: 0.5rem;">
+              {{ form.ocupante_irregular.label_tag }}
+              {{ form.ocupante_irregular }}
+              {{ form.ocupante_irregular.errors }}
+            </div>
+            <div class="form-group col-md-12">
+              {{ form.ocupante_irregular_tempo.label_tag }}
+              {{ form.ocupante_irregular_tempo }}
+              {{ form.ocupante_irregular_tempo.errors }}
+            </div>
+          </div>
+
+          <div class="form-group col-md-6">
+
+            {{ DocumentoLoteInlineFormSet.management_form }}
+
+            <div class="card card-register">
+              <div class="card-header"><b>1. Qual documento o lote possui?</b></div>
+              <div class="card-body">
+                <div>
+                  {% for form in DocumentoLoteInlineFormSet %}
+                    <div id="{{ form.prefix }}-row" class="dynamic-form-documentos_lote form-row">
+                      {{ form.id }}
+                      <div class="col-md-11">
+                        {{ form.tipo_documento.label_tag }}
+                        {{ form.tipo_documento }}
+                        {{ form.tipo_documento.errors }}
+                      </div>
+                      <div class="col-md-1" style="margin-top: 6%;">
+                        <a id="documentos_lote" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Documento">
+                          <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                        </a>
+                        <div hidden="true">{{ form.DELETE }}</div>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+                <div>
+                  <a id="documentos_lote" href="javascript:void(0)" class="btn btn-success add-row" title="Novo Documento">
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group col-md-6">
+            {{ form.recebe_beneficio_social.label_tag }}
+            {{ form.recebe_beneficio_social }}
+            {{ form.recebe_beneficio_social.errors }}
+          </div>
+
+          <div class="form-group col-md-6">
+
+            {{ BeneficioSocialInlineFormSet.management_form }}
+
+            <div class="card card-register">
+              <div class="card-header"><b>4. Quais os tipos de benefício?</b></div>
+              <div class="card-body">
+                <div>
+                  {% for form in BeneficioSocialInlineFormSet %}
+                    <div id="{{ form.prefix }}-row" class="dynamic-form-beneficios_sociais form-row">
+                      {{ form.id }}
+                      <div class="col-md-5">
+                        {{ form.tipo_beneficio.label_tag }}
+                        {{ form.tipo_beneficio }}
+                        {{ form.tipo_beneficio.errors }}
+                      </div>
+                      <div class="col-md-6">
+                        {{ form.outros.label_tag }}
+                        {{ form.outros }}
+                        {{ form.outros.errors }}
+                      </div>
+                      <div class="col-md-1" style="margin-top: 6%;">
+                        <a id="beneficios_sociais" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Benefício">
+                          <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                        </a>
+                        <div hidden="true">{{ form.DELETE }}</div>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+                <div>
+                  <a id="beneficios_sociais" href="javascript:void(0)" class="btn btn-success add-row" title="Novo Benefício">
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group col-md-6">
+
+            {{ AutoDeclaracaoEtniaInlineFormSet.management_form }}
+
+            <div class="card card-register">
+              <div class="card-header"><b>5. Quantos moradores se declaram...</b></div>
+              <div class="card-body">
+                <div>
+                  {% for form in AutoDeclaracaoEtniaInlineFormSet %}
+                    <div id="{{ form.prefix }}-row" class="dynamic-form-auto_declaracoes form-row">
+                      {{ form.id }}
+                      <div class="col-md-3">
+                        {{ form.tipo_declaracao_etnia.label_tag }}
+                        {{ form.tipo_declaracao_etnia }}
+                        {{ form.tipo_declaracao_etnia.errors }}
+                      </div>
+                      <div class="col-md-3">
+                        {{ form.quantidade.label_tag }}
+                        {{ form.quantidade }}
+                        {{ form.quantidade.errors }}
+                      </div>
+                      <div class="col-md-5">
+                        {{ form.outros.label_tag }}
+                        {{ form.outros }}
+                        {{ form.outros.errors }}
+                      </div>
+                      <div class="col-md-1" style="margin-top: 6%;">
+                        <a id="auto_declaracoes" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Autodeclaração">
+                          <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                        </a>
+                        <div hidden="true">{{ form.DELETE }}</div>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+                <div>
+                  <a id="auto_declaracoes" href="javascript:void(0)" class="btn btn-success add-row" title="Nova Autodeclaração">
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group col-md-12">
+
+            {{ EstruturaOrganizativaInlineFormSet.management_form }}
+
+            <div class="card card-register">
+              <div class="card-header"><b>6. Das estruturas organizativas internas ao assentamento diga qual existe no assentamento e de quais os membros da família participam</b></div>
+              <div class="card-body">
+                <div>
+                  {% for form in EstruturaOrganizativaInlineFormSet %}
+                    <div id="{{ form.prefix }}-row" class="dynamic-form-estruturas_organizativas form-row">
+                      {{ form.id }}
+                      <div class="col-md-6">
+                        {{ form.tipo_estrutura_organizativa.label_tag }}
+                        {{ form.tipo_estrutura_organizativa }}
+                        {{ form.tipo_estrutura_organizativa.errors }}
+                      </div>
+                      <div class="col-md-5">
+                        {{ form.frequencia.label_tag }}
+                        {{ form.frequencia }}
+                        {{ form.frequencia.errors }}
+                      </div>
+                      <div class="col-md-1" style="margin-top: 2.7%;">
+                        <a id="estruturas_organizativas" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Estrutura">
+                          <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                        </a>
+                        <div hidden="true">{{ form.DELETE }}</div>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+                <div>
+                  <a id="estruturas_organizativas" href="javascript:void(0)" class="btn btn-success add-row" title="Nova Estrutura">
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group col-md-3">
+            {{ form.moradia_assentamento.label_tag }}
+            {{ form.moradia_assentamento }}
+            {{ form.moradia_assentamento.errors }}
+          </div>
+          <div class="form-group col-md-3">
+            {{ form.tipo_parede_externa.label_tag }}
+            {{ form.tipo_parede_externa }}
+            {{ form.tipo_parede_externa.errors }}
+          </div>
+          <div class="form-group col-md-3">
+            {{ form.tipo_instalacao_eletrica.label_tag }}
+            {{ form.tipo_instalacao_eletrica }}
+            {{ form.tipo_instalacao_eletrica.errors }}
+          </div>
+          <div class="form-group col-md-3">
+            {{ form.tipo_instalacao_sanitaria.label_tag }}
+            {{ form.tipo_instalacao_sanitaria }}
+            {{ form.tipo_instalacao_sanitaria.errors }}
+          </div>
+
+          <div class="form-group col-md-6">
+
+            {{ FonteAguaInlineFormSet.management_form }}
+
+            <div class="card card-register">
+              <div class="card-header"><b>11. De onde vem a água que abastece a família?</b></div>
+              <div class="card-body">
+                <div>
+                  {% for form in FonteAguaInlineFormSet %}
+                    <div id="{{ form.prefix }}-row" class="dynamic-form-fontes_agua form-row">
+                      {{ form.id }}
+                      <div class="col-md-5">
+                        {{ form.fonte_agua.label_tag }}
+                        {{ form.fonte_agua }}
+                        {{ form.fonte_agua.errors }}
+                      </div>
+                      <div class="col-md-6">
+                        {{ form.outra.label_tag }}
+                        {{ form.outra }}
+                        {{ form.outra.errors }}
+                      </div>
+                      <div class="col-md-1" style="margin-top: 6%;">
+                        <a id="fontes_agua" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Fonte">
+                          <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                        </a>
+                        <div hidden="true">{{ form.DELETE }}</div>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+                <div>
+                  <a id="fontes_agua" href="javascript:void(0)" class="btn btn-success add-row" title="Nova Fonte">
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group col-md-6">
+
+            {{ TratamentoAguaInlineFormSet.management_form }}
+
+            <div class="card card-register">
+              <div class="card-header"><b>12. Qual a forma tratamento da água para consumo?</b></div>
+              <div class="card-body">
+                <div>
+                  {% for form in TratamentoAguaInlineFormSet %}
+                    <div id="{{ form.prefix }}-row" class="dynamic-form-tratamentos_agua form-row">
+                      {{ form.id }}
+                      <div class="col-md-5">
+                        {{ form.tratamento_agua.label_tag }}
+                        {{ form.tratamento_agua }}
+                        {{ form.tratamento_agua.errors }}
+                      </div>
+                      <div class="col-md-6">
+                        {{ form.outros.label_tag }}
+                        {{ form.outros }}
+                        {{ form.outros.errors }}
+                      </div>
+                      <div class="col-md-1" style="margin-top: 6%;">
+                        <a id="tratamentos_agua" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Tratamento">
+                          <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                        </a>
+                        <div hidden="true">{{ form.DELETE }}</div>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+                <div>
+                  <a id="tratamentos_agua" href="javascript:void(0)" class="btn btn-success add-row" title="Novo Tratamento">
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group col-md-3">
+            {{ form.localizacao_fonte_agua.label_tag }}
+            {{ form.localizacao_fonte_agua }}
+            {{ form.localizacao_fonte_agua.errors }}
+          </div>
+          <div class="form-group col-md-3">
+            {{ form.abastecimento_agua_suficiente.label_tag }}
+            {{ form.abastecimento_agua_suficiente }}
+            {{ form.abastecimento_agua_suficiente.errors }}
+          </div>
+          <div class="form-group col-md-4">
+            {{ form.quantas_familias_utilizam_mesma_fonte_agua.label_tag }}
+            {{ form.quantas_familias_utilizam_mesma_fonte_agua }}
+            {{ form.quantas_familias_utilizam_mesma_fonte_agua.errors }}
+          </div>
+          <div class="form-group col-md-2">
+            {{ form.quantidade_familias_utilizacao_mesma_fonte_agua.label_tag }}
+            {{ form.quantidade_familias_utilizacao_mesma_fonte_agua }}
+            {{ form.quantidade_familias_utilizacao_mesma_fonte_agua.errors }}
+          </div>
+          <div class="form-group col-md-4">
+            {{ form.agua_para_animais_plantio.label_tag }}
+            {{ form.agua_para_animais_plantio }}
+            {{ form.agua_para_animais_plantio.errors }}
+          </div>
+          <div class="form-group col-md-4">
+            {{ form.agua_para_animais_plantio_outros.label_tag }}
+            {{ form.agua_para_animais_plantio_outros }}
+            {{ form.agua_para_animais_plantio_outros.errors }}
+          </div>
+          <div class="form-group col-md-4">
+            {{ form.regularidade_abastecimento_agua.label_tag }}
+            {{ form.regularidade_abastecimento_agua }}
+            {{ form.regularidade_abastecimento_agua.errors }}
+          </div>
+          <div class="form-group col-md-4">
+            {{ form.tipo_estrada_acesso.label_tag }}
+            {{ form.tipo_estrada_acesso }}
+            {{ form.tipo_estrada_acesso.errors }}
+          </div>
+          <div class="form-group col-md-4">
+            {{ form.situacao_estrada_acesso.label_tag }}
+            {{ form.situacao_estrada_acesso }}
+            {{ form.situacao_estrada_acesso.errors }}
+          </div>
+          <div class="form-group col-md-4">
+            {{ form.situacao_cercado_lote.label_tag }}
+            {{ form.situacao_cercado_lote }}
+            {{ form.situacao_cercado_lote.errors }}
+          </div>
+
+          <div class="form-group col-md-12">
+
+            {{ ConstrucaoLoteInlineFormSet.management_form }}
+
+            <div class="card card-register">
+              <div class="card-header"><b>21. O que tem construído no lote?</b></div>
+              <div class="card-body">
+                <div>
+                  {% for form in ConstrucaoLoteInlineFormSet %}
+                    <div id="{{ form.prefix }}-row" class="dynamic-form-construcoes_lote form-row">
+                      {{ form.id }}
+                      {#                    <fieldset class="border p-2" style="width: 100%;">#}
+                      {#                      {% if forloop.last %}#}
+                      {#                        <legend><b style="font-size: 1rem;">Construção #</b></legend>#}
+                      {#                      {% else %}#}
+                      {#                        <legend><b style="font-size: 1rem;">Construção #{{ forloop.counter }}</b></legend>#}
+                      {#                      {% endif %}#}
+                      {#                      <div class="row">#}
+                      <div class="col-md-4">
+                        {{ form.construcao_no_lote.label_tag }}
+                        {{ form.construcao_no_lote }}
+                        {{ form.construcao_no_lote.errors }}
+                      </div>
+                      <div class="col-md-3">
+                        {{ form.quantidade.label_tag }}
+                        {{ form.quantidade }}
+                        {{ form.quantidade.errors }}
+                      </div>
+                      <div class="col-md-4">
+                        {{ form.outros.label_tag }}
+                        {{ form.outros }}
+                        {{ form.outros.errors }}
+                      </div>
+                      <div class="col-md-1" style="margin-top: 2.7%;">
+                        <a id="construcoes_lote" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Construção">
+                          <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                        </a>
+                        <div hidden="true">{{ form.DELETE }}</div>
+                      </div>
+                      {#                      </div>#}
+                      {#                    </fieldset>#}
+                    </div>
+                  {% endfor %}
+                </div>
+                <div>
+                  <a id="construcoes_lote" href="javascript:void(0)" class="btn btn-success add-row" title="Nova Construção">
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group col-md-12">
+
+            {{ BemProdutivoInlineFormSet.management_form }}
+
+            <div class="card card-register">
+              <div class="card-header"><b>22. Bens produtivos disponíveis no lote...</b></div>
+              <div class="card-body">
+                <div>
+                  {% for form in BemProdutivoInlineFormSet %}
+                    <div id="{{ form.prefix }}-row" class="dynamic-form-bens_produtivos form-row">
+                      {{ form.id }}
+                      {#                    <fieldset class="border p-2" style="width: 100%;">#}
+                      {#                      {% if forloop.last %}#}
+                      {#                        <legend><b style="font-size: 1rem;">Bem Produtivo #</b></legend>#}
+                      {#                      {% else %}#}
+                      {#                        <legend><b style="font-size: 1rem;">Bem Produtivo #{{ forloop.counter }}</b></legend>#}
+                      {#                      {% endif %}#}
+                      {#                      <div class="row">#}
+                      <div class="col-md-4">
+                        {{ form.bem_produtivo.label_tag }}
+                        {{ form.bem_produtivo }}
+                        {{ form.bem_produtivo.errors }}
+                      </div>
+                      <div class="col-md-3">
+                        {{ form.quantidade.label_tag }}
+                        {{ form.quantidade }}
+                        {{ form.quantidade.errors }}
+                      </div>
+                      <div class="col-md-4">
+                        {{ form.outros.label_tag }}
+                        {{ form.outros }}
+                        {{ form.outros.errors }}
+                      </div>
+                      <div class="col-md-1" style="margin-top: 2.7%;">
+                        <a id="bens_produtivos" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Bem produtivo">
+                          <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                        </a>
+                        <div hidden="true">{{ form.DELETE }}</div>
+                      </div>
+                      {#                      </div>#}
+                      {#                    </fieldset>#}
+                    </div>
+                  {% endfor %}
+                </div>
+                <div>
+                  <a id="bens_produtivos" href="javascript:void(0)" class="btn btn-success add-row" title="Novo Bem produtivo">
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group col-md-12">
+
+            {{ AplicacaoCreditoInlineFormSet.management_form }}
+
+            <div class="card card-register">
+              <div class="card-header"><b>23. Com relação aos créditos, como está a aplicação no lote?</b></div>
+              <div class="card-body">
+                <div>
+                  {% for form in AplicacaoCreditoInlineFormSet %}
+                    <div id="{{ form.prefix }}-row" class="dynamic-form-aplicacoes_creditos form-row">
+                      {{ form.id }}
+                      {#                    <fieldset class="border p-2" style="width: 100%;">#}
+                      {#                      {% if forloop.last %}#}
+                      {#                        <legend><b style="font-size: 1rem;">Aplicação de Crédito #</b></legend>#}
+                      {#                      {% else %}#}
+                      {#                        <legend><b style="font-size: 1rem;">Aplicação de Crédito #{{ forloop.counter }}</b></legend>#}
+                      {#                      {% endif %}#}
+                      {#                      <div class="row">#}
+                      <div class="col-md-6">
+                        {{ form.tipo_aplicacao_credito.label_tag }}
+                        {{ form.tipo_aplicacao_credito }}
+                        {{ form.tipo_aplicacao_credito.errors }}
+                      </div>
+                      <div class="col-md-5">
+                        {{ form.valor.label_tag }}
+                        {{ form.valor }}
+                        {{ form.valor.errors }}
+                      </div>
+                      <div class="col-md-1" style="margin-top: 2.7%;">
+                        <a id="aplicacoes_creditos" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Aplicação de Crédito">
+                          <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                        </a>
+                        <div hidden="true">{{ form.DELETE }}</div>
+                      </div>
+                      {#                      </div>#}
+                      {#                    </fieldset>#}
+                    </div>
+                  {% endfor %}
+                </div>
+                <div>
+                  <a id="aplicacoes_creditos" href="javascript:void(0)" class="btn btn-success add-row" title="Nova Aplicação de Crédito">
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group col-md-12">
+
+            {{ CreditoBancarioInlineFormSet.management_form }}
+
+            <div class="card card-register">
+              <div class="card-header"><b>24. Com relação aos créditos bancários, como está a aplicação na parcela?</b></div>
+              <div class="card-body">
+                <div>
+                  {% for form in CreditoBancarioInlineFormSet %}
+                    <div id="{{ form.prefix }}-row" class="dynamic-form-creditos_bancarios form-row">
+                      {{ form.id }}
+                      {#                    <fieldset class="border p-2" style="width: 100%;">#}
+                      {#                      {% if forloop.last %}#}
+                      {#                        <legend><b style="font-size: 1rem;">Crédito Bancário #</b></legend>#}
+                      {#                      {% else %}#}
+                      {#                        <legend><b style="font-size: 1rem;">Crédito Bancário #{{ forloop.counter }}</b></legend>#}
+                      {#                      {% endif %}#}
+                      {#                      <div class="row">#}
+                      <div class="col-md-3">
+                        {{ form.credito_bancario.label_tag }}
+                        {{ form.credito_bancario }}
+                        {{ form.credito_bancario.errors }}
+                      </div>
+                      <div class="col-md-2">
+                        {{ form.valor.label_tag }}
+                        {{ form.valor }}
+                        {{ form.valor.errors }}
+                      </div>
+                      <div class="col-md-2">
+                        {{ form.adimplente.label_tag }}
+                        {{ form.adimplente }}
+                        {{ form.adimplente.errors }}
+                      </div>
+                      <div class="col-md-4">
+                        {{ form.outros.label_tag }}
+                        {{ form.outros }}
+                        {{ form.outros.errors }}
+                      </div>
+                      <div class="col-md-1" style="margin-top: 2.7%;">
+                        <a id="creditos_bancarios" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Crédito Bancário">
+                          <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                        </a>
+                        <div hidden="true">{{ form.DELETE }}</div>
+                      </div>
+                      {#                      </div>#}
+                      {#                    </fieldset>#}
+                    </div>
+                  {% endfor %}
+                </div>
+                <div>
+                  <a id="creditos_bancarios" href="javascript:void(0)" class="btn btn-success add-row" title="Novo Crédito Bancário">
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group col-md-12">
+
+            {{ CulturaInlineFormSet.management_form }}
+
+            <div class="card card-register">
+              <div class="card-header">
+                <b>25. Agora falaremos sobre a produção/culturas, plantadas na sua lavoura/roça no último ano agrícola</b><br/>
+                <span class="badge badge-warning">Obs: A Questão de nº 28 está contida neste formulário. Responda-o caso alguma cultura seja irrigada.</span>
+              </div>
+              <div class="card-body">
+                <div>
+                  {% for form in CulturaInlineFormSet %}
+                    <div id="{{ form.prefix }}-row" class="dynamic-form-culturas form-row">
+                      {{ form.id }}
+                      <fieldset class="border p-2" style="width: 100%;">
+                        {% if forloop.last %}
+                          <legend><b style="font-size: 1rem;">Cultura #</b></legend>
+                        {% else %}
+                          <legend><b style="font-size: 1rem;">Cultura #{{ forloop.counter }}</b></legend>
+                        {% endif %}
+                        <div class="row">
+                          <div class="col-md-5" style="padding-right: 0px">
+                            {{ form.tipo_producao.label_tag }}
+                            {{ form.tipo_producao }}
+                            {{ form.tipo_producao.errors }}
+                          </div>
+                          <div class="col-md-5" style="padding-right: 0px">
+                            {{ form.tipo_producao_outros.label_tag }}
+                            {{ form.tipo_producao_outros }}
+                            {{ form.tipo_producao_outros.errors }}
+                          </div>
+                          <div class="col-md-2">
+                            {{ form.area_plantada.label_tag }}
+                            {{ form.area_plantada }}
+                            {{ form.area_plantada.errors }}
+                          </div>
+                          <div class="col-md-2" style="padding-right: 0px">
+                            {{ form.producao_consumo.label_tag }}
+                            {{ form.producao_consumo }}
+                            {{ form.producao_consumo.errors }}
+                          </div>
+                          <div class="col-md-2" style="padding-right: 0px">
+                            {{ form.producao_comercio.label_tag }}
+                            {{ form.producao_comercio }}
+                            {{ form.producao_comercio.errors }}
+                          </div>
+                          <div class="col-md-2" style="padding-right: 0px">
+                            {{ form.valor.label_tag }}
+                            {{ form.valor }}
+                            {{ form.valor.errors }}
+                          </div>
+                          <div class="col-md-4" style="padding-right: 0px">
+                            {{ form.canal_comercializacao.label_tag }}
+                            {{ form.canal_comercializacao }}
+                            {{ form.canal_comercializacao.errors }}
+                          </div>
+                          <div class="col-md-2">
+                            {{ form.mercado_institucional.label_tag }}
+                            {{ form.mercado_institucional }}
+                            {{ form.mercado_institucional.errors }}
+                          </div>
+                          <div class="col-md-12">
+                            <fieldset class="border p-2" style="width: 100%;">
+                              <legend><b style="font-size: 1rem;">28. Sobre o Nível Tecnológico de Produção, existe(m) alguma(s) cultura(s) irrigada(s)?</b></legend>
+                              <div class="form-row">
+                                <div class="col-md-3">
+                                  {{ form.irrigacao.label_tag }}
+                                  {{ form.irrigacao }}
+                                  {{ form.irrigacao.errors }}
+                                </div>
+                                <div class="col-md-3">
+                                  {{ form.area_irrigada.label_tag }}
+                                  {{ form.area_irrigada }}
+                                  {{ form.area_irrigada.errors }}
+                                </div>
+                                <div class="col-md-3">
+                                  {{ form.medida_area_irrigada.label_tag }}
+                                  {{ form.medida_area_irrigada }}
+                                  {{ form.medida_area_irrigada.errors }}
+                                </div>
+                                <div class="col-md-3">
+                                  {{ form.tipo_irrigacao.label_tag }}
+                                  {{ form.tipo_irrigacao }}
+                                  {{ form.tipo_irrigacao.errors }}
+                                </div>
+                              </div>
+                            </fieldset>
+                          </div>
+                          <div class="col-md-1" style="margin-top: 1rem;">
+                            <a id="culturas" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Cultura">
+                              <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                            </a>
+                            <div hidden="true">{{ form.DELETE }}</div>
+                          </div>
+                        </div>
+                      </fieldset>
+                    </div>
+                  {% endfor %}
+                </div>
+                <div>
+                  <a id="culturas" href="javascript:void(0)" class="btn btn-success add-row" title="Nova Cultura" style="margin-top: 1rem;">
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group col-md-12">
+
+            {{ OlericulturaInlineFormSet.management_form }}
+
+            <div class="card card-register">
+              <div class="card-header">
+                <b>26. Olericulturas - Legumes e Verduras no último ano agrícola</b><br/>
+                <span class="badge badge-warning">Obs: A Questão de nº 28 está contida neste formulário. Responda-o caso alguma cultura seja irrigada.</span>
+              </div>
+              <div class="card-body">
+                <div>
+                  {% for form in OlericulturaInlineFormSet %}
+                    <div id="{{ form.prefix }}-row" class="dynamic-form-olericulturas form-row">
+                      {{ form.id }}
+                      <fieldset class="border p-2" style="width: 100%;">
+                        {% if forloop.last %}
+                          <legend><b style="font-size: 1rem;">Olericultura #</b></legend>
+                        {% else %}
+                          <legend><b style="font-size: 1rem;">Olericultura #{{ forloop.counter }}</b></legend>
+                        {% endif %}
+                        <div class="row">
+                          <div class="col-md-5" style="padding-right: 0px">
+                            {{ form.tipo_producao.label_tag }}
+                            {{ form.tipo_producao }}
+                            {{ form.tipo_producao.errors }}
+                          </div>
+                          <div class="col-md-5" style="padding-right: 0px">
+                            {{ form.tipo_producao_outros.label_tag }}
+                            {{ form.tipo_producao_outros }}
+                            {{ form.tipo_producao_outros.errors }}
+                          </div>
+                          <div class="col-md-2">
+                            {{ form.area_plantada.label_tag }}
+                            {{ form.area_plantada }}
+                            {{ form.area_plantada.errors }}
+                          </div>
+                          <div class="col-md-3" style="padding-right: 0px">
+                            {{ form.producao_consumo.label_tag }}
+                            {{ form.producao_consumo }}
+                            {{ form.producao_consumo.errors }}
+                          </div>
+                          <div class="col-md-3" style="padding-right: 0px">
+                            {{ form.producao_comercio.label_tag }}
+                            {{ form.producao_comercio }}
+                            {{ form.producao_comercio.errors }}
+                          </div>
+                          <div class="col-md-3" style="padding-right: 0px">
+                            {{ form.producao_unidade_medida.label_tag }}
+                            {{ form.producao_unidade_medida }}
+                            {{ form.producao_unidade_medida.errors }}
+                          </div>
+                          <div class="col-md-3">
+                            {{ form.valor.label_tag }}
+                            {{ form.valor }}
+                            {{ form.valor.errors }}
+                          </div>
+                          <div class="col-md-6" style="padding-right: 0px">
+                            {{ form.canal_comercializacao.label_tag }}
+                            {{ form.canal_comercializacao }}
+                            {{ form.canal_comercializacao.errors }}
+                          </div>
+                          <div class="col-md-6">
+                            {{ form.mercado_institucional.label_tag }}
+                            {{ form.mercado_institucional }}
+                            {{ form.mercado_institucional.errors }}
+                          </div>
+                          <div class="col-md-12">
+                            <fieldset class="border p-2" style="width: 100%;">
+                              <legend><b style="font-size: 1rem;">28. Sobre o Nível Tecnológico de Produção, existe(m) alguma(s) cultura(s) irrigada(s)?</b></legend>
+                              <div class="form-row">
+                                <div class="col-md-3">
+                                  {{ form.irrigacao.label_tag }}
+                                  {{ form.irrigacao }}
+                                  {{ form.irrigacao.errors }}
+                                </div>
+                                <div class="col-md-3">
+                                  {{ form.area_irrigada.label_tag }}
+                                  {{ form.area_irrigada }}
+                                  {{ form.area_irrigada.errors }}
+                                </div>
+                                <div class="col-md-3">
+                                  {{ form.medida_area_irrigada.label_tag }}
+                                  {{ form.medida_area_irrigada }}
+                                  {{ form.medida_area_irrigada.errors }}
+                                </div>
+                                <div class="col-md-3">
+                                  {{ form.tipo_irrigacao.label_tag }}
+                                  {{ form.tipo_irrigacao }}
+                                  {{ form.tipo_irrigacao.errors }}
+                                </div>
+                              </div>
+                            </fieldset>
+                          </div>
+                          <div class="col-md-1" style="margin-top: 1rem;">
+                            <a id="olericulturas" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Olericultura">
+                              <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                            </a>
+                            <div hidden="true">{{ form.DELETE }}</div>
+                          </div>
+                        </div>
+                      </fieldset>
+                    </div>
+                  {% endfor %}
+                </div>
+                <div>
+                  <a id="olericulturas" href="javascript:void(0)" class="btn btn-success add-row" title="Nova Olericultura" style="margin-top: 1rem;">
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group col-md-12">
+
+            {{ FruticulturaInlineFormSet.management_form }}
+
+            <div class="card card-register">
+              <div class="card-header">
+                <b>27. Fruticultura referente ao último ano agrícola</b><br/>
+                <span class="badge badge-warning">Obs: A Questão de nº 28 está contida neste formulário. Responda-o caso alguma cultura seja irrigada.</span>
+              </div>
+              <div class="card-body">
+                <div>
+                  {% for form in FruticulturaInlineFormSet %}
+                    <div id="{{ form.prefix }}-row" class="dynamic-form-fruticulturas form-row">
+                      {{ form.id }}
+                      <fieldset class="border p-2" style="width: 100%;">
+                        {% if forloop.last %}
+                          <legend><b style="font-size: 1rem;">Fruticultura #</b></legend>
+                        {% else %}
+                          <legend><b style="font-size: 1rem;">Fruticultura #{{ forloop.counter }}</b></legend>
+                        {% endif %}
+                        <div class="row">
+                          <div class="col-md-5" style="padding-right: 0px">
+                            {{ form.tipo_producao.label_tag }}
+                            {{ form.tipo_producao }}
+                            {{ form.tipo_producao.errors }}
+                          </div>
+                          <div class="col-md-5" style="padding-right: 0px">
+                            {{ form.tipo_producao_outros.label_tag }}
+                            {{ form.tipo_producao_outros }}
+                            {{ form.tipo_producao_outros.errors }}
+                          </div>
+                          <div class="col-md-2">
+                            {{ form.area_plantada.label_tag }}
+                            {{ form.area_plantada }}
+                            {{ form.area_plantada.errors }}
+                          </div>
+                          <div class="col-md-2" style="padding-right: 0px">
+                            {{ form.producao_consumo.label_tag }}
+                            {{ form.producao_consumo }}
+                            {{ form.producao_consumo.errors }}
+                          </div>
+                          <div class="col-md-2" style="padding-right: 0px">
+                            {{ form.producao_comercio.label_tag }}
+                            {{ form.producao_comercio }}
+                            {{ form.producao_comercio.errors }}
+                          </div>
+                          <div class="col-md-2" style="padding-right: 0px">
+                            {{ form.valor.label_tag }}
+                            {{ form.valor }}
+                            {{ form.valor.errors }}
+                          </div>
+                          <div class="col-md-4" style="padding-right: 0px">
+                            {{ form.canal_comercializacao.label_tag }}
+                            {{ form.canal_comercializacao }}
+                            {{ form.canal_comercializacao.errors }}
+                          </div>
+                          <div class="col-md-2">
+                            {{ form.mercado_institucional.label_tag }}
+                            {{ form.mercado_institucional }}
+                            {{ form.mercado_institucional.errors }}
+                          </div>
+                          <div class="col-md-12">
+                            <fieldset class="border p-2" style="width: 100%;">
+                              <legend><b style="font-size: 1rem;">28. Sobre o Nível Tecnológico de Produção, existe(m) alguma(s) cultura(s) irrigada(s)?</b></legend>
+                              <div class="form-row">
+                                <div class="col-md-3">
+                                  {{ form.irrigacao.label_tag }}
+                                  {{ form.irrigacao }}
+                                  {{ form.irrigacao.errors }}
+                                </div>
+                                <div class="col-md-3">
+                                  {{ form.area_irrigada.label_tag }}
+                                  {{ form.area_irrigada }}
+                                  {{ form.area_irrigada.errors }}
+                                </div>
+                                <div class="col-md-3">
+                                  {{ form.medida_area_irrigada.label_tag }}
+                                  {{ form.medida_area_irrigada }}
+                                  {{ form.medida_area_irrigada.errors }}
+                                </div>
+                                <div class="col-md-3">
+                                  {{ form.tipo_irrigacao.label_tag }}
+                                  {{ form.tipo_irrigacao }}
+                                  {{ form.tipo_irrigacao.errors }}
+                                </div>
+                              </div>
+                            </fieldset>
+                          </div>
+                          <div class="col-md-1" style="margin-top: 1rem;">
+                            <a id="fruticulturas" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Fruticultura">
+                              <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                            </a>
+                            <div hidden="true">{{ form.DELETE }}</div>
+                          </div>
+                        </div>
+                      </fieldset>
+                    </div>
+                  {% endfor %}
+                </div>
+                <div>
+                  <a id="fruticulturas" href="javascript:void(0)" class="btn btn-success add-row" title="Nova Fruticultura" style="margin-top: 1rem;">
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group col-md-12">
+
+            {{ AtividadeExtrativistaInlineFormSet.management_form }}
+
+            <div class="card card-register">
+              <div class="card-header"><b>29. Produtos de atividade extrativista do último ano agrícola</b></div>
+              <div class="card-body">
+                <div>
+                  {% for form in AtividadeExtrativistaInlineFormSet %}
+                    <div id="{{ form.prefix }}-row" class="dynamic-form-atividades_extrativistas form-row">
+                      {{ form.id }}
+                      <fieldset class="border p-2" style="width: 100%;">
+                        {% if forloop.last %}
+                          <legend><b style="font-size: 1rem;">Produto de Atividade Extrativista #</b></legend>
+                        {% else %}
+                          <legend><b style="font-size: 1rem;">Produto de Atividade Extrativista #{{ forloop.counter }}</b></legend>
+                        {% endif %}
+                        <div class="row">
+                          <div class="col-md-3" style="padding-right: 0px;">
+                            {{ form.especificacao.label_tag }}
+                            {{ form.especificacao }}
+                            {{ form.especificacao.errors }}
+                          </div>
+                          <div class="col-md-3" style="padding-right: 0px;">
+                            {{ form.outros.label_tag }}
+                            {{ form.outros }}
+                            {{ form.outros.errors }}
+                          </div>
+                          <div class="col-md-3" style="padding-right: 0px;">
+                            {{ form.quantidade_frutos_ano.label_tag }}
+                            {{ form.quantidade_frutos_ano }}
+                            {{ form.quantidade_frutos_ano.errors }}
+                          </div>
+                          <div class="col-md-3" style="padding-right: 0px">
+                            {{ form.quantidade_palmitos_ano.label_tag }}
+                            {{ form.quantidade_palmitos_ano }}
+                            {{ form.quantidade_palmitos_ano.errors }}
+                          </div>
+                          <div class="col-md-2" style="padding-right: 0px">
+                            {{ form.valor.label_tag }}
+                            {{ form.valor }}
+                            {{ form.valor.errors }}
+                          </div>
+                          <div class="col-md-5" style="padding-right: 0px">
+                            {{ form.canal_comercializacao.label_tag }}
+                            {{ form.canal_comercializacao }}
+                            {{ form.canal_comercializacao.errors }}
+                          </div>
+                          <div class="col-md-4" style="padding-right: 0px">
+                            {{ form.mercado_institucional.label_tag }}
+                            {{ form.mercado_institucional }}
+                            {{ form.mercado_institucional.errors }}
+                          </div>
+                          <div class="col-md-1" style="margin-top: 2rem; padding-left: 1.5rem;">
+                            <a id="atividades_extrativistas" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Atividade Extrativista">
+                              <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                            </a>
+                            <div hidden="true">{{ form.DELETE }}</div>
+                          </div>
+                        </div>
+                      </fieldset>
+                    </div>
+                  {% endfor %}
+                </div>
+                <div>
+                  <a id="atividades_extrativistas" href="javascript:void(0)" class="btn btn-success add-row" title="Nova Atividade Extrativista" style="margin-top: 1rem;">
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group col-md-12">
+
+            {{ ProducaoFlorestalInlineFormSet.management_form }}
+
+            <div class="card card-register">
+              <div class="card-header"><b>30. Produção Florestal do último ano agrícola</b></div>
+              <div class="card-body">
+                <div>
+                  {% for form in ProducaoFlorestalInlineFormSet %}
+                    <div id="{{ form.prefix }}-row" class="dynamic-form-producoes_florestais form-row">
+                      {{ form.id }}
+                      <fieldset class="border p-2" style="width: 100%;">
+                        {% if forloop.last %}
+                          <legend><b style="font-size: 1rem;">Produção Florestal #</b></legend>
+                        {% else %}
+                          <legend><b style="font-size: 1rem;">Produção Florestal #{{ forloop.counter }}</b></legend>
+                        {% endif %}
+                        <div class="row">
+                          <div class="col-md-5" style="padding-right: 0px">
+                            {{ form.especificacao.label_tag }}
+                            {{ form.especificacao }}
+                            {{ form.especificacao.errors }}
+                          </div>
+                          <div class="col-md-4" style="padding-right: 0px">
+                            {{ form.outros.label_tag }}
+                            {{ form.outros }}
+                            {{ form.outros.errors }}
+                          </div>
+                          <div class="col-md-3">
+                            {{ form.quantidade_produzida_ano.label_tag }}
+                            {{ form.quantidade_produzida_ano }}
+                            {{ form.quantidade_produzida_ano.errors }}
+                          </div>
+                          <div class="col-md-3" style="padding-right: 0px">
+                            {{ form.area_plantada.label_tag }}
+                            {{ form.area_plantada }}
+                            {{ form.area_plantada.errors }}
+                          </div>
+                          <div class="col-md-3" style="padding-right: 0px">
+                            {{ form.valor.label_tag }}
+                            {{ form.valor }}
+                            {{ form.valor.errors }}
+                          </div>
+                          <div class="col-md-6">
+                            {{ form.canal_comercializacao.label_tag }}
+                            {{ form.canal_comercializacao }}
+                            {{ form.canal_comercializacao.errors }}
+                          </div>
+                          <div class="col-md-1" style="margin-top: 0.5rem;">
+                            <a id="producoes_florestais" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Produção Florestal">
+                              <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                            </a>
+                            <div hidden="true">{{ form.DELETE }}</div>
+                          </div>
+                        </div>
+                      </fieldset>
+                    </div>
+                  {% endfor %}
+                </div>
+                <div>
+                  <a id="producoes_florestais" href="javascript:void(0)" class="btn btn-success add-row" title="Nova Produção Florestal" style="margin-top: 1rem;">
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group col-md-12">
+
+            {{ BovinoculturaInlineFormSet.management_form }}
+
+            <div class="card card-register">
+              <div class="card-header"><b>31. Sobre o Efetivo Animal do último ano agrícola</b></div>
+              <div class="card-body">
+                <div>
+                  {% for form in BovinoculturaInlineFormSet %}
+                    <div id="{{ form.prefix }}-row" class="dynamic-form-bovinoculturas form-row">
+                      {{ form.id }}
+                      <div class="col-md-3">
+                        {{ form.tipo_criacao.label_tag }}
+                        {{ form.tipo_criacao }}
+                        {{ form.tipo_criacao.errors }}
+                      </div>
+                      <div class="col-md-4">
+                        {{ form.especificacao.label_tag }}
+                        {{ form.especificacao }}
+                        {{ form.especificacao.errors }}
+                      </div>
+                      <div class="col-md-2">
+                        {{ form.quantidade_cabecas.label_tag }}
+                        {{ form.quantidade_cabecas }}
+                        {{ form.quantidade_cabecas.errors }}
+                      </div>
+                      <div class="col-md-2">
+                        {{ form.valor_cabeca.label_tag }}
+                        {{ form.valor_cabeca }}
+                        {{ form.valor_cabeca.errors }}
+                      </div>
+                      <div class="col-md-1" style="margin-top: 2rem; padding-left: 2rem;">
+                        <a id="bovinoculturas" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Efetivo Animal">
+                          <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                        </a>
+                        <div hidden="true">{{ form.DELETE }}</div>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+                <div>
+                  <a id="bovinoculturas" href="javascript:void(0)" class="btn btn-success add-row" title="Novo Efetivo Animal" style="margin-top: 1rem;">
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group col-md-12">
+            <span style="font-size: 90%;" class="badge badge-warning">Obs: Se houver abate e consumo ou venda de Carne no lote, lançar no item Carne da tabela "Descarte Animal".</span>
+          </div>
+
+          <div class="form-group col-md-12">
+
+            {{ OutraCriacaoInlineFormSet.management_form }}
+
+            <div class="card card-register">
+              <div class="card-header"><b>Outras Criações Animais</b></div>
+              <div class="card-body">
+                <div>
+                  {% for form in OutraCriacaoInlineFormSet %}
+                    <div id="{{ form.prefix }}-row" class="dynamic-form-outras_criacoes form-row">
+                      {{ form.id }}
+                      <div class="col-md-5">
+                        {{ form.especificacao.label_tag }}
+                        {{ form.especificacao }}
+                        {{ form.especificacao.errors }}
+                      </div>
+                      <div class="col-md-2">
+                        {{ form.quantidade_cabecas.label_tag }}
+                        {{ form.quantidade_cabecas }}
+                        {{ form.quantidade_cabecas.errors }}
+                      </div>
+                      <div class="col-md-2">
+                        {{ form.valor_cabeca.label_tag }}
+                        {{ form.valor_cabeca }}
+                        {{ form.valor_cabeca.errors }}
+                      </div>
+                      <div class="col-md-1" style="margin-top: 2rem; padding-left: 2rem;">
+                        <a id="outras_criacoes" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Criação">
+                          <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                        </a>
+                        <div hidden="true">{{ form.DELETE }}</div>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+                <div>
+                  <a id="outras_criacoes" href="javascript:void(0)" class="btn btn-success add-row" title="Nova Criação" style="margin-top: 1rem;">
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group col-md-12">
+
+            {{ BovinoculturaLeiteiraInlineFormSet.management_form }}
+
+            <div class="card card-register">
+              <div class="card-header"><b>Descarte Animal - Bovinocultura Leiteira</b></div>
+              <div class="card-body">
+                <div>
+                  {% for form in BovinoculturaLeiteiraInlineFormSet %}
+                    <div id="{{ form.prefix }}-row" class="dynamic-form-bovinoculturas_leiteira form-row">
+                      {{ form.id }}
+                      <fieldset class="border p-2" style="width: 100%;">
+                        {% if forloop.last %}
+                          <legend><b style="font-size: 1rem;">Descarte Animal (Bovinocultura Leiteira) #</b></legend>
+                        {% else %}
+                          <legend><b style="font-size: 1rem;">Descarte Animal (Bovinocultura Leiteira) #{{ forloop.counter }}</b></legend>
+                        {% endif %}
+                        <div class="row">
+                          <div class="col-md-4" style="padding-right: 0px;">
+                            {{ form.especificacao.label_tag }}
+                            {{ form.especificacao }}
+                            {{ form.especificacao.errors }}
+                          </div>
+                          <div class="col-md-3" style="padding-right: 0px;">
+                            {{ form.quantidade_cabecas_consumo.label_tag }}
+                            {{ form.quantidade_cabecas_consumo }}
+                            {{ form.quantidade_cabecas_consumo.errors }}
+                          </div>
+                          <div class="col-md-3" style="padding-right: 0px;">
+                            {{ form.quantidade_cabecas_comercio.label_tag }}
+                            {{ form.quantidade_cabecas_comercio }}
+                            {{ form.quantidade_cabecas_comercio.errors }}
+                          </div>
+                          <div class="col-md-2">
+                            {{ form.valor_cabeca.label_tag }}
+                            {{ form.valor_cabeca }}
+                            {{ form.valor_cabeca.errors }}
+                          </div>
+                          <div class="col-md-6" style="padding-right: 0px;">
+                            {{ form.canal_comercializacao.label_tag }}
+                            {{ form.canal_comercializacao }}
+                            {{ form.canal_comercializacao.errors }}
+                          </div>
+                          <div class="col-md-6">
+                            {{ form.canal_comercializacao_outros.label_tag }}
+                            {{ form.canal_comercializacao_outros }}
+                            {{ form.canal_comercializacao_outros.errors }}
+                          </div>
+                          <div class="col-md-1" style="margin-top: 0.5rem;">
+                            <a id="bovinoculturas_leiteira" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Descarte Animal">
+                              <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                            </a>
+                            <div hidden="true">{{ form.DELETE }}</div>
+                          </div>
+                        </div>
+                      </fieldset>
+                    </div>
+                  {% endfor %}
+                </div>
+                <div>
+                  <a id="bovinoculturas_leiteira" href="javascript:void(0)" class="btn btn-success add-row" title="Novo Descarte Animal" style="margin-top: 1rem;">
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group col-md-12">
+
+            {{ BovinoculturaCorteInlineFormSet.management_form }}
+
+            <div class="card card-register">
+              <div class="card-header"><b>Descarte Animal - Bovinocultura de Corte</b></div>
+              <div class="card-body">
+                <div>
+                  {% for form in BovinoculturaCorteInlineFormSet %}
+                    <div id="{{ form.prefix }}-row" class="dynamic-form-bovinoculturas_corte form-row">
+                      {{ form.id }}
+                      <fieldset class="border p-2" style="width: 100%;">
+                        {% if forloop.last %}
+                          <legend><b style="font-size: 1rem;">Descarte Animal (Bovinocultura de Corte) #</b></legend>
+                        {% else %}
+                          <legend><b style="font-size: 1rem;">Descarte Animal (Bovinocultura de Corte) #{{ forloop.counter }}</b></legend>
+                        {% endif %}
+                        <div class="row">
+                          <div class="col-md-4"  style="padding-right: 0px;">
+                            {{ form.especificacao.label_tag }}
+                            {{ form.especificacao }}
+                            {{ form.especificacao.errors }}
+                          </div>
+                          <div class="col-md-3" style="padding-right: 0px;">
+                            {{ form.quantidade_cabecas_consumo.label_tag }}
+                            {{ form.quantidade_cabecas_consumo }}
+                            {{ form.quantidade_cabecas_consumo.errors }}
+                          </div>
+                          <div class="col-md-3">
+                            {{ form.quantidade_cabecas_comercio.label_tag }}
+                            {{ form.quantidade_cabecas_comercio }}
+                            {{ form.quantidade_cabecas_comercio.errors }}
+                          </div>
+                          <div class="col-md-2" style="padding-right: 0px;">
+                            {{ form.valor_cabeca.label_tag }}
+                            {{ form.valor_cabeca }}
+                            {{ form.valor_cabeca.errors }}
+                          </div>
+                          <div class="col-md-6" style="padding-right: 0px;">
+                            {{ form.canal_comercializacao.label_tag }}
+                            {{ form.canal_comercializacao }}
+                            {{ form.canal_comercializacao.errors }}
+                          </div>
+                          <div class="col-md-6">
+                            {{ form.canal_comercializacao_outros.label_tag }}
+                            {{ form.canal_comercializacao_outros }}
+                            {{ form.canal_comercializacao_outros.errors }}
+                          </div>
+                          <div class="col-md-1" style="margin-top: 0.5rem;">
+                            <a id="bovinoculturas_corte" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Descarte Animal">
+                              <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                            </a>
+                            <div hidden="true">{{ form.DELETE }}</div>
+                          </div>
+                        </div>
+                      </fieldset>
+                    </div>
+                  {% endfor %}
+                </div>
+                <div>
+                  <a id="bovinoculturas_corte" href="javascript:void(0)" class="btn btn-success add-row" title="Novo Descarte Animal" style="margin-top: 1rem;">
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group col-md-12">
+
+            {{ OrigemAnimalInlineFormSet.management_form }}
+
+            <div class="card card-register">
+              <div class="card-header"><b>32. Sobre os produtos de origem animal produzidos no último ano agrícola</b></div>
+              <div class="card-body">
+                <div>
+                  {% for form in OrigemAnimalInlineFormSet %}
+                    <div id="{{ form.prefix }}-row" class="dynamic-form-origens_animais form-row">
+                      {{ form.id }}
+                      <fieldset class="border p-2" style="width: 100%;">
+                        {% if forloop.last %}
+                          <legend><b style="font-size: 1rem;">Produto de Origem Animal #</b></legend>
+                        {% else %}
+                          <legend><b style="font-size: 1rem;">Produto de Origem Animal #{{ forloop.counter }}</b></legend>
+                        {% endif %}
+                        <div class="row">
+                          <div class="col-md-4" style="padding-right: 0px;">
+                            {{ form.especificacao.label_tag }}
+                            {{ form.especificacao }}
+                            {{ form.especificacao.errors }}
+                          </div>
+                          <div class="col-md-4" style="padding-right: 0px;">
+                            {{ form.outros.label_tag }}
+                            {{ form.outros }}
+                            {{ form.outros.errors }}
+                          </div>
+                          <div class="col-md-2" style="padding-right: 0px;">
+                            {{ form.producao_consumo.label_tag }}
+                            {{ form.producao_consumo }}
+                            {{ form.producao_consumo.errors }}
+                          </div>
+                          <div class="col-md-2">
+                            {{ form.producao_comercio.label_tag }}
+                            {{ form.producao_comercio }}
+                            {{ form.producao_comercio.errors }}
+                          </div>
+                          <div class="col-md-2" style="padding-right: 0px;">
+                            {{ form.valor.label_tag }}
+                            {{ form.valor }}
+                            {{ form.valor.errors }}
+                          </div>
+                          <div class="col-md-5" style="padding-right: 0px;">
+                            {{ form.canal_comercializacao.label_tag }}
+                            {{ form.canal_comercializacao }}
+                            {{ form.canal_comercializacao.errors }}
+                          </div>
+                          <div class="col-md-5">
+                            {{ form.mercado_institucional.label_tag }}
+                            {{ form.mercado_institucional }}
+                            {{ form.mercado_institucional.errors }}
+                          </div>
+                          <div class="col-md-1" style="margin-top: 0.5rem;">
+                            <a id="origens_animais" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Produto">
+                              <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                            </a>
+                            <div hidden="true">{{ form.DELETE }}</div>
+                          </div>
+                        </div>
+                      </fieldset>
+                    </div>
+                  {% endfor %}
+                </div>
+                <div>
+                  <a id="origens_animais" href="javascript:void(0)" class="btn btn-success add-row" title="Novo Produto" style="margin-top: 1rem;">
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group col-md-6">
+
+            {{ NivelTecnologicoProducaoAnimalInlineFormSet.management_form }}
+
+            <div class="card card-register">
+              <div class="card-header">
+                <b>Sobre o Nível Tecnológico da Produção Animal</b><br/>
+                <span class="badge badge-warning">Obs: A Questão de nº 33 é preenchida automaticamente, de acordo com este formulário.</span>
+              </div>
+              <div class="card-body">
+                <div>
+                  {% for form in NivelTecnologicoProducaoAnimalInlineFormSet %}
+                    <div id="{{ form.prefix }}-row" class="dynamic-form-niveis_tecnologicos_producao_animal form-row">
+                      {{ form.id }}
+                      <div class="col-md-5">
+                        {{ form.tipo_capineira.label_tag }}
+                        {{ form.tipo_capineira }}
+                        {{ form.tipo_capineira.errors }}
+                      </div>
+                      <div class="col-md-5">
+                        {{ form.area_capineira.label_tag }}
+                        {{ form.area_capineira }}
+                        {{ form.area_capineira.errors }}
+                      </div>
+                      <div class="col-md-1" style="margin-top: 2rem; padding-left: 2rem;">
+                        <a id="niveis_tecnologicos_producao_animal" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Nível Tecnológico">
+                          <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                        </a>
+                        <div hidden="true">{{ form.DELETE }}</div>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+                <div>
+                  <a id="niveis_tecnologicos_producao_animal" href="javascript:void(0)" class="btn btn-success add-row" title="Novo Nível Tecnológico" style="margin-top: 1rem;">
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group col-md-6">
+            <div class="form-group col-md-12">
+              {{ form.possui_pastagem_em_pastejo_rotacionado.label_tag }}
+              {{ form.possui_pastagem_em_pastejo_rotacionado }}
+              {{ form.possui_pastagem_em_pastejo_rotacionado.errors }}
+            </div>
+            <div>
+              <div class="form-group col-md-12">
+                {{ form.area_pastejo_rotacionado.label_tag }}
+                {{ form.area_pastejo_rotacionado }}
+                {{ form.area_pastejo_rotacionado.errors }}
+              </div>
+            </div>
+            <div class="form-group col-md-12">
+              {{ form.pratica_inseminacao_artificial_no_rebanho_leiteiro.label_tag }}
+              {{ form.pratica_inseminacao_artificial_no_rebanho_leiteiro }}
+              {{ form.pratica_inseminacao_artificial_no_rebanho_leiteiro.errors }}
+            </div>
+          </div>
+
+          <div class="form-group col-md-12">
+
+            {{ ProcessadoBeneficiadoInlineFormSet.management_form }}
+
+            <div class="card card-register">
+              <div class="card-header"><b>36. Sobre os produtos processados ou beneficiados no estabelecimento, no último ano agrícola (agroindústria)</b></div>
+              <div class="card-body">
+                <div>
+                  {% for form in ProcessadoBeneficiadoInlineFormSet %}
+                    <div id="{{ form.prefix }}-row" class="dynamic-form-processados_beneficiados form-row">
+                      {{ form.id }}
+                      <fieldset class="border p-2" style="width: 100%;">
+                        {% if forloop.last %}
+                          <legend><b style="font-size: 1rem;">Produto Processado ou Beneficiado #</b></legend>
+                        {% else %}
+                          <legend><b style="font-size: 1rem;">Produto Processado ou Beneficiado #{{ forloop.counter }}</b></legend>
+                        {% endif %}
+                        <div class="row">
+                          <div class="col-md-4" style="padding-right: 0px;">
+                            {{ form.especificacao.label_tag }}
+                            {{ form.especificacao }}
+                            {{ form.especificacao.errors }}
+                          </div>
+                          <div class="col-md-4" style="padding-right: 0px;">
+                            {{ form.outros.label_tag }}
+                            {{ form.outros }}
+                            {{ form.outros.errors }}
+                          </div>
+                          <div class="col-md-2" style="padding-right: 0px;">
+                            {{ form.producao_consumo.label_tag }}
+                            {{ form.producao_consumo }}
+                            {{ form.producao_consumo.errors }}
+                          </div>
+                          <div class="col-md-2">
+                            {{ form.producao_comercio.label_tag }}
+                            {{ form.producao_comercio }}
+                            {{ form.producao_comercio.errors }}
+                          </div>
+                          <div class="col-md-2" style="padding-right: 0px;">
+                            {{ form.valor.label_tag }}
+                            {{ form.valor }}
+                            {{ form.valor.errors }}
+                          </div>
+                          <div class="col-md-5" style="padding-right: 0px;">
+                            {{ form.canal_comercializacao.label_tag }}
+                            {{ form.canal_comercializacao }}
+                            {{ form.canal_comercializacao.errors }}
+                          </div>
+                          <div class="col-md-5">
+                            {{ form.mercado_institucional.label_tag }}
+                            {{ form.mercado_institucional }}
+                            {{ form.mercado_institucional.errors }}
+                          </div>
+                          <div class="col-md-1" style="margin-top: 0.5rem;">
+                            <a id="processados_beneficiados" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Produto">
+                              <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                            </a>
+                            <div hidden="true">{{ form.DELETE }}</div>
+                          </div>
+                        </div>
+                      </fieldset>
+                    </div>
+                  {% endfor %}
+                </div>
+                <div>
+                  <a id="processados_beneficiados" href="javascript:void(0)" class="btn btn-success add-row" title="Novo Produto" style="margin-top: 1rem;">
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group col-md-6">
+            {{ form.area_preservacao_permanente.label_tag }}
+            {{ form.area_preservacao_permanente }}
+            {{ form.area_preservacao_permanente.errors }}
+          </div>
+          <div class="form-group col-md-6">
+            {{ form.area_preservacao_permanente_cercada.label_tag }}
+            {{ form.area_preservacao_permanente_cercada }}
+            {{ form.area_preservacao_permanente_cercada.errors }}
+          </div>
+
+          <div class="form-group col-md-12">
+
+            {{ ProblemaAmbientalInlineFormSet.management_form }}
+
+            <div class="card card-register">
+              <div class="card-header"><b>40. Quais são os problemas ambientais existentes no lote?</b><br/></div>
+              <div class="card-body">
+                <div>
+                  {% for form in ProblemaAmbientalInlineFormSet %}
+                    <div id="{{ form.prefix }}-row" class="dynamic-form-problemas_ambientais form-row">
+                      {{ form.id }}
+                      <div class="col-md-6">
+                        {{ form.tipo_problema.label_tag }}
+                        {{ form.tipo_problema }}
+                        {{ form.tipo_problema.errors }}
+                      </div>
+                      <div class="col-md-4">
+                        {{ form.outros.label_tag }}
+                        {{ form.outros }}
+                        {{ form.outros.errors }}
+                      </div>
+                      <div class="col-md-1" style="margin-top: 2rem; padding-left: 2rem;">
+                        <a id="problemas_ambientais" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Problema Ambiental">
+                          <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                        </a>
+                        <div hidden="true">{{ form.DELETE }}</div>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+                <div>
+                  <a id="problemas_ambientais" href="javascript:void(0)" class="btn btn-success add-row" title="Novo Problema Ambiental" style="margin-top: 1rem;">
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group col-md-8">
+
+            {{ PraticaConservacionistaInlineFormSet.management_form }}
+
+            <div class="card card-register">
+              <div class="card-header"><b>41. Quais são as práticas conservacionistas praticadas na propriedade?</b><br/></div>
+              <div class="card-body">
+                <div>
+                  {% for form in PraticaConservacionistaInlineFormSet %}
+                    <div id="{{ form.prefix }}-row" class="dynamic-form-praticas_conservacionistas form-row">
+                      {{ form.id }}
+                      <div class="col-md-10">
+                        {{ form.tipo_pratica.label_tag }}
+                        {{ form.tipo_pratica }}
+                        {{ form.tipo_pratica.errors }}
+                      </div>
+                      <div class="col-md-1" style="margin-top: 2rem; padding-left: 2rem;">
+                        <a id="praticas_conservacionistas" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Prática Conservacionista">
+                          <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                        </a>
+                        <div hidden="true">{{ form.DELETE }}</div>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+                <div>
+                  <a id="praticas_conservacionistas" href="javascript:void(0)" class="btn btn-success add-row" title="Nova Prática Conservacionista" style="margin-top: 1rem;">
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-group col-md-12">
+              {{ form.destino_lixo_domestico_nao_organico.label_tag }}
+              {{ form.destino_lixo_domestico_nao_organico }}
+              {{ form.destino_lixo_domestico_nao_organico.errors }}
+            </div>
+            <div class="form-group col-md-12">
+              {{ form.destino_material_organico.label_tag }}
+              {{ form.destino_material_organico }}
+              {{ form.destino_material_organico.errors }}
+            </div>
+          </div>
+
+          <div class="form-group col-md-8">
+
+            {{ LicenciamentoAmbientalInlineFormSet.management_form }}
+
+            <div class="card card-register">
+              <div class="card-header"><b>44. Necessita de licenciamento ambiental de quais atividades?</b><br/></div>
+              <div class="card-body">
+                <div>
+                  {% for form in LicenciamentoAmbientalInlineFormSet %}
+                    <div id="{{ form.prefix }}-row" class="dynamic-form-licenciamentos_ambientais form-row">
+                      {{ form.id }}
+                      <div class="col-md-5">
+                        {{ form.tipo_atividade.label_tag }}
+                        {{ form.tipo_atividade }}
+                        {{ form.tipo_atividade.errors }}
+                      </div>
+                      <div class="col-md-5">
+                        {{ form.outros.label_tag }}
+                        {{ form.outros }}
+                        {{ form.outros.errors }}
+                      </div>
+                      <div class="col-md-1" style="margin-top: 2rem; padding-left: 2rem;">
+                        <a id="licenciamentos_ambientais" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Licenciamento Ambiental">
+                          <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                        </a>
+                        <div hidden="true">{{ form.DELETE }}</div>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+                <div>
+                  <a id="licenciamentos_ambientais" href="javascript:void(0)" class="btn btn-success add-row" title="Novo Licenciamento Ambiental" style="margin-top: 1rem;">
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-group col-md-12">
+              {{ form.necessita_autoriacao_exploracao_florestal_queima_controlada.label_tag }}
+              {{ form.necessita_autoriacao_exploracao_florestal_queima_controlada }}
+              {{ form.necessita_autoriacao_exploracao_florestal_queima_controlada.errors }}
+            </div>
+          </div>
+
+          <div class="form-group col-md-6">
+
+            {{ AtendimentoSaudeForm.management_form }}
+
+            <div class="card card-register">
+              <div class="card-header"><b>46. Onde é feito o atendimento à saúde para as famílias do assentamento?</b><br/></div>
+              <div class="card-body">
+                <div class="form-row">
+                  {{ form.id }}
+                  <div class="row">
+                    <div class="col-md-4" style="padding-right: 0px;">
+                      {{ AtendimentoSaudeForm.hospital.label_tag }}
+                      {{ AtendimentoSaudeForm.hospital }}
+                      {{ AtendimentoSaudeForm.hospital.errors }}
+                    </div>
+                    <div class="col-md-4" style="padding-right: 0px;">
+                      {{ AtendimentoSaudeForm.posto_saude.label_tag }}
+                      {{ AtendimentoSaudeForm.posto_saude }}
+                      {{ AtendimentoSaudeForm.posto_saude.errors }}
+                    </div>
+                    <div class="col-md-4">
+                      {{ AtendimentoSaudeForm.farmacia.label_tag }}
+                      {{ AtendimentoSaudeForm.farmacia }}
+                      {{ AtendimentoSaudeForm.farmacia.errors }}
+                    </div>
+                    <div class="col-md-4" style="padding-right: 0px;">
+                      {{ AtendimentoSaudeForm.outros.label_tag }}
+                      {{ AtendimentoSaudeForm.outros }}
+                      {{ AtendimentoSaudeForm.outros.errors }}
+                    </div>
+                    <div class="col-md-8">
+                      {{ AtendimentoSaudeForm.outros_especificacao.label_tag }}
+                      {{ AtendimentoSaudeForm.outros_especificacao }}
+                      {{ AtendimentoSaudeForm.outros_especificacao.errors }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group col-md-12" style="margin-top: 3rem; padding-left: 0px; padding-left: 0px;">
+              {{ form.qualidade_servico_saude.label_tag }}
+              {{ form.qualidade_servico_saude }}
+              {{ form.qualidade_servico_saude.errors }}
+            </div>
+          </div>
+
+          <div class="form-group col-md-6">
+
+            {{ ProgramaSaudeInlineFormSet.management_form }}
+
+            <div class="card card-register">
+              <div class="card-header"><b>47. Quais os programas ou tipos de atendimento à saúde são disponibilizados no P.A?</b><br/></div>
+              <div class="card-body">
+                <div>
+                  {% for form in ProgramaSaudeInlineFormSet %}
+                    <div id="{{ form.prefix }}-row" class="dynamic-form-programas_saude form-row">
+                      {{ form.id }}
+                      <div class="col-md-10">
+                        {{ form.programa_saude.label_tag }}
+                        {{ form.programa_saude }}
+                        {{ form.programa_saude.errors }}
+                      </div>
+                      <div class="col-md-1" style="margin-top: 2rem; padding-left: 2rem;">
+                        <a id="programas_saude" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Programa de Saúde">
+                          <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                        </a>
+                        <div hidden="true">{{ form.DELETE }}</div>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+                <div>
+                  <a id="programas_saude" href="javascript:void(0)" class="btn btn-success add-row" title="Novo Programa de Saúde" style="margin-top: 1rem;">
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group col-md-8">
+
+            {{ AtividadeFisicaInlineFormSet.management_form }}
+
+            <div class="card card-register">
+              <div class="card-header"><b>50. Quais são os esportes/atividades físicas praticados pelos familiares com maior frequência?</b><br/></div>
+              <div class="card-body">
+                <div>
+                  {% for form in AtividadeFisicaInlineFormSet %}
+                    <div id="{{ form.prefix }}-row" class="dynamic-form-atividades_fisicas form-row">
+                      {{ form.id }}
+                      <div class="col-md-5">
+                        {{ form.atividade_fisica.label_tag }}
+                        {{ form.atividade_fisica }}
+                        {{ form.atividade_fisica.errors }}
+                      </div>
+                      <div class="col-md-5">
+                        {{ form.outros.label_tag }}
+                        {{ form.outros }}
+                        {{ form.outros.errors }}
+                      </div>
+                      <div class="col-md-1" style="margin-top: 2rem; padding-left: 2rem;">
+                        <a id="atividades_fisicas" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Atividade Física">
+                          <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                        </a>
+                        <div hidden="true">{{ form.DELETE }}</div>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+                <div>
+                  <a id="atividades_fisicas" href="javascript:void(0)" class="btn btn-success add-row" title="Nova Atividade Física" style="margin-top: 1rem;">
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-group col-md-12">
+              {{ form.frequencia_atividade_fisica.label_tag }}
+              {{ form.frequencia_atividade_fisica }}
+              {{ form.frequencia_atividade_fisica.errors }}
+            </div>
+          </div>
+
+          <div class="form-group col-md-12">
+            <span style="font-size: 90%;" class="badge badge-warning">Obs: Para as questões 52 e 53 entrevistar lideranças ou responsáveis pelo setor no P.A</span>
+          </div>
+
+          <div class="form-group col-md-6">
+
+            {{ EspacoDisponivelInlineFormSet.management_form }}
+
+            <div class="card card-register">
+              <div class="card-header"><b>52. No assentamento quais são os espaços disponíveis para a prática de esporte ou para a recreação?</b><br/></div>
+              <div class="card-body">
+                <div>
+                  {% for form in EspacoDisponivelInlineFormSet %}
+                    <div id="{{ form.prefix }}-row" class="dynamic-form-espacos_disponiveis form-row">
+                      {{ form.id }}
+                      <div class="col-md-10">
+                        {{ form.espaco_disponivel.label_tag }}
+                        {{ form.espaco_disponivel }}
+                        {{ form.espaco_disponivel.errors }}
+                      </div>
+                      <div class="col-md-1" style="margin-top: 2rem; padding-left: 2rem;">
+                        <a id="espacos_disponiveis" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Espaço Disponível">
+                          <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                        </a>
+                        <div hidden="true">{{ form.DELETE }}</div>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+                <div>
+                  <a id="espacos_disponiveis" href="javascript:void(0)" class="btn btn-success add-row" title="Nova Espaço Disponível" style="margin-top: 1rem;">
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group col-md-6">
+
+            {{ EstabelecimentoEnsinoInlineFormSet.management_form }}
+
+            <div class="card card-register">
+              <div class="card-header"><b>53. Que tipo de estabelecimento de ensino está disponível no assentamento?</b><br/></div>
+              <div class="card-body">
+                <div>
+                  {% for form in EstabelecimentoEnsinoInlineFormSet %}
+                    <div id="{{ form.prefix }}-row" class="dynamic-form-estabelecimentos_ensino form-row">
+                      {{ form.id }}
+                      <div class="col-md-10">
+                        {{ form.estabelecimento_ensino.label_tag }}
+                        {{ form.estabelecimento_ensino }}
+                        {{ form.estabelecimento_ensino.errors }}
+                      </div>
+                      <div class="col-md-1" style="margin-top: 2rem; padding-left: 2rem;">
+                        <a id="estabelecimentos_ensino" href="javascript:void(0)" class="btn btn-danger delete-row" title="Excluir Estabelecimento de Ensino">
+                          <i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                        </a>
+                        <div hidden="true">{{ form.DELETE }}</div>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+                <div>
+                  <a id="estabelecimentos_ensino" href="javascript:void(0)" class="btn btn-success add-row" title="Novo Estabelecimento de Ensino" style="margin-top: 1rem;">
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            {{ form.oferta_transporte_interno.label_tag }}
+            {{ form.oferta_transporte_interno }}
+            {{ form.oferta_transporte_interno.errors }}
+          </div>
+
+          <div class="form-group col-md-6">
+            {{ NaoPossuiDocumentoForm.management_form }}
+
+            <div class="card card-register">
+              <div class="card-header"><b>56. Com relação à documentação, quantas pessoas NÃO POSSUEM os documentos relacionados abaixo?</b><br/></div>
+              <div class="card-body">
+                <div class="form-row">
+                  {{ form.id }}
+                  <div class="row">
+                    <div class="col-md-6" style="padding-right: 0px;">
+                      {{ NaoPossuiDocumentoForm.certidao_nascimento.label_tag }}
+                      {{ NaoPossuiDocumentoForm.certidao_nascimento }}
+                      {{ NaoPossuiDocumentoForm.certidao_nascimento.errors }}
+                    </div>
+                    <div class="col-md-6">
+                      {{ NaoPossuiDocumentoForm.identidade.label_tag }}
+                      {{ NaoPossuiDocumentoForm.identidade }}
+                      {{ NaoPossuiDocumentoForm.identidade.errors }}
+                    </div>
+                    <div class="col-md-6" style="margin-top: 1rem; padding-right: 0px;">
+                      {{ NaoPossuiDocumentoForm.cpf.label_tag }}
+                      {{ NaoPossuiDocumentoForm.cpf }}
+                      {{ NaoPossuiDocumentoForm.cpf.errors }}
+                    </div>
+                    <div class="col-md-6" style="margin-top: 1rem;">
+                      {{ NaoPossuiDocumentoForm.carteira_de_trabalho.label_tag }}
+                      {{ NaoPossuiDocumentoForm.carteira_de_trabalho }}
+                      {{ NaoPossuiDocumentoForm.carteira_de_trabalho.errors }}
+                    </div>
+                    <div class="col-md-6" style="margin-top: 1rem; padding-right: 0px;">
+                      {{ NaoPossuiDocumentoForm.certidao_de_casamento_ou_uniao_estavel.label_tag }}
+                      {{ NaoPossuiDocumentoForm.certidao_de_casamento_ou_uniao_estavel }}
+                      {{ NaoPossuiDocumentoForm.certidao_de_casamento_ou_uniao_estavel.errors }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-success">Salvar</button>
+        <a class="btn btn-secondary" href="{% url 'core:listar_diagnosticos_por_projeto_assentamento' projeto_assentamento.contrato_id projeto_assentamento.pk %}" style="pointer-events: all;">Voltar</a>
+      </form>
+    </div>
+  </div>
+{% endblock %}
+
+{% block js %}
+
+  <script>
+    function updateElementIndex(el, prefix, ndx) {
+      var id_regex = new RegExp('(' + prefix + '-\\d+)');
+      var replacement = prefix + '-' + ndx;
+      if ($(el).attr("for")) $(el).attr("for", $(el).attr("for").replace(id_regex, replacement));
+      if (el.id) el.id = el.id.replace(id_regex, replacement);
+      if (el.name) el.name = el.name.replace(id_regex, replacement);
+    }
+
+    function addForm(btn, prefix) {
+      var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
+      var row = $('.dynamic-form-' + prefix + ':last').clone(true).get(0);
+      $(row).show();
+      $(row).insertAfter($('.dynamic-form-' + prefix + ':last')).children('.hidden').removeClass('hidden');
+      $(row).children().not(':last').children().each(function() {
+        updateElementIndex(this, prefix, formCount);
+        $(this).val('');
+      });
+      if (prefix == 'culturas' || prefix == 'olericulturas' || prefix == 'fruticulturas' || prefix == 'atividades_extrativistas'
+        || prefix == 'producoes_florestais' || prefix == 'bovinoculturas_leiteira' || prefix == 'bovinoculturas_corte'
+        || prefix == 'origens_animais' || prefix == 'processados_beneficiados' || prefix == 'membros') {
+        $(row).children().each(function () {
+          if($(this).is('fieldset')) {
+            $(this).children().children().not(':last').children().each(function () {
+              if($(this).is('fieldset')) {
+                $(this).children().children().children().each(function () {
+                  updateElementIndex(this, prefix, formCount);
+                  $(this).val('');
+                });
+              } else {
+                updateElementIndex(this, prefix, formCount);
+                $(this).val('');
+              }
+            });
+          }
+        });
+      }
+
+      $(row).find('.delete-row').click(function() {
+        deleteForm(this, prefix);
+      });
+      $('#id_' + prefix + '-TOTAL_FORMS').val(formCount + 1);
+      return false;
+    }
+
+    function deleteForm(btn, prefix) {
+      $(btn).parents('.dynamic-form-' + prefix).hide();
+      {#$(btn).parents('.dynamic-form').remove();#}
+      var id = $(btn).parents('.dynamic-form-' + prefix).children().attr('id').replace('-id', '-DELETE');
+      document.getElementById(id).checked = true;
+      var forms = $('.dynamic-form-' + prefix);
+      $('#id_' + prefix + '-TOTAL_FORMS').val(forms.length);
+      for (var i=0, formCount=forms.length; i<formCount; i++) {
+        $(forms.get(i)).children().not(':last').children().each(function() {
+          updateElementIndex(this, prefix, i);
+        });
+      }
+      return false;
+    }
+
+    $(document).ready(function () {
+      $(function () {
+        $('.add-row').click(function() {
+          return addForm(this, this.id);
+        });
+        $('.delete-row').click(function() {
+          return deleteForm(this, this.id);
+        })
+      })
+    });
+  </script>
+{% endblock %}
