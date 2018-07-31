@@ -2210,8 +2210,29 @@
         });
         $('.delete-row').click(function() {
           return deleteForm(this, this.id);
-        })
-      })
+        });
+      });
+    });
+
+    $(document).ready(function () {
+      var contatos = document.getElementsByClassName('form-control contatos'),
+        valores = document.getElementsByClassName('form-control valor');
+
+      $( "#my_form" ).submit(function( event ) {
+        [].forEach.call(contatos, function (contato) {
+          $(contato).unmask();
+        });
+        [].forEach.call(valores, function (valor) {
+          {#$(valor).unmask();#}
+        });
+      });
+
+      [].forEach.call(contatos, function (contato) {
+        $(contato).mask('(00) 00000-0000');
+      });
+      [].forEach.call(valores, function (valor) {
+        {#$(valor).mask("#.##0,00", {reverse: true});#}
+      });
     });
   </script>
 {% endblock %}
