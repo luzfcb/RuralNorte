@@ -6,6 +6,7 @@ from django.views import generic
 from django.views.generic import ListView, DetailView, FormView
 from django.views.generic.detail import SingleObjectMixin
 from django_tables2 import RequestConfig
+from django.contrib import messages
 
 from . import models
 from . import tables
@@ -131,6 +132,10 @@ def novo_diagnostico(request, pa_id):
         }
     )
 
+    membros_forms = forms.MembroInlineFormSet(
+        prefix='membros',
+        queryset=models.Membro.objects.none()
+    )
     contatos_forms = forms.ContatoInlineFormSet(
         prefix='contatos',
         queryset=models.Contato.objects.none()
@@ -269,6 +274,13 @@ def novo_diagnostico(request, pa_id):
                 'projeto_assentamento': projeto_assentamento.pk
             }
         )
+
+        membros_forms = forms.MembroInlineFormSet(
+            request.POST,
+            prefix='membros',
+            queryset=models.Membro.objects.none()
+        )
+        inlines.append(membros_forms)
 
         contatos_forms = forms.ContatoInlineFormSet(
             request.POST,
@@ -494,6 +506,7 @@ def novo_diagnostico(request, pa_id):
 
         if form.is_valid() and atendimento_saude_forms.is_valid() and nao_possui_documento_forms.is_valid() \
             and all([item.is_valid() for item in inlines]):
+
             lote = form.save(commit=False)
             lote.save()
 
@@ -515,11 +528,13 @@ def novo_diagnostico(request, pa_id):
             template = reverse('core:listar_diagnosticos_por_projeto_assentamento',
                                kwargs={'contrato_id': projeto_assentamento.contrato_id,
                                        'pa_id': projeto_assentamento.pk})
+            messages.success(request, 'Diagnóstico salvo com sucesso!')
             return redirect(template)
     template_name = 'core/editar_diagnostico.html'
     context = {
         'form': form,
         'projeto_assentamento': projeto_assentamento,
+        'MembroInlineFormSet': membros_forms,
         'ContatoInlineFormSet': contatos_forms,
         'DocumentoLoteInlineFormSet': documentos_lote_forms,
         'BeneficioSocialInlineFormSet': beneficios_forms,
@@ -568,6 +583,10 @@ def editar_diagnostico(request, pa_id, diagnostico_id):
         }
     )
 
+    membros_forms = forms.MembroInlineFormSet(
+        prefix='membros',
+        queryset=form.instance.membros.all()
+    )
     contatos_forms = forms.ContatoInlineFormSet(
         prefix='contatos',
         queryset=form.instance.contatos.all()
@@ -711,6 +730,13 @@ def editar_diagnostico(request, pa_id, diagnostico_id):
                 'projeto_assentamento': projeto_assentamento.pk
             }
         )
+
+        membros_forms = forms.MembroInlineFormSet(
+            request.POST,
+            prefix='membros',
+            queryset=form.instance.membros.all()
+        )
+        inlines.append(membros_forms)
 
         contatos_forms = forms.ContatoInlineFormSet(
             request.POST,
@@ -940,7 +966,9 @@ def editar_diagnostico(request, pa_id, diagnostico_id):
             instance=form.instance.nao_possui_documento
         )
 
-        if form.is_valid() and all([item.is_valid() for item in inlines]):
+        if form.is_valid() and atendimento_saude_forms.is_valid() and nao_possui_documento_forms.is_valid() \
+            and all([item.is_valid() for item in inlines]):
+
             lote = form.save(commit=False)
             lote.save()
 
@@ -966,11 +994,13 @@ def editar_diagnostico(request, pa_id, diagnostico_id):
             template = reverse('core:listar_diagnosticos_por_projeto_assentamento',
                                kwargs={'contrato_id': projeto_assentamento.contrato_id,
                                        'pa_id': projeto_assentamento.pk})
+            messages.success(request, 'Diagnóstico alterado com sucesso!')
             return redirect(template)
     template_name = 'core/editar_diagnostico.html'
     context = {
         'form': form,
         'projeto_assentamento': projeto_assentamento,
+        'MembroInlineFormSet': membros_forms,
         'ContatoInlineFormSet': contatos_forms,
         'DocumentoLoteInlineFormSet': documentos_lote_forms,
         'BeneficioSocialInlineFormSet': beneficios_forms,
